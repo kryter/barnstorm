@@ -3,8 +3,7 @@
   "version": "1.0.0",
   "description": "Organize end to end test code",
   "sideEffects": false,
-  "scripts": {
-  },
+  "scripts": {},
   "author": "Kori Ryter <kryter@gmail.com>",
   "license": "MIT",
   "repository": {
@@ -14,5 +13,8 @@
   "bugs": {
     "url": "https://github.com/kryter/barnstorm/issues"
   },
-  "homepage": "https://github.com/kryter/barnstorm#readme"
+  "homepage": "https://github.com/kryter/barnstorm#readme",
+  "devDependencies": {
+    "typescript": "^4.4.2"
+  }
 }
