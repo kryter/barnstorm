@@ -1,0 +1,11 @@
+{
+  "name": "barnstorm",
+  "version": "1.0.0",
+  "description": "Organize end to end test code",
+  "author": "Kori Ryter",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kryter/barnstorm.git"
+  }
+}
