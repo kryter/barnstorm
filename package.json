@@ -1,9 +1,11 @@
 {
-  "name": "barnstorm",
+  "name": "@kryter/barnstorm",
   "version": "1.0.0",
   "description": "Organize end to end test code",
   "sideEffects": false,
-  "scripts": {},
+  "scripts": {
+    "build": "tsc"
+  },
   "author": "Kori Ryter <kryter@gmail.com>",
   "license": "MIT",
   "repository": {

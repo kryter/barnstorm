@@ -1,0 +1,8 @@
+{
+  "include": ["src/**/*.ts"],
+  "compilerOptions": {
+    "outDir": "lib/",
+    "declaration": true
+  },
+  "exclude": ["node_modules"]
+}
