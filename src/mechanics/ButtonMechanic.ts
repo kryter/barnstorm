@@ -12,4 +12,6 @@ export abstract class ButtonMechanic {
   }
 
   public abstract click(): void;
+  public abstract verifyIsNotVisible(): void;
+  public abstract verifyContent(content: string): void;
 }

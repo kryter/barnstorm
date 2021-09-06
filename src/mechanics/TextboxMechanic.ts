@@ -11,6 +11,7 @@ export abstract class TextBoxMechanic {
   constructor(protected options: TextBoxMechanicOptions) {
   }
 
+  public abstract verifyIsInFocus(): void;
   public abstract enterText(textToType: string): void;
   public abstract verifyText(expectedText: string): void;
 }
