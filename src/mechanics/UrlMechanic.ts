@@ -1,14 +1,4 @@
-export interface UrlMechanicOptions {
-  /**
-   * Url to visit and verify.
-   */
-  url: string;
-}
-
-export abstract class UrlMechanic {
-  constructor(protected options: UrlMechanicOptions) {
-  }
-
-  public abstract visit(): void;
-  public abstract verifyUrl(): void;
+export interface UrlMechanic {
+  visit(url: string): void;
+  verifyUrl(expectedUrl: string): void;
 }

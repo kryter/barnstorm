@@ -1,3 +1,3 @@
-export abstract class KeyboardMechanic {
-  public abstract pressEnter(): void;
+export interface KeyboardMechanic {
+  pressEnter(): void;
 }

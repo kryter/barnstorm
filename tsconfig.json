@@ -2,7 +2,8 @@
   "include": ["src/**/*.ts"],
   "compilerOptions": {
     "outDir": "lib/",
-    "declaration": true
+    "declaration": true,
+    "target": "es5"
   },
   "exclude": ["node_modules"]
 }
