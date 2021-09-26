@@ -7,10 +7,26 @@ export class CheckboxInstrument extends ElementInstrument {
   }
 
   public toggle(): void {
-    Mechanics.Checkbox.toggle(this.options.selector);
+    Mechanics.Checkbox.toggle(this.getSelector());
   }
 
-  public verifyCheckedState(expectedIsChecked: boolean): void {
-    Mechanics.Checkbox.verifyCheckedState(this.options.selector, expectedIsChecked);
+  public verifyIsChecked(): void {
+    Mechanics.Checkbox.verifyCheckedState(this.getSelector(), true);
+  }
+
+  public verifyIsNotChecked(): void {
+    Mechanics.Checkbox.verifyCheckedState(this.getSelector(), false);
+  }
+
+  public uncheck(): void {
+    this.verifyIsChecked();
+    this.toggle();
+    this.verifyIsNotChecked();
+  }
+
+  public check(): void {
+    this.verifyIsNotChecked();
+    this.toggle();
+    this.verifyIsChecked();
   }
 }
