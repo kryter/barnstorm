@@ -6,10 +6,13 @@ Barnstorm provides organization for end to end tests that goes beyond just addin
 
 Install barnstorm:
 
-```npm install kryter/barnstorm --save```
+```npm install @kryter/barnstorm --save```
 
-Then install the barnstorm specific plugin for your test framework.  If a plugin for your framework doesn't exist, you can create one.  For the Cypress framework:
+Then install the barnstorm specific plugin for your test framework.
 
-```npm install kryter/barnstorm-cypress```
+Cypress:
+```npm install @kryter/barnstorm-cypress```
 
-Then update your tests to call pilots, mechanics, and towers instead of making bare calls to the framework using inline CSS selectors.
+If a plugin for your framework doesn't exist, you can create one using an existing plugin as the example.
+
+Then update your tests to use flight instruments instead of making bare calls to the framework using inline CSS selectors.
