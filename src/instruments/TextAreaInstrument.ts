@@ -9,6 +9,7 @@ export class TextAreaInstrument extends ElementInstrument {
   public enterText(textToType: string): void {
     Mechanics.TextArea.enterText(this.options.selector, textToType);
   }
+
   public verifyText(expectedText: string): void {
     Mechanics.TextArea.verifyText(this.options.selector, expectedText);
   }

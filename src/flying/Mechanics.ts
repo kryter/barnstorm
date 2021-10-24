@@ -13,11 +13,18 @@ import { ListMechanic } from '../mechanics/ListMechanic';
  */
 export class Mechanics {
   public static Button : ButtonMechanic = null;
+
   public static Checkbox : CheckboxMechanic = null;
+
   public static Element : ElementMechanic = null;
+
   public static Keyboard : KeyboardMechanic = null;
+
   public static List : ListMechanic = null;
+
   public static TextArea : TextAreaMechanic = null;
+
   public static TextBox : TextBoxMechanic = null;
+
   public static Url : UrlMechanic = null;
 }

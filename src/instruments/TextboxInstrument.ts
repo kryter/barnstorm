@@ -9,6 +9,7 @@ export class TextBoxInstrument extends ElementInstrument {
   public enterText(textToType: string): void {
     Mechanics.TextBox.enterText(this.options.selector, textToType);
   }
+
   public verifyText(expectedText: string): void {
     Mechanics.TextBox.verifyText(this.options.selector, expectedText);
   }

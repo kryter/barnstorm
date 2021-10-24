@@ -1,14 +1,16 @@
-import { Mechanics } from "../flying/Mechanics";
+import { Mechanics } from '../flying/Mechanics';
 import { ListInstrument } from './ListInstrument';
 
 export interface ElementInstrumentOptions {
   /**
-   * Optional: List instrument that provides the parent CSS selector for this HTML element.
+   * Optional: List instrument that provides
+   * the parent CSS selector for this HTML element.
    */
   listInstrument?: ListInstrument;
 
   /**
-   * Optional: 1 based number of the item in the list instrument (used if list instrument is provided).
+   * Optional: 1 based number of the item in the list instrument
+   * (used if list instrument is provided).
    */
   itemNumber?: number;
 
@@ -18,13 +20,16 @@ export interface ElementInstrumentOptions {
   selector: string;
 }
 
-export class ElementInstrument<TOptions extends ElementInstrumentOptions = ElementInstrumentOptions> {
+export class ElementInstrument<TOptions extends
+ElementInstrumentOptions = ElementInstrumentOptions> {
   constructor(protected options: TOptions) {
   }
 
   protected getSelector(): string {
     if (this.options.listInstrument) {
-      return `${this.options.listInstrument.listItemSelectorByNumber(this.options.itemNumber)} ${this.options.selector}`;
+      const { listInstrument } = this.options;
+      const itemSelector = listInstrument.listItemSelectorByNumber(this.options.itemNumber);
+      return `${itemSelector} ${this.options.selector}`;
     }
     return this.options.selector;
   }
@@ -33,7 +38,7 @@ export class ElementInstrument<TOptions extends ElementInstrumentOptions = Eleme
     Mechanics.Element.verifyIsNotVisible(this.getSelector());
   }
 
-  public verifyTextContent(content: string,): void {
+  public verifyTextContent(content: string): void {
     Mechanics.Element.verifyTextContent(this.getSelector(), content);
   }
 

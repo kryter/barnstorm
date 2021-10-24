@@ -1,5 +1,5 @@
-import { ElementInstrument, ElementInstrumentOptions } from './ElementInstrument';
 import { Mechanics } from '../flying/Mechanics';
+
 export interface ListMechanicOptions {
   /**
    * CSS selector to get the root HTML element representing the list as a whole.
@@ -45,13 +45,14 @@ export class ListInstrument {
     this.verifyContentLength(expectedContent.length);
 
     // Then verify the content for all expected items in the list.
-    for (let i = 0; i < expectedContent.length; i++) {
+    for (let i = 0; i < expectedContent.length; i += 1) {
       this.verifyItemContent(i, expectedContent[i]);
     }
   }
 
   public verifyItemContent(itemIndex: number, expectedItemContent: string): void {
-    Mechanics.Element.verifyTextContent(this.listItemSelectorByIndex(itemIndex), expectedItemContent);
+    const itemSelector = this.listItemSelectorByIndex(itemIndex);
+    Mechanics.Element.verifyTextContent(itemSelector, expectedItemContent);
   }
 
   public verifyContentLength(expectedLength: number): void {
