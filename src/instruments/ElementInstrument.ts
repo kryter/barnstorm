@@ -1,5 +1,5 @@
-import { Mechanics } from '../flying/Mechanics';
-import { ListInstrument } from './ListInstrument';
+import { Mechanics } from "../flying/Mechanics";
+import { ListInstrument } from "./ListInstrument";
 
 export interface ElementInstrumentOptions {
   /**
@@ -20,15 +20,17 @@ export interface ElementInstrumentOptions {
   selector: string;
 }
 
-export class ElementInstrument<TOptions extends
-ElementInstrumentOptions = ElementInstrumentOptions> {
-  constructor(protected options: TOptions) {
-  }
+export class ElementInstrument<
+  TOptions extends ElementInstrumentOptions = ElementInstrumentOptions
+> {
+  constructor(protected options: TOptions) {}
 
   protected getSelector(): string {
     if (this.options.listInstrument) {
       const { listInstrument } = this.options;
-      const itemSelector = listInstrument.listItemSelectorByNumber(this.options.itemNumber);
+      const itemSelector = listInstrument.listItemSelectorByNumber(
+        this.options.itemNumber
+      );
       return `${itemSelector} ${this.options.selector}`;
     }
     return this.options.selector;

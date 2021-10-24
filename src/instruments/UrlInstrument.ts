@@ -1,4 +1,4 @@
-import { Mechanics } from '../flying/Mechanics';
+import { Mechanics } from "../flying/Mechanics";
 
 export interface UrlInstrumentOptions {
   /**
@@ -8,8 +8,7 @@ export interface UrlInstrumentOptions {
 }
 
 export class UrlInstrument {
-  constructor(protected options: UrlInstrumentOptions) {
-  }
+  constructor(protected options: UrlInstrumentOptions) {}
 
   public visit(): void {
     Mechanics.Url.visit(this.options.url);

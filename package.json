@@ -5,8 +5,9 @@
   "sideEffects": false,
   "scripts": {
     "build": "tsc",
-    "lint": "eslint 'src/**'",
-    "lint:fix": "eslint --fix 'src/**'"
+    "lint": "eslint 'src/**' && npx prettier --check .",
+    "lint:fix": "eslint --fix 'src/**'",
+    "format": "prettier --write ."
   },
   "repository": {
     "type": "git",
@@ -34,7 +35,9 @@
     "eslint": "^7.32.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-config-airbnb-typescript": "^14.0.1",
+    "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.25.2",
+    "prettier": "^2.4.1",
     "typescript": "^4.4.2"
   }
 }

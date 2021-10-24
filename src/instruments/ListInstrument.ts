@@ -1,4 +1,4 @@
-import { Mechanics } from '../flying/Mechanics';
+import { Mechanics } from "../flying/Mechanics";
 
 export interface ListMechanicOptions {
   /**
@@ -14,8 +14,7 @@ export interface ListMechanicOptions {
 }
 
 export class ListInstrument {
-  constructor(protected options: ListMechanicOptions) {
-  }
+  constructor(protected options: ListMechanicOptions) {}
 
   protected genericListItemSelector(): string {
     return `${this.options.selector} ${this.options.relativeItemSelector}`;
@@ -32,8 +31,8 @@ export class ListInstrument {
   }
 
   /**
-  * Takes a one-based item index and returns a selector for that item.
-  */
+   * Takes a one-based item index and returns a selector for that item.
+   */
   public listItemSelectorByNumber(itemNumber: number): string {
     return `${this.genericListItemSelector()}:nth-child(${itemNumber})`;
   }
@@ -50,12 +49,18 @@ export class ListInstrument {
     }
   }
 
-  public verifyItemContent(itemIndex: number, expectedItemContent: string): void {
+  public verifyItemContent(
+    itemIndex: number,
+    expectedItemContent: string
+  ): void {
     const itemSelector = this.listItemSelectorByIndex(itemIndex);
     Mechanics.Element.verifyTextContent(itemSelector, expectedItemContent);
   }
 
   public verifyContentLength(expectedLength: number): void {
-    Mechanics.List.verifyListLength(this.genericListItemSelector(), expectedLength);
+    Mechanics.List.verifyListLength(
+      this.genericListItemSelector(),
+      expectedLength
+    );
   }
 }
