@@ -1,4 +1,4 @@
-import {CheckboxMechanic} from './CheckboxMechanic';
+import { CheckboxMechanic } from './CheckboxMechanic';
 
 export default class CheckboxMechanicStandard implements CheckboxMechanic {
   private isChecked: boolean = false;
@@ -6,6 +6,7 @@ export default class CheckboxMechanicStandard implements CheckboxMechanic {
   toggle(selector: string): void {
     this.isChecked = !this.isChecked;
   }
+
   verifyCheckedState(selector: string, expectedIsChecked: boolean): void {
     if (this.isChecked && !expectedIsChecked) {
       throw new Error(`The checkbox was observed to be in a checked state,

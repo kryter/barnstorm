@@ -1,4 +1,4 @@
-import {UrlMechanic} from './UrlMechanic';
+import { UrlMechanic } from './UrlMechanic';
 
 export default class UrlMechanicStandard implements UrlMechanic {
   private currentUrl: string;

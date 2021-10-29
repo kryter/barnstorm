@@ -37,4 +37,3 @@ export function register(): void {
 
   isRegistered = true;
 }
-

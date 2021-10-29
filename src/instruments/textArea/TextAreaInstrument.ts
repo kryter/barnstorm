@@ -2,7 +2,7 @@ import { Mechanics } from '../../Mechanics';
 import {
   ElementInstrument,
   ElementInstrumentOptions,
-} from "../element/ElementInstrument";
+} from '../element/ElementInstrument';
 
 export class TextAreaInstrument extends ElementInstrument {
   constructor(options: ElementInstrumentOptions) {

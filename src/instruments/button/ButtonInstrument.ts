@@ -2,7 +2,7 @@ import { Mechanics } from '../../Mechanics';
 import {
   ElementInstrumentOptions,
   ElementInstrument,
-} from "../element/ElementInstrument";
+} from '../element/ElementInstrument';
 
 export class ButtonInstrument extends ElementInstrument {
   constructor(options: ElementInstrumentOptions) {
