@@ -1,8 +1,8 @@
+import { Mechanics } from '../../flying/Mechanics';
 import {
   ElementInstrument,
   ElementInstrumentOptions,
-} from "./ElementInstrument";
-import { Mechanics } from "../flying/Mechanics";
+} from "../element/ElementInstrument";
 
 export class CheckboxInstrument extends ElementInstrument {
   constructor(options: ElementInstrumentOptions) {

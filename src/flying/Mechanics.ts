@@ -1,11 +1,11 @@
-import { ButtonMechanic } from "../mechanics/ButtonMechanic";
-import { CheckboxMechanic } from "../mechanics/CheckboxMechanic";
-import { ElementMechanic } from "../mechanics/ElementMechanic";
-import { KeyboardMechanic } from "../mechanics/KeyboardMechanic";
-import { TextAreaMechanic } from "../mechanics/TextAreaMechanic";
-import { TextBoxMechanic } from "../mechanics/TextBoxMechanic";
-import { UrlMechanic } from "../mechanics/UrlMechanic";
-import { ListMechanic } from "../mechanics/ListMechanic";
+import { ButtonMechanic } from "../mechanics/button/ButtonMechanic";
+import { CheckboxMechanic } from "../mechanics/checkbox/CheckboxMechanic";
+import { ElementMechanic } from "../mechanics/element/ElementMechanic";
+import { KeyboardMechanic } from "../mechanics/keyboard/KeyboardMechanic";
+import { TextAreaMechanic } from "../mechanics/textArea/TextAreaMechanic";
+import { TextBoxMechanic } from "../mechanics/textBox/TextBoxMechanic";
+import { UrlMechanic } from "../mechanics/url/UrlMechanic";
+import { ListMechanic } from "../mechanics/list/ListMechanic";
 
 /**
  * Before running a test, be sure to populate the mechanics

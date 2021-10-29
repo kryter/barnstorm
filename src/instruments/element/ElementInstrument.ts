@@ -1,5 +1,5 @@
-import { Mechanics } from "../flying/Mechanics";
-import { ListInstrument } from "./ListInstrument";
+import { Mechanics } from '../../flying/Mechanics';
+import { ListInstrument } from "../list/ListInstrument";
 
 export interface ElementInstrumentOptions {
   /**

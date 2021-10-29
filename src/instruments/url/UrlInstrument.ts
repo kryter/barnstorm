@@ -1,4 +1,4 @@
-import { Mechanics } from "../flying/Mechanics";
+import { Mechanics } from '../../flying/Mechanics';
 
 export interface UrlInstrumentOptions {
   /**
