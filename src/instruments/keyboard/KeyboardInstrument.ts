@@ -1,4 +1,4 @@
-import { Mechanics } from '../../flying/Mechanics';
+import { Mechanics } from '../../Mechanics';
 
 export class KeyboardInstrument {
   public static pressEnter(): void {
