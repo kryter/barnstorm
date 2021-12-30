@@ -1,15 +1,15 @@
-import { Mechanics } from '../../Mechanics';
 import {
   ElementInstrumentOptions,
   ElementInstrument,
 } from '../element/ElementInstrument';
+import MechanicsSet from '../../MechanicsSet';
 
 export class ButtonInstrument extends ElementInstrument {
-  constructor(options: ElementInstrumentOptions) {
-    super(options);
+  constructor(mechanicsSet: MechanicsSet, options: ElementInstrumentOptions) {
+    super(mechanicsSet, options);
   }
 
   public click(): void {
-    Mechanics.Button.click(this.options.selector);
+    this.mechanicsSet.button.click(this.options.selector);
   }
 }

@@ -1,13 +1,6 @@
 const config = {
   verbose: true,
+  modulePathIgnorePatterns: ["<rootDir>/lib/"]
 };
 
 module.exports = config;
-
-// Or async function
-module.exports = async () => {
-  return {
-    rootDir: 'src',
-    clearMocks: true
-  };
-};

@@ -1,4 +1,4 @@
-import { Mechanics } from '../../Mechanics';
+import MechanicsSet from '../../MechanicsSet';
 
 export interface UrlInstrumentOptions {
   /**
@@ -8,13 +8,16 @@ export interface UrlInstrumentOptions {
 }
 
 export class UrlInstrument {
-  constructor(protected options: UrlInstrumentOptions) {}
+  constructor(
+    protected mechanicsSet: MechanicsSet,
+    protected options: UrlInstrumentOptions
+  ) {}
 
   public visit(): void {
-    Mechanics.Url.visit(this.options.url);
+    this.mechanicsSet.url.visit(this.options.url);
   }
 
   public verifyUrl(): void {
-    Mechanics.Url.verifyUrl(this.options.url);
+    this.mechanicsSet.url.verifyUrl(this.options.url);
   }
 }

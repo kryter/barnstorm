@@ -1,4 +1,4 @@
-import { Mechanics } from '../../Mechanics';
+import MechanicsSet from '../../MechanicsSet';
 import { ListInstrument } from '../list/ListInstrument';
 
 export interface ElementInstrumentOptions {
@@ -23,9 +23,12 @@ export interface ElementInstrumentOptions {
 export class ElementInstrument<
   TOptions extends ElementInstrumentOptions = ElementInstrumentOptions
 > {
-  constructor(protected options: TOptions) {}
+  constructor(
+    protected mechanicsSet: MechanicsSet,
+    protected options: TOptions
+  ) {}
 
-  protected getSelector(): string {
+  public getSelector(): string {
     if (this.options.listInstrument) {
       const { listInstrument } = this.options;
       const itemSelector = listInstrument.listItemSelectorByNumber(
@@ -37,22 +40,25 @@ export class ElementInstrument<
   }
 
   public verifyIsNotVisible(): void {
-    Mechanics.Element.verifyIsNotVisible(this.getSelector());
+    this.mechanicsSet.element.verifyIsNotVisible(this.getSelector());
   }
 
   public verifyTextContent(content: string): void {
-    Mechanics.Element.verifyTextContent(this.getSelector(), content);
+    this.mechanicsSet.element.verifyTextContent(this.getSelector(), content);
   }
 
   public verifyHasClass(className: string): void {
-    Mechanics.Element.verifyHasClass(this.getSelector(), className);
+    this.mechanicsSet.element.verifyHasClass(this.getSelector(), className);
   }
 
   public verifyDoesNotHaveClass(className: string): void {
-    Mechanics.Element.verifyDoesNotHaveClass(this.getSelector(), className);
+    this.mechanicsSet.element.verifyDoesNotHaveClass(
+      this.getSelector(),
+      className
+    );
   }
 
   public verifyIsInFocus(): void {
-    Mechanics.Element.verifyIsInFocus(this.getSelector());
+    this.mechanicsSet.element.verifyIsInFocus(this.getSelector());
   }
 }

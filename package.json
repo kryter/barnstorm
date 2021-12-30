@@ -8,7 +8,7 @@
     "lint": "eslint 'src/**' && npx prettier --check .",
     "lint:fix": "eslint --fix 'src/**'",
     "format": "prettier --write 'src/**'",
-    "precommit": "tsc && eslint --fix 'src/**' && prettier --write 'src/**'",
+    "precommit": "tsc && eslint --fix 'src/**' && prettier --write 'src/**' && jest",
     "test": "jest"
   },
   "repository": {

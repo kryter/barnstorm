@@ -1,6 +1,6 @@
 import { UrlMechanic } from './UrlMechanic';
 
-export default class UrlMechanicStandard implements UrlMechanic {
+export default class UrlMechanicMock implements UrlMechanic {
   private currentUrl: string;
 
   visit(url: string): void {

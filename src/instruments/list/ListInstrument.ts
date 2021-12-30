@@ -1,4 +1,4 @@
-import { Mechanics } from '../../Mechanics';
+import MechanicsSet from '../../MechanicsSet';
 
 export interface ListMechanicOptions {
   /**
@@ -14,7 +14,10 @@ export interface ListMechanicOptions {
 }
 
 export class ListInstrument {
-  constructor(protected options: ListMechanicOptions) {}
+  constructor(
+    protected mechanicsSet: MechanicsSet,
+    protected options: ListMechanicOptions
+  ) {}
 
   protected genericListItemSelector(): string {
     return `${this.options.selector} ${this.options.relativeItemSelector}`;
@@ -54,11 +57,14 @@ export class ListInstrument {
     expectedItemContent: string
   ): void {
     const itemSelector = this.listItemSelectorByIndex(itemIndex);
-    Mechanics.Element.verifyTextContent(itemSelector, expectedItemContent);
+    this.mechanicsSet.element.verifyTextContent(
+      itemSelector,
+      expectedItemContent
+    );
   }
 
   public verifyContentLength(expectedLength: number): void {
-    Mechanics.List.verifyListLength(
+    this.mechanicsSet.list.verifyListLength(
       this.genericListItemSelector(),
       expectedLength
     );

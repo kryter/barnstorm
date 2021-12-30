@@ -1,22 +1,29 @@
-import { Mechanics } from '../../Mechanics';
 import { ButtonInstrument } from './ButtonInstrument';
-import ButtonMechanicStandard from '../../mechanics/button/ButtonMechanicStandard';
+import ButtonMechanicMock from '../../mechanics/button/ButtonMechanicMock';
+import MechanicsSet from '../../MechanicsSet';
+import { InstrumentSet } from '../../InstrumentSet';
 
-jest.mock('../../mechanics/button/ButtonMechanicStandard');
+jest.mock('../../mechanics/button/ButtonMechanicMock');
 
 describe('ButtonInstrument', () => {
   const selector = '.the-button-selector';
   let buttonInstrument: ButtonInstrument;
-  let mockButtonMechanic: ButtonMechanicStandard;
+  let mockButtonMechanic: ButtonMechanicMock;
+  let mockIndex = 0;
 
   beforeEach(() => {
-    Mechanics.Button = new ButtonMechanicStandard();
-    expect(ButtonMechanicStandard).toHaveBeenCalledTimes(1);
+    const mechanicsSet: MechanicsSet = {
+      button: new ButtonMechanicMock(),
+    };
 
-    mockButtonMechanic = ButtonMechanicStandard.mock.instances[0];
+    mockButtonMechanic = (<jest.Mock<ButtonMechanicMock>>ButtonMechanicMock)
+      .mock.instances[mockIndex];
+    mockIndex += 1;
 
-    buttonInstrument = new ButtonInstrument({
-      selector
+    const instrumentSet: InstrumentSet = new InstrumentSet(mechanicsSet);
+
+    buttonInstrument = instrumentSet.useButton({
+      selector,
     });
   });
 
@@ -26,5 +33,4 @@ describe('ButtonInstrument', () => {
     expect(mockButtonMechanic.click).toHaveBeenCalledWith(selector);
     expect(mockButtonMechanic.click).toHaveBeenCalledTimes(1);
   });
-
 });

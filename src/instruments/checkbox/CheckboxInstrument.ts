@@ -1,24 +1,24 @@
-import { Mechanics } from '../../Mechanics';
+import MechanicsSet from '../../MechanicsSet';
 import {
   ElementInstrument,
   ElementInstrumentOptions,
 } from '../element/ElementInstrument';
 
 export class CheckboxInstrument extends ElementInstrument {
-  constructor(options: ElementInstrumentOptions) {
-    super(options);
+  constructor(mechanicsSet: MechanicsSet, options: ElementInstrumentOptions) {
+    super(mechanicsSet, options);
   }
 
   public toggle(): void {
-    Mechanics.Checkbox.toggle(this.getSelector());
+    this.mechanicsSet.checkbox.toggle(this.getSelector());
   }
 
   public verifyIsChecked(): void {
-    Mechanics.Checkbox.verifyCheckedState(this.getSelector(), true);
+    this.mechanicsSet.checkbox.verifyCheckedState(this.getSelector(), true);
   }
 
   public verifyIsNotChecked(): void {
-    Mechanics.Checkbox.verifyCheckedState(this.getSelector(), false);
+    this.mechanicsSet.checkbox.verifyCheckedState(this.getSelector(), false);
   }
 
   public uncheck(): void {

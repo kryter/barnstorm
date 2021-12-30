@@ -1,7 +1,9 @@
-import { Mechanics } from '../../Mechanics';
+import MechanicsSet from '../../MechanicsSet';
 
 export class KeyboardInstrument {
-  public static pressEnter(): void {
-    Mechanics.Keyboard.pressEnter();
+  constructor(protected mechanicsSet: MechanicsSet) {}
+
+  public pressEnter(): void {
+    this.mechanicsSet.keyboard.pressEnter();
   }
 }

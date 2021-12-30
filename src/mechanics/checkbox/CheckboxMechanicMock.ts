@@ -1,6 +1,6 @@
 import { CheckboxMechanic } from './CheckboxMechanic';
 
-export default class CheckboxMechanicStandard implements CheckboxMechanic {
+export default class CheckboxMechanicMock implements CheckboxMechanic {
   private isChecked: boolean = false;
 
   toggle(selector: string): void {
