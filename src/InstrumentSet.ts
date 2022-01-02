@@ -1,4 +1,4 @@
-import MechanicsSet from './MechanicsSet';
+import MechanicGroup from './MechanicGroup';
 import { ButtonInstrument } from './instruments/button/ButtonInstrument';
 import { CheckboxInstrument } from './instruments/checkbox/CheckboxInstrument';
 import {
@@ -8,81 +8,113 @@ import {
 import { KeyboardInstrument } from './instruments/keyboard/KeyboardInstrument';
 import { TextAreaInstrument } from './instruments/textArea/TextAreaInstrument';
 import { TextBoxInstrument } from './instruments/textBox/TextBoxInstrument';
-import {
-  UrlInstrument,
-  UrlInstrumentOptions,
-} from './instruments/url/UrlInstrument';
+import { UrlInstrument } from './instruments/url/UrlInstrument';
 import {
   ListInstrument,
-  ListMechanicOptions,
+  ListInstrumentOptions,
 } from './instruments/list/ListInstrument';
+import { FlightPlan } from './FlightPlan';
+import { Instrument } from './Instrument';
+import { FlightPlanLeg } from './FlightPlanLeg';
 
 export class InstrumentSet {
-  constructor(protected mechanicsSet: MechanicsSet) {}
+  private instruments: Instrument<unknown>[] = [];
+
+  private idToInstrument: Record<string, Instrument<unknown>> = {};
+
+  constructor(protected mechanicGroup: MechanicGroup) {
+    this.trackInstrument(new KeyboardInstrument(this.mechanicGroup));
+    this.trackInstrument(new UrlInstrument(this.mechanicGroup));
+  }
+
+  public fly(flightPlan: FlightPlan): void {
+    // Verify initial state.
+    this.verifyState();
+
+    flightPlan.legs.forEach((leg: FlightPlanLeg) => {
+      // Do the test action.
+      leg.doTestAction();
+
+      // Update expectations based on the action and verify updated state.
+      leg.updateExpectations();
+      this.verifyState();
+    });
+  }
+
+  protected verifyState(): void {
+    this.instruments.forEach((instrument) => instrument.verifyState());
+  }
+
+  public use<TInstrument extends Instrument<unknown>>(
+    instrumentId: string
+  ): TInstrument {
+    return this.idToInstrument[instrumentId] as TInstrument;
+  }
 
   /**
    * Build and configure a button instrument with the current mechanics set.
    */
-  public useButton(
-    instrumentOptions: ElementInstrumentOptions
-  ): ButtonInstrument {
-    return new ButtonInstrument(this.mechanicsSet, instrumentOptions);
+  public setupButton(instrumentOptions: ElementInstrumentOptions): void {
+    this.trackInstrument(
+      new ButtonInstrument(this.mechanicGroup, instrumentOptions)
+    );
   }
 
   /**
    * Build and configure  a checkbox instrument with the current mechanics set.
    */
-  public useCheckbox(
-    instrumentOptions: ElementInstrumentOptions
-  ): CheckboxInstrument {
-    return new CheckboxInstrument(this.mechanicsSet, instrumentOptions);
+  public setupCheckbox(
+    instrumentOptions: ElementInstrumentOptions<boolean>
+  ): void {
+    this.trackInstrument(
+      new CheckboxInstrument(this.mechanicGroup, instrumentOptions)
+    );
   }
 
   /**
    * Build and configure  a element instrument with the current mechanics set.
    */
-  public useElement(
-    instrumentOptions: ElementInstrumentOptions
-  ): ElementInstrument {
-    return new ElementInstrument(this.mechanicsSet, instrumentOptions);
-  }
-
-  /**
-   * Build and configure  a keyboard instrument with the current mechanics set.
-   */
-  public useKeyboard(): KeyboardInstrument {
-    return new KeyboardInstrument(this.mechanicsSet);
+  public setupElement(instrumentOptions: ElementInstrumentOptions): void {
+    this.trackInstrument(
+      new ElementInstrument(this.mechanicGroup, instrumentOptions)
+    );
   }
 
   /**
    * Build and configure  a list instrument with the current mechanics set.
    */
-  public useList(instrumentOptions: ListMechanicOptions): ListInstrument {
-    return new ListInstrument(this.mechanicsSet, instrumentOptions);
+  public setupList(instrumentOptions: ListInstrumentOptions): void {
+    this.trackInstrument(
+      new ListInstrument(this.mechanicGroup, instrumentOptions)
+    );
   }
 
   /**
    * Build and configure  a text area instrument with the current mechanics set.
    */
-  public useTextArea(
-    instrumentOptions: ElementInstrumentOptions
-  ): TextAreaInstrument {
-    return new TextAreaInstrument(this.mechanicsSet, instrumentOptions);
+  public setupTextArea(
+    instrumentOptions: ElementInstrumentOptions<string>
+  ): void {
+    this.trackInstrument(
+      new TextAreaInstrument(this.mechanicGroup, instrumentOptions)
+    );
   }
 
   /**
    * Build and configure  a text box instrument with the current mechanics set.
    */
-  public useTextBox(
-    instrumentOptions: ElementInstrumentOptions
-  ): TextBoxInstrument {
-    return new TextBoxInstrument(this.mechanicsSet, instrumentOptions);
+  public setupTextBox(
+    instrumentOptions: ElementInstrumentOptions<string>
+  ): void {
+    this.trackInstrument(
+      new TextBoxInstrument(this.mechanicGroup, instrumentOptions)
+    );
   }
 
-  /**
-   * Build and configure  a url instrument with the current mechanics set.
-   */
-  public useUrl(instrumentOptions: UrlInstrumentOptions): UrlInstrument {
-    return new UrlInstrument(this.mechanicsSet, instrumentOptions);
+  protected trackInstrument(instrument: Instrument<unknown>) {
+    if (instrument) {
+      this.instruments.push(instrument);
+      this.idToInstrument[instrument.getId()] = instrument;
+    }
   }
 }

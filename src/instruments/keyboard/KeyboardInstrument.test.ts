@@ -1,17 +1,20 @@
-import { KeyboardInstrument } from './KeyboardInstrument';
+import {
+  KeyboardInstrument,
+  KEYBOARD_INSTRUMENT_ID,
+} from './KeyboardInstrument';
 import KeyboardMechanicMock from '../../mechanics/keyboard/KeyboardMechanicMock';
-import MechanicsSet from '../../MechanicsSet';
+import MechanicGroup from '../../MechanicGroup';
 import { InstrumentSet } from '../../InstrumentSet';
 
 jest.mock('../../mechanics/keyboard/KeyboardMechanicMock');
 
 describe('KeyboardInstrument', () => {
-  let keyboardInstrument: KeyboardInstrument;
+  let instrumentSet: InstrumentSet;
   let mockKeyboardMechanic: KeyboardMechanicMock;
   let mockIndex = 0;
 
   beforeEach(() => {
-    const mechanicsSet: MechanicsSet = {
+    const mechanicGroup: MechanicGroup = {
       keyboard: new KeyboardMechanicMock(),
     };
 
@@ -20,13 +23,11 @@ describe('KeyboardInstrument', () => {
     )).mock.instances[mockIndex];
     mockIndex += 1;
 
-    const instrumentSet: InstrumentSet = new InstrumentSet(mechanicsSet);
-
-    keyboardInstrument = instrumentSet.useKeyboard();
+    instrumentSet = new InstrumentSet(mechanicGroup);
   });
 
   test('can press the enter key', () => {
-    keyboardInstrument.pressEnter();
+    instrumentSet.use<KeyboardInstrument>(KEYBOARD_INSTRUMENT_ID).pressEnter();
 
     expect(mockKeyboardMechanic.pressEnter).toHaveBeenCalledTimes(1);
   });

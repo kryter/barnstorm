@@ -1,18 +1,22 @@
 import { CheckboxInstrument } from './CheckboxInstrument';
 import CheckboxMechanicMock from '../../mechanics/checkbox/CheckboxMechanicMock';
-import MechanicsSet from '../../MechanicsSet';
+import MechanicGroup from '../../MechanicGroup';
 import { InstrumentSet } from '../../InstrumentSet';
 
 jest.mock('../../mechanics/checkbox/CheckboxMechanicMock');
 
+const CHECKBOX_INSTRUMENT_ID = 'CHECKBOX_INSTRUMENT';
+const CHECKED_CHECKBOX_INSTRUMENT_ID = 'CHECKED_CHECKBOX_INSTRUMENT';
+
 describe('CheckboxInstrument', () => {
   const selector = '.the-checkbox-selector';
-  let checkboxInstrument: CheckboxInstrument;
+
+  let instrumentSet: InstrumentSet;
   let mockCheckboxMechanic;
   let mockIndex = 0;
 
   beforeEach(() => {
-    const mechanicsSet: MechanicsSet = {
+    const mechanicGroup: MechanicGroup = {
       checkbox: new CheckboxMechanicMock(),
     };
 
@@ -21,16 +25,73 @@ describe('CheckboxInstrument', () => {
     )).mock.instances[mockIndex];
     mockIndex += 1;
 
-    const instrumentSet: InstrumentSet = new InstrumentSet(mechanicsSet);
+    instrumentSet = new InstrumentSet(mechanicGroup);
 
-    checkboxInstrument = instrumentSet.useCheckbox({
+    instrumentSet.setupCheckbox({
+      id: CHECKBOX_INSTRUMENT_ID,
       selector,
+      initialState: false,
     });
+
+    instrumentSet.setupCheckbox({
+      id: CHECKED_CHECKBOX_INSTRUMENT_ID,
+      selector,
+      initialState: true,
+    });
+  });
+
+  test('can be initialized in a checked state', () => {
+    expect(
+      instrumentSet
+        .use<CheckboxInstrument>(CHECKED_CHECKBOX_INSTRUMENT_ID)
+        .getState()
+    ).toBe(true);
+
+    // Set expected result of mock to be in sync with non-default initial state.
+    mockCheckboxMechanic.toggle();
+
+    // When we verify the instrument, the mechanic should be called
+    // to verify the checkbox is checked.
+    instrumentSet
+      .use<CheckboxInstrument>(CHECKED_CHECKBOX_INSTRUMENT_ID)
+      .verifyState();
+    expect(mockCheckboxMechanic.verifyCheckedState).toHaveBeenCalledWith(
+      selector,
+      true
+    );
+  });
+
+  test('can be initialized in a checked state and set state', () => {
+    expect(
+      instrumentSet
+        .use<CheckboxInstrument>(CHECKED_CHECKBOX_INSTRUMENT_ID)
+        .getState()
+    ).toBe(true);
+    instrumentSet
+      .use<CheckboxInstrument>(CHECKED_CHECKBOX_INSTRUMENT_ID)
+      .setState(false);
+    expect(
+      instrumentSet
+        .use<CheckboxInstrument>(CHECKED_CHECKBOX_INSTRUMENT_ID)
+        .getState()
+    ).toBe(false);
+  });
+
+  test('can set state', () => {
+    expect(
+      instrumentSet.use<CheckboxInstrument>(CHECKBOX_INSTRUMENT_ID).getState()
+    ).toBe(false);
+    instrumentSet
+      .use<CheckboxInstrument>(CHECKBOX_INSTRUMENT_ID)
+      .setState(true);
+    expect(
+      instrumentSet.use<CheckboxInstrument>(CHECKBOX_INSTRUMENT_ID).getState()
+    ).toBe(true);
   });
 
   test('can be checked and unchecked', () => {
     // Check section
-    checkboxInstrument.check();
+    instrumentSet.use<CheckboxInstrument>(CHECKBOX_INSTRUMENT_ID).check();
 
     expect(mockCheckboxMechanic.toggle).toHaveBeenCalledWith(selector);
     expect(mockCheckboxMechanic.toggle).toHaveBeenCalledTimes(1);
@@ -46,7 +107,7 @@ describe('CheckboxInstrument', () => {
     expect(mockCheckboxMechanic.verifyCheckedState).toHaveBeenCalledTimes(2);
 
     // Uncheck section (requires the check section for setup)
-    checkboxInstrument.uncheck();
+    instrumentSet.use<CheckboxInstrument>(CHECKBOX_INSTRUMENT_ID).uncheck();
 
     expect(mockCheckboxMechanic.toggle).toHaveBeenCalledWith(selector);
     expect(mockCheckboxMechanic.toggle).toHaveBeenCalledTimes(2);
@@ -63,7 +124,7 @@ describe('CheckboxInstrument', () => {
   });
 
   test('can be toggled', () => {
-    checkboxInstrument.toggle();
+    instrumentSet.use<CheckboxInstrument>(CHECKBOX_INSTRUMENT_ID).toggle();
 
     expect(mockCheckboxMechanic.toggle).toHaveBeenCalledWith(selector);
     expect(mockCheckboxMechanic.toggle).toHaveBeenCalledTimes(1);
@@ -72,7 +133,9 @@ describe('CheckboxInstrument', () => {
   });
 
   test('can verify checked', () => {
-    checkboxInstrument.verifyIsChecked();
+    instrumentSet
+      .use<CheckboxInstrument>(CHECKBOX_INSTRUMENT_ID)
+      .verifyIsChecked();
 
     expect(mockCheckboxMechanic.toggle).toHaveBeenCalledTimes(0);
 
@@ -84,7 +147,9 @@ describe('CheckboxInstrument', () => {
   });
 
   test('can verify unchecked', () => {
-    checkboxInstrument.verifyIsNotChecked();
+    instrumentSet
+      .use<CheckboxInstrument>(CHECKBOX_INSTRUMENT_ID)
+      .verifyIsNotChecked();
 
     expect(mockCheckboxMechanic.toggle).toHaveBeenCalledTimes(0);
 

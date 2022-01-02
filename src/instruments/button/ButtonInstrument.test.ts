@@ -1,18 +1,21 @@
 import { ButtonInstrument } from './ButtonInstrument';
 import ButtonMechanicMock from '../../mechanics/button/ButtonMechanicMock';
-import MechanicsSet from '../../MechanicsSet';
+import MechanicGroup from '../../MechanicGroup';
 import { InstrumentSet } from '../../InstrumentSet';
 
 jest.mock('../../mechanics/button/ButtonMechanicMock');
 
+const BUTTON_INSTRUMENT_ID = 'BUTTON_INSTRUMENT';
+
 describe('ButtonInstrument', () => {
   const selector = '.the-button-selector';
-  let buttonInstrument: ButtonInstrument;
+
+  let instrumentSet: InstrumentSet;
   let mockButtonMechanic: ButtonMechanicMock;
   let mockIndex = 0;
 
   beforeEach(() => {
-    const mechanicsSet: MechanicsSet = {
+    const mechanicGroup: MechanicGroup = {
       button: new ButtonMechanicMock(),
     };
 
@@ -20,15 +23,16 @@ describe('ButtonInstrument', () => {
       .mock.instances[mockIndex];
     mockIndex += 1;
 
-    const instrumentSet: InstrumentSet = new InstrumentSet(mechanicsSet);
+    instrumentSet = new InstrumentSet(mechanicGroup);
 
-    buttonInstrument = instrumentSet.useButton({
+    instrumentSet.setupButton({
+      id: BUTTON_INSTRUMENT_ID,
       selector,
     });
   });
 
   test('can be clicked', () => {
-    buttonInstrument.click();
+    instrumentSet.use<ButtonInstrument>(BUTTON_INSTRUMENT_ID).click();
 
     expect(mockButtonMechanic.click).toHaveBeenCalledWith(selector);
     expect(mockButtonMechanic.click).toHaveBeenCalledTimes(1);

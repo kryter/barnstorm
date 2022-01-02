@@ -1,6 +1,7 @@
-import MechanicsSet from '../../MechanicsSet';
+import MechanicGroup from '../../MechanicGroup';
+import { Instrument, InstrumentOptions } from '../../Instrument';
 
-export interface ListMechanicOptions {
+export interface ListInstrumentOptions extends InstrumentOptions<string[]> {
   /**
    * CSS selector to get the root HTML element representing the list as a whole.
    */
@@ -13,11 +14,31 @@ export interface ListMechanicOptions {
   relativeItemSelector: string;
 }
 
-export class ListInstrument {
+export class ListInstrument implements Instrument<string[]> {
+  private currentState: string[];
+
   constructor(
-    protected mechanicsSet: MechanicsSet,
-    protected options: ListMechanicOptions
-  ) {}
+    protected mechanicGroup: MechanicGroup,
+    protected options: ListInstrumentOptions
+  ) {
+    this.currentState = options.initialState;
+  }
+
+  public getId(): string {
+    return this.options.id;
+  }
+
+  public getState(): string[] {
+    return this.currentState;
+  }
+
+  public setState(nextState: string[]): void {
+    this.currentState = nextState;
+  }
+
+  public verifyState(): void {
+    this.verifyListContent(this.currentState);
+  }
 
   protected genericListItemSelector(): string {
     return `${this.options.selector} ${this.options.relativeItemSelector}`;
@@ -57,14 +78,14 @@ export class ListInstrument {
     expectedItemContent: string
   ): void {
     const itemSelector = this.listItemSelectorByIndex(itemIndex);
-    this.mechanicsSet.element.verifyTextContent(
+    this.mechanicGroup.element.verifyTextContent(
       itemSelector,
       expectedItemContent
     );
   }
 
   public verifyContentLength(expectedLength: number): void {
-    this.mechanicsSet.list.verifyListLength(
+    this.mechanicGroup.list.verifyListLength(
       this.genericListItemSelector(),
       expectedLength
     );

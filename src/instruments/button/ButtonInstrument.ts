@@ -2,14 +2,33 @@ import {
   ElementInstrumentOptions,
   ElementInstrument,
 } from '../element/ElementInstrument';
-import MechanicsSet from '../../MechanicsSet';
+import MechanicGroup from '../../MechanicGroup';
 
-export class ButtonInstrument extends ElementInstrument {
-  constructor(mechanicsSet: MechanicsSet, options: ElementInstrumentOptions) {
-    super(mechanicsSet, options);
+export class ButtonInstrument extends ElementInstrument<
+  void,
+  ElementInstrumentOptions
+> {
+  constructor(mechanicGroup: MechanicGroup, options: ElementInstrumentOptions) {
+    super(mechanicGroup, options);
+  }
+
+  public getId(): string {
+    return this.options.id;
+  }
+
+  public getState(): void {
+    // TODO what is a button's state?
+  }
+
+  public setState(): void {
+    // TODO what is a button's state?
+  }
+
+  public verifyState(): void {
+    // TODO what can we verify about a button?
   }
 
   public click(): void {
-    this.mechanicsSet.button.click(this.options.selector);
+    this.mechanicGroup.button.click(this.options.selector);
   }
 }

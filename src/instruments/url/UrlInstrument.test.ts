@@ -1,18 +1,18 @@
-import { UrlInstrument } from './UrlInstrument';
+import { UrlInstrument, URL_INSTRUMENT_ID } from './UrlInstrument';
 import UrlMechanicMock from '../../mechanics/url/UrlMechanicMock';
-import MechanicsSet from '../../MechanicsSet';
+import MechanicGroup from '../../MechanicGroup';
 import { InstrumentSet } from '../../InstrumentSet';
 
 jest.mock('../../mechanics/url/UrlMechanicMock');
 
 describe('UrlInstrument', () => {
+  let instrumentSet: InstrumentSet;
   const url = 'https://example.cypress.io/todo';
-  let urlInstrument: UrlInstrument;
   let mockUrlMechanic: UrlMechanicMock;
   let mockIndex = 0;
 
   beforeEach(() => {
-    const mechanicsSet: MechanicsSet = {
+    const mechanicGroup: MechanicGroup = {
       url: new UrlMechanicMock(),
     };
 
@@ -20,24 +20,23 @@ describe('UrlInstrument', () => {
       .instances[mockIndex];
     mockIndex += 1;
 
-    const instrumentSet: InstrumentSet = new InstrumentSet(mechanicsSet);
-
-    urlInstrument = instrumentSet.useUrl({
-      url,
-    });
+    instrumentSet = new InstrumentSet(mechanicGroup);
   });
 
-  test('can visit the url', () => {
-    urlInstrument.visit();
+  test('can visit and verify the url', () => {
+    instrumentSet.use<UrlInstrument>(URL_INSTRUMENT_ID).verifyUrl();
+
+    expect(mockUrlMechanic.verifyUrl).toHaveBeenCalledWith('');
+    expect(mockUrlMechanic.verifyUrl).toHaveBeenCalledTimes(1);
+
+    instrumentSet.use<UrlInstrument>(URL_INSTRUMENT_ID).visit(url);
 
     expect(mockUrlMechanic.visit).toHaveBeenCalledWith(url);
     expect(mockUrlMechanic.visit).toHaveBeenCalledTimes(1);
-  });
 
-  test('can verify the url', () => {
-    urlInstrument.verifyUrl();
+    instrumentSet.use<UrlInstrument>(URL_INSTRUMENT_ID).verifyUrl();
 
     expect(mockUrlMechanic.verifyUrl).toHaveBeenCalledWith(url);
-    expect(mockUrlMechanic.verifyUrl).toHaveBeenCalledTimes(1);
+    expect(mockUrlMechanic.verifyUrl).toHaveBeenCalledTimes(2);
   });
 });

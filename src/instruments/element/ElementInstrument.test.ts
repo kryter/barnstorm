@@ -1,22 +1,26 @@
 import { ElementInstrument } from './ElementInstrument';
 import ElementMechanicMock from '../../mechanics/element/ElementMechanicMock';
-import MechanicsSet from '../../MechanicsSet';
+import MechanicGroup from '../../MechanicGroup';
 import { InstrumentSet } from '../../InstrumentSet';
 import ListMechanicMock from '../../mechanics/list/ListMechanicMock';
+import { ListInstrument } from '../list/ListInstrument';
 
 jest.mock('../../mechanics/element/ElementMechanicMock');
+
+const ELEMENT_INSTRUMENT_ID = 'ELEMENT_INSTRUMENT';
+const LIST_INSTRUMENT_ID = 'LIST_INSTRUMENT';
+const LIST_ITEM_ELEMENT_INSTRUMENT_ID = 'LIST_ITEM_ELEMENT_INSTRUMENT';
 
 describe('ElementInstrument', () => {
   const selector = '.the-element-selector';
   const classToCheck = 'selected';
 
-  let elementInstrument: ElementInstrument;
+  let instrumentSet: InstrumentSet;
   let mockElementMechanic: ElementMechanicMock;
   let mockIndex = 0;
-  let instrumentSet: InstrumentSet;
 
   beforeEach(() => {
-    const mechanicsSet: MechanicsSet = {
+    const mechanicGroup: MechanicGroup = {
       element: new ElementMechanicMock(),
       list: new ListMechanicMock(),
     };
@@ -25,29 +29,41 @@ describe('ElementInstrument', () => {
       .mock.instances[mockIndex];
     mockIndex += 1;
 
-    instrumentSet = new InstrumentSet(mechanicsSet);
+    instrumentSet = new InstrumentSet(mechanicGroup);
 
-    elementInstrument = instrumentSet.useElement({
+    instrumentSet.setupElement({
+      id: ELEMENT_INSTRUMENT_ID,
       selector,
+      initialState: undefined,
     });
   });
 
   test('can get simple selector', () => {
-    const actualSelector = elementInstrument.getSelector();
+    const actualSelector = instrumentSet
+      .use<ElementInstrument>(ELEMENT_INSTRUMENT_ID)
+      .getSelector();
 
     expect(actualSelector).toBe(selector);
   });
 
   test('can get a selector for an item in a list', () => {
-    const listItemElementInstrument = instrumentSet.useElement({
+    instrumentSet.setupList({
+      id: LIST_INSTRUMENT_ID,
+      selector: '.the-list',
+      relativeItemSelector: '.a-list-item',
+      initialState: [],
+    });
+
+    instrumentSet.setupElement({
+      id: LIST_ITEM_ELEMENT_INSTRUMENT_ID,
+      initialState: undefined,
       selector,
-      listInstrument: instrumentSet.useList({
-        selector: '.the-list',
-        relativeItemSelector: '.a-list-item',
-      }),
+      listInstrument: instrumentSet.use<ListInstrument>(LIST_INSTRUMENT_ID),
       itemNumber: 3,
     });
-    const listItemSelector = listItemElementInstrument.getSelector();
+    const listItemSelector = instrumentSet
+      .use<ElementInstrument>(LIST_ITEM_ELEMENT_INSTRUMENT_ID)
+      .getSelector();
 
     expect(listItemSelector).toBe(
       '.the-list .a-list-item:nth-child(3) .the-element-selector'
@@ -55,7 +71,9 @@ describe('ElementInstrument', () => {
   });
 
   test('can verify is not visible', () => {
-    elementInstrument.verifyIsNotVisible();
+    instrumentSet
+      .use<ElementInstrument>(ELEMENT_INSTRUMENT_ID)
+      .verifyIsNotVisible();
 
     expect(mockElementMechanic.verifyIsNotVisible).toHaveBeenCalledWith(
       selector
@@ -65,7 +83,9 @@ describe('ElementInstrument', () => {
 
   test('can verify text content', () => {
     const textContent = 'hello world';
-    elementInstrument.verifyTextContent(textContent);
+    instrumentSet
+      .use<ElementInstrument>(ELEMENT_INSTRUMENT_ID)
+      .verifyTextContent(textContent);
 
     expect(mockElementMechanic.verifyTextContent).toHaveBeenCalledWith(
       selector,
@@ -75,7 +95,9 @@ describe('ElementInstrument', () => {
   });
 
   test('can verify has a class', () => {
-    elementInstrument.verifyHasClass(classToCheck);
+    instrumentSet
+      .use<ElementInstrument>(ELEMENT_INSTRUMENT_ID)
+      .verifyHasClass(classToCheck);
 
     expect(mockElementMechanic.verifyHasClass).toHaveBeenCalledWith(
       selector,
@@ -85,7 +107,9 @@ describe('ElementInstrument', () => {
   });
 
   test('can verify does not have a class', () => {
-    elementInstrument.verifyDoesNotHaveClass(classToCheck);
+    instrumentSet
+      .use<ElementInstrument>(ELEMENT_INSTRUMENT_ID)
+      .verifyDoesNotHaveClass(classToCheck);
 
     expect(mockElementMechanic.verifyDoesNotHaveClass).toHaveBeenCalledWith(
       selector,
@@ -95,7 +119,9 @@ describe('ElementInstrument', () => {
   });
 
   test('can verify is in focus', () => {
-    elementInstrument.verifyIsInFocus();
+    instrumentSet
+      .use<ElementInstrument>(ELEMENT_INSTRUMENT_ID)
+      .verifyIsInFocus();
 
     expect(mockElementMechanic.verifyIsInFocus).toHaveBeenCalledWith(selector);
     expect(mockElementMechanic.verifyIsInFocus).toHaveBeenCalledTimes(1);

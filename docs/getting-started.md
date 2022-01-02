@@ -30,7 +30,7 @@ A Barnstorm plugin provides a set of test framework specific mechanics via a `bu
 import { InstrumentSet } from "@kryter/barnstorm/lib/InstrumentSet";
 import { buildMechanicsSet } from "@kryter/barnstorm-cypress/lib/buildMechanicsSet";
 
-export const instrumentSet: InstrumentSet = new InstrumentSet(buildMechanicsSet());
+export instrumentSet = new InstrumentSet(buildMechanicsSet());
 ```
 
 For convenience, I put this bit of code in a file called `AppInstrumentSet.ts` in my `src` directory to make it easy to use from all my `page` files that live next to their corresponding components.
@@ -89,14 +89,15 @@ class TodoPage {
   }
 
   public todoList(): ListInstrument {
-    return instrumentSet.useList({
+    return instrumentSet.setupList({
       selector: '.todo-list',
-      relativeItemSelector: 'li'
+      relativeItemSelector: 'li',
+      initialState: []
     });
   }
 
   public todoListItemCheckbox(itemNumber: number): CheckboxInstrument {
-    return instrumentSet.useCheckbox({
+    return instrumentSet.setupCheckbox({
       listInstrument: this.todoList(),
       itemNumber: itemNumber,
       selector: 'input[type="checkbox"].toggle'
@@ -104,13 +105,13 @@ class TodoPage {
   }
 
   public todoTextBox(): TextBoxInstrument {
-    return instrumentSet.useTextBox({
+    return instrumentSet.setupTextBox({
       selector: '[data-test=new-todo]'
     });
   }
 
   public activeFilterButton(): ButtonInstrument {
-    return instrumentSet.useButton({
+    return instrumentSet.setupButton({
       selector: '[href="#/active"]'
     });
   }

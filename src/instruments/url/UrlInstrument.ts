@@ -1,23 +1,35 @@
-import MechanicsSet from '../../MechanicsSet';
+import MechanicGroup from '../../MechanicGroup';
+import { Instrument } from '../../Instrument';
 
-export interface UrlInstrumentOptions {
-  /**
-   * Url to visit and verify.
-   */
-  url: string;
-}
+export const URL_INSTRUMENT_ID = 'URL_INSTRUMENT';
 
-export class UrlInstrument {
-  constructor(
-    protected mechanicsSet: MechanicsSet,
-    protected options: UrlInstrumentOptions
-  ) {}
+export class UrlInstrument implements Instrument<string> {
+  private currentState: string = '';
 
-  public visit(): void {
-    this.mechanicsSet.url.visit(this.options.url);
+  constructor(protected mechanicGroup: MechanicGroup) {}
+
+  public getId(): string {
+    return URL_INSTRUMENT_ID;
+  }
+
+  public getState(): string {
+    return this.currentState;
+  }
+
+  public setState(nextState: string): void {
+    this.currentState = nextState;
+  }
+
+  public verifyState(): void {
+    this.verifyUrl();
+  }
+
+  public visit(nextUrl: string): void {
+    this.currentState = nextUrl;
+    this.mechanicGroup.url.visit(nextUrl);
   }
 
   public verifyUrl(): void {
-    this.mechanicsSet.url.verifyUrl(this.options.url);
+    this.mechanicGroup.url.verifyUrl(this.currentState);
   }
 }

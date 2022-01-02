@@ -1,20 +1,22 @@
 import { TextAreaInstrument } from './TextAreaInstrument';
 import TextAreaMechanicMock from '../../mechanics/textArea/TextAreaMechanicMock';
-import MechanicsSet from '../../MechanicsSet';
+import MechanicGroup from '../../MechanicGroup';
 import { InstrumentSet } from '../../InstrumentSet';
 
 jest.mock('../../mechanics/textArea/TextAreaMechanicMock');
+
+const TEXT_AREA_INSTRUMENT_ID = 'TEXT_AREA_INSTRUMENT';
 
 describe('TextAreaInstrument', () => {
   const selector = '.the-textArea-selector';
   const expectedText = 'hello world';
 
-  let textAreaInstrument: TextAreaInstrument;
+  let instrumentSet: InstrumentSet;
   let mockTextAreaMechanic: TextAreaMechanicMock;
   let mockIndex = 0;
 
   beforeEach(() => {
-    const mechanicsSet: MechanicsSet = {
+    const mechanicGroup: MechanicGroup = {
       textArea: new TextAreaMechanicMock(),
     };
 
@@ -23,15 +25,19 @@ describe('TextAreaInstrument', () => {
     )).mock.instances[mockIndex];
     mockIndex += 1;
 
-    const instrumentSet: InstrumentSet = new InstrumentSet(mechanicsSet);
+    instrumentSet = new InstrumentSet(mechanicGroup);
 
-    textAreaInstrument = instrumentSet.useTextArea({
+    instrumentSet.setupTextArea({
+      id: TEXT_AREA_INSTRUMENT_ID,
       selector,
+      initialState: '',
     });
   });
 
   test('can enter text', () => {
-    textAreaInstrument.enterText(expectedText);
+    instrumentSet
+      .use<TextAreaInstrument>(TEXT_AREA_INSTRUMENT_ID)
+      .enterText(expectedText);
 
     expect(mockTextAreaMechanic.enterText).toHaveBeenCalledWith(
       selector,
@@ -41,7 +47,9 @@ describe('TextAreaInstrument', () => {
   });
 
   test('can verify text', () => {
-    textAreaInstrument.verifyText(expectedText);
+    instrumentSet
+      .use<TextAreaInstrument>(TEXT_AREA_INSTRUMENT_ID)
+      .verifyText(expectedText);
 
     expect(mockTextAreaMechanic.verifyText).toHaveBeenCalledWith(
       selector,

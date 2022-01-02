@@ -1,20 +1,22 @@
 import { TextBoxInstrument } from './TextBoxInstrument';
 import TextBoxMechanicMock from '../../mechanics/textBox/TextBoxMechanicMock';
-import MechanicsSet from '../../MechanicsSet';
+import MechanicGroup from '../../MechanicGroup';
 import { InstrumentSet } from '../../InstrumentSet';
 
 jest.mock('../../mechanics/textBox/TextBoxMechanicMock');
+
+const TEXT_BOX_INSTRUMENT_ID = 'TEXT_BOX_INSTRUMENT';
 
 describe('TextBoxInstrument', () => {
   const selector = '.the-textBox-selector';
   const expectedText = 'hello world';
 
-  let textBoxInstrument: TextBoxInstrument;
+  let instrumentSet: InstrumentSet;
   let mockTextBoxMechanic: TextBoxMechanicMock;
   let mockIndex = 0;
 
   beforeEach(() => {
-    const mechanicsSet: MechanicsSet = {
+    const mechanicGroup: MechanicGroup = {
       textBox: new TextBoxMechanicMock(),
     };
 
@@ -22,15 +24,19 @@ describe('TextBoxInstrument', () => {
       .mock.instances[mockIndex];
     mockIndex += 1;
 
-    const instrumentSet: InstrumentSet = new InstrumentSet(mechanicsSet);
+    instrumentSet = new InstrumentSet(mechanicGroup);
 
-    textBoxInstrument = instrumentSet.useTextBox({
+    instrumentSet.setupTextBox({
+      id: TEXT_BOX_INSTRUMENT_ID,
       selector,
+      initialState: '',
     });
   });
 
   test('can enter text', () => {
-    textBoxInstrument.enterText(expectedText);
+    instrumentSet
+      .use<TextBoxInstrument>(TEXT_BOX_INSTRUMENT_ID)
+      .enterText(expectedText);
 
     expect(mockTextBoxMechanic.enterText).toHaveBeenCalledWith(
       selector,
@@ -40,7 +46,9 @@ describe('TextBoxInstrument', () => {
   });
 
   test('can verify text', () => {
-    textBoxInstrument.verifyText(expectedText);
+    instrumentSet
+      .use<TextBoxInstrument>(TEXT_BOX_INSTRUMENT_ID)
+      .verifyText(expectedText);
 
     expect(mockTextBoxMechanic.verifyText).toHaveBeenCalledWith(
       selector,

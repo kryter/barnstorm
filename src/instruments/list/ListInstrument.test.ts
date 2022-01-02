@@ -1,22 +1,25 @@
 import { ListInstrument } from './ListInstrument';
 import ListMechanicMock from '../../mechanics/list/ListMechanicMock';
-import MechanicsSet from '../../MechanicsSet';
+import MechanicGroup from '../../MechanicGroup';
 import { InstrumentSet } from '../../InstrumentSet';
 import ElementMechanicMock from '../../mechanics/element/ElementMechanicMock';
 
 jest.mock('../../mechanics/element/ElementMechanicMock');
 jest.mock('../../mechanics/list/ListMechanicMock');
 
+const LIST_INSTRUMENT_ID = 'LIST_INSTRUMENT';
+
 describe('ListInstrument', () => {
   const selector = '.the-list-selector';
   const relativeItemSelector = '.a-list-item-selector';
-  let listInstrument: ListInstrument;
+
+  let instrumentSet: InstrumentSet;
   let mockElementMechanic: ElementMechanicMock;
   let mockListMechanic: ListMechanicMock;
   let mockIndex = 0;
 
   beforeEach(() => {
-    const mechanicsSet: MechanicsSet = {
+    const mechanicGroup: MechanicGroup = {
       element: new ElementMechanicMock(),
       list: new ListMechanicMock(),
     };
@@ -28,16 +31,20 @@ describe('ListInstrument', () => {
       .instances[mockIndex];
     mockIndex += 1;
 
-    const instrumentSet: InstrumentSet = new InstrumentSet(mechanicsSet);
+    instrumentSet = new InstrumentSet(mechanicGroup);
 
-    listInstrument = instrumentSet.useList({
+    instrumentSet.setupList({
+      id: LIST_INSTRUMENT_ID,
       selector,
       relativeItemSelector,
+      initialState: [],
     });
   });
 
   test('can get an item selector by index', () => {
-    const listItemSelector = listInstrument.listItemSelectorByIndex(2);
+    const listItemSelector = instrumentSet
+      .use<ListInstrument>(LIST_INSTRUMENT_ID)
+      .listItemSelectorByIndex(2);
 
     expect(listItemSelector).toBe(
       '.the-list-selector .a-list-item-selector:nth-child(3)'
@@ -45,7 +52,9 @@ describe('ListInstrument', () => {
   });
 
   test('can get an item selector by number', () => {
-    const listItemSelector = listInstrument.listItemSelectorByNumber(3);
+    const listItemSelector = instrumentSet
+      .use<ListInstrument>(LIST_INSTRUMENT_ID)
+      .listItemSelectorByNumber(3);
 
     expect(listItemSelector).toBe(
       '.the-list-selector .a-list-item-selector:nth-child(3)'
@@ -54,7 +63,9 @@ describe('ListInstrument', () => {
 
   test('can verify list content', () => {
     const expectedContent = ['one', 'two', 'three'];
-    listInstrument.verifyListContent(expectedContent);
+    instrumentSet
+      .use<ListInstrument>(LIST_INSTRUMENT_ID)
+      .verifyListContent(expectedContent);
 
     expect(mockElementMechanic.verifyTextContent).toHaveBeenCalledWith(
       '.the-list-selector .a-list-item-selector:nth-child(1)',
@@ -73,7 +84,9 @@ describe('ListInstrument', () => {
 
   test('can verify list content length', () => {
     const expectedLength = 5;
-    listInstrument.verifyContentLength(expectedLength);
+    instrumentSet
+      .use<ListInstrument>(LIST_INSTRUMENT_ID)
+      .verifyContentLength(expectedLength);
 
     expect(mockListMechanic.verifyListLength).toHaveBeenCalledWith(
       '.the-list-selector .a-list-item-selector',

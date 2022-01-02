@@ -7,7 +7,7 @@ import { TextBoxMechanic } from './mechanics/textBox/TextBoxMechanic';
 import { UrlMechanic } from './mechanics/url/UrlMechanic';
 import { ListMechanic } from './mechanics/list/ListMechanic';
 
-export default interface MechanicsSet {
+export default interface MechanicGroup {
   button?: ButtonMechanic;
   checkbox?: CheckboxMechanic;
   element?: ElementMechanic;
