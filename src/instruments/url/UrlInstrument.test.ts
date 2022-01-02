@@ -26,7 +26,7 @@ describe('UrlInstrument', () => {
   test('can visit and verify the url', () => {
     instrumentSet.use<UrlInstrument>(URL_INSTRUMENT_ID).verifyUrl();
 
-    expect(mockUrlMechanic.verifyUrl).toHaveBeenCalledWith('');
+    expect(mockUrlMechanic.verifyUrl).toHaveBeenCalledWith(undefined);
     expect(mockUrlMechanic.verifyUrl).toHaveBeenCalledTimes(1);
 
     instrumentSet.use<UrlInstrument>(URL_INSTRUMENT_ID).visit(url);

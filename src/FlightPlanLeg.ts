@@ -1,5 +1,6 @@
+import { InstrumentSet } from './InstrumentSet';
+
 export interface FlightPlanLeg {
-  description: string;
-  doTestAction: () => void;
-  updateExpectations: () => void;
+  doTestAction: (instrumentSet: InstrumentSet) => void;
+  updateExpectations: (instrumentSet: InstrumentSet) => void;
 }

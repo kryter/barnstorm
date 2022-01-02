@@ -10,10 +10,6 @@ export class KeyboardInstrument implements Instrument<void> {
     return KEYBOARD_INSTRUMENT_ID;
   }
 
-  public getState(): void {
-    // TODO what is a keyboard's state?
-  }
-
   public setState(): void {
     // TODO what is a keyboard's state?
   }

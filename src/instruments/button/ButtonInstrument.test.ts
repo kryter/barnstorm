@@ -2,6 +2,7 @@ import { ButtonInstrument } from './ButtonInstrument';
 import ButtonMechanicMock from '../../mechanics/button/ButtonMechanicMock';
 import MechanicGroup from '../../MechanicGroup';
 import { InstrumentSet } from '../../InstrumentSet';
+import { INSTRUMENT_TYPES } from '../../InstrumentOptions';
 
 jest.mock('../../mechanics/button/ButtonMechanicMock');
 
@@ -25,8 +26,9 @@ describe('ButtonInstrument', () => {
 
     instrumentSet = new InstrumentSet(mechanicGroup);
 
-    instrumentSet.setupButton({
+    instrumentSet.setup({
       id: BUTTON_INSTRUMENT_ID,
+      instrumentType: INSTRUMENT_TYPES.BUTTON,
       selector,
     });
   });

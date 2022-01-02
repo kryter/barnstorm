@@ -14,7 +14,7 @@ export class CheckboxInstrument extends ElementInstrument<
   ) {
     super(mechanicGroup, options);
 
-    this.currentState = options.initialState;
+    this.currentState = options.initialState || false;
   }
 
   public verifyState(): void {
@@ -23,21 +23,22 @@ export class CheckboxInstrument extends ElementInstrument<
     } else {
       this.verifyIsNotChecked();
     }
-
-    super.verifyState();
   }
 
   public toggle(): void {
-    this.mechanicGroup.checkbox.toggle(this.getSelector());
+    this.mechanicGroup.checkbox.toggle(this.options.selector);
     this.currentState = !this.currentState;
   }
 
   public verifyIsChecked(): void {
-    this.mechanicGroup.checkbox.verifyCheckedState(this.getSelector(), true);
+    this.mechanicGroup.checkbox.verifyCheckedState(this.options.selector, true);
   }
 
   public verifyIsNotChecked(): void {
-    this.mechanicGroup.checkbox.verifyCheckedState(this.getSelector(), false);
+    this.mechanicGroup.checkbox.verifyCheckedState(
+      this.options.selector,
+      false
+    );
   }
 
   public uncheck(): void {

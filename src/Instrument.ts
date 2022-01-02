@@ -1,16 +1,3 @@
-export interface InstrumentOptions<TState = void> {
-  /**
-   * Instrument Id.  Useful for accessing an instrument after it is created
-   * so that it can be used to manipulate or verify a UI element.
-   */
-  id: string;
-
-  /**
-   * The expected content when the UI component loads.
-   */
-  initialState?: TState;
-}
-
 /**
  * An Instrument tracks the mechanic(s) needed for a particular UI element
  * as well as the expected results for the UI element, if it is interactive.
@@ -26,7 +13,6 @@ export interface InstrumentOptions<TState = void> {
  */
 export interface Instrument<TState = void> {
   getId: () => string;
-  getState: () => TState;
   setState: (nextState: TState) => void;
   verifyState: () => void;
 }

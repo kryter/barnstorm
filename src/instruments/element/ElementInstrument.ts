@@ -1,28 +1,16 @@
 import MechanicGroup from '../../MechanicGroup';
-import { ListInstrument } from '../list/ListInstrument';
-import { Instrument, InstrumentOptions } from '../../Instrument';
+import { Instrument } from '../../Instrument';
+import { InstrumentOptions } from '../../InstrumentOptions';
 
 export interface ElementInstrumentOptions<TState = void>
   extends InstrumentOptions<TState> {
-  /**
-   * Optional: List instrument that provides
-   * the parent CSS selector for this HTML element.
-   */
-  listInstrument?: ListInstrument;
-
-  /**
-   * Optional: 1 based number of the item in the list instrument
-   * (used if list instrument is provided).
-   */
-  itemNumber?: number;
-
   /**
    * CSS selector to get the HTML element.
    */
   selector: string;
 }
 
-export class ElementInstrument<
+export abstract class ElementInstrument<
   TState = void,
   TOptions extends ElementInstrumentOptions<TState> = ElementInstrumentOptions<TState>
 > implements Instrument<TState>
@@ -38,49 +26,35 @@ export class ElementInstrument<
     return this.options.id;
   }
 
-  public getState(): TState {
-    return this.currentState;
-  }
-
   public setState(nextState: TState): void {
     this.currentState = nextState;
   }
 
-  public verifyState(): void {
-    // TODO what can we verify about a element?
-  }
-
-  public getSelector(): string {
-    if (this.options.listInstrument) {
-      const { listInstrument } = this.options;
-      const itemSelector = listInstrument.listItemSelectorByNumber(
-        this.options.itemNumber
-      );
-      return `${itemSelector} ${this.options.selector}`;
-    }
-    return this.options.selector;
-  }
+  public abstract verifyState(): void;
 
   public verifyIsNotVisible(): void {
-    this.mechanicGroup.element.verifyIsNotVisible(this.getSelector());
+    this.mechanicGroup.element.verifyIsNotVisible(this.options.selector);
   }
 
   public verifyTextContent(content: string): void {
-    this.mechanicGroup.element.verifyTextContent(this.getSelector(), content);
+    this.mechanicGroup.element.verifyTextContent(
+      this.options.selector,
+      content
+    );
   }
 
   public verifyHasClass(className: string): void {
-    this.mechanicGroup.element.verifyHasClass(this.getSelector(), className);
+    this.mechanicGroup.element.verifyHasClass(this.options.selector, className);
   }
 
   public verifyDoesNotHaveClass(className: string): void {
     this.mechanicGroup.element.verifyDoesNotHaveClass(
-      this.getSelector(),
+      this.options.selector,
       className
     );
   }
 
   public verifyIsInFocus(): void {
-    this.mechanicGroup.element.verifyIsInFocus(this.getSelector());
+    this.mechanicGroup.element.verifyIsInFocus(this.options.selector);
   }
 }

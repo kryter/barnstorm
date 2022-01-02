@@ -1,6 +1,6 @@
 import { ElementMechanic } from './ElementMechanic';
 
-export default class ElementMechanicDefault implements ElementMechanic {
+export default class ElementMechanicMock implements ElementMechanic {
   verifyIsNotVisible(selector: string): void {}
 
   verifyTextContent(selector: string, content: string): void {}

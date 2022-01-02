@@ -1,47 +1,131 @@
 import MechanicGroup from '../../MechanicGroup';
-import { Instrument, InstrumentOptions } from '../../Instrument';
+import { Instrument } from '../../Instrument';
+import { ElementInstrumentOptions } from '../element/ElementInstrument';
+import { InstrumentManager } from '../../InstrumentManager';
 
-export interface ListInstrumentOptions extends InstrumentOptions<string[]> {
-  /**
-   * CSS selector to get the root HTML element representing the list as a whole.
-   */
-  selector: string;
-
+export interface ListInstrumentOptions
+  extends ElementInstrumentOptions<Record<string, unknown>[]> {
   /**
    * CSS selector to get an item in the list.
    * This selector is relative to the listSelector.
    */
   relativeItemSelector: string;
+
+  /**
+   * A list instrument operates on a set of rows.
+   * Each row contains zero or more columns.  The possible columns a row can have
+   * are specified by column keys.  The column options are used to create an instrument
+   * for the column item within the row.
+   */
+  columns: ElementInstrumentOptions<unknown>[];
 }
 
-export class ListInstrument implements Instrument<string[]> {
-  private currentState: string[];
+export class ListInstrument implements Instrument<Record<string, unknown>[]> {
+  private columnIdToColumnOptions: Record<
+    string,
+    ElementInstrumentOptions<unknown>
+  > = {};
+
+  private rows: Record<string, string>[] = [];
 
   constructor(
     protected mechanicGroup: MechanicGroup,
-    protected options: ListInstrumentOptions
+    protected options: ListInstrumentOptions,
+    protected instrumentManager: InstrumentManager
   ) {
-    this.currentState = options.initialState;
+    this.options.columns.forEach((columnOptions) => {
+      this.columnIdToColumnOptions[columnOptions.id] = columnOptions;
+    });
+
+    this.setState(options.initialState || []);
   }
 
   public getId(): string {
     return this.options.id;
   }
 
-  public getState(): string[] {
-    return this.currentState;
+  public getCellId(rowIndex: number, columnId: string): string {
+    return `${this.getId()}--${rowIndex}--${columnId}`;
   }
 
-  public setState(nextState: string[]): void {
-    this.currentState = nextState;
+  public addRow(columnIdToState: Record<string, unknown>): void {
+    const newRow = this.createRow(this.rows.length, columnIdToState);
+    this.rows.push(newRow);
+  }
+
+  public createRow(
+    rowIndex: number,
+    columnIdToState: Record<string, unknown>
+  ): Record<string, string> {
+    const newRow = {};
+    Object.keys(columnIdToState).forEach((columnId: string) => {
+      const cellId = this.setupInstrument(
+        rowIndex,
+        columnId,
+        columnIdToState[columnId]
+      );
+      newRow[columnId] = cellId;
+    });
+    return newRow;
+  }
+
+  public setState(nextState: Record<string, unknown>[]): void {
+    // Clear out old state.
+    if (this.rows) {
+      this.rows.forEach((row: Record<string, string>) => {
+        Object.values(row).forEach((instrumentId: string) =>
+          this.instrumentManager.teardownInstrument(instrumentId)
+        );
+      });
+    }
+
+    // Populate new state.
+    this.rows = nextState.map(
+      (columnIdToState: Record<string, unknown>, rowIndex: number) =>
+        this.createRow(rowIndex, columnIdToState)
+    );
+  }
+
+  private setupInstrument(
+    rowIndex: number,
+    columnId: string,
+    initialState: unknown
+  ): string {
+    const columnOptions: ElementInstrumentOptions<unknown> =
+      this.getColumnOptions(columnId);
+
+    const cellId = this.getCellId(rowIndex, columnId);
+
+    this.instrumentManager.setupInstrument({
+      ...columnOptions,
+      id: this.getCellId(rowIndex, columnId),
+      initialState,
+      selector: `${this.listItemSelectorByIndex(rowIndex)} ${
+        columnOptions.selector || ''
+      }`,
+    });
+
+    return cellId;
   }
 
   public verifyState(): void {
-    this.verifyListContent(this.currentState);
+    // Just check the length here.
+    // The cell instruments will check their own cell states.
+    this.verifyContentLength(this.rows.length);
   }
 
-  protected genericListItemSelector(): string {
-    return `${this.options.selector} ${this.options.relativeItemSelector}`;
+  public getColumnOptions(columnId: string): ElementInstrumentOptions<unknown> {
+    const columnOptions = this.columnIdToColumnOptions[columnId];
+
+    if (!columnOptions) {
+      throw new Error(
+        `Column key \`columnId = ${columnId} \` was not found in the column definitions: ${Object.keys(
+          this.columnIdToColumnOptions
+        ).join(', ')}`
+      );
+    }
+
+    return columnOptions;
   }
 
   /**
@@ -61,27 +145,8 @@ export class ListInstrument implements Instrument<string[]> {
     return `${this.genericListItemSelector()}:nth-child(${itemNumber})`;
   }
 
-  public verifyListContent(expectedContent: string[]): void {
-    // First verify the expected length of the list to make sure there
-    // are no extra actual items in the DOM and we are in the right ballpark
-    // for additionally verifying the content.
-    this.verifyContentLength(expectedContent.length);
-
-    // Then verify the content for all expected items in the list.
-    for (let i = 0; i < expectedContent.length; i += 1) {
-      this.verifyItemContent(i, expectedContent[i]);
-    }
-  }
-
-  public verifyItemContent(
-    itemIndex: number,
-    expectedItemContent: string
-  ): void {
-    const itemSelector = this.listItemSelectorByIndex(itemIndex);
-    this.mechanicGroup.element.verifyTextContent(
-      itemSelector,
-      expectedItemContent
-    );
+  protected genericListItemSelector(): string {
+    return `${this.options.selector} ${this.options.relativeItemSelector}`;
   }
 
   public verifyContentLength(expectedLength: number): void {

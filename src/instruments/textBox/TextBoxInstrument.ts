@@ -13,7 +13,7 @@ export class TextBoxInstrument extends ElementInstrument<
     options: ElementInstrumentOptions<string>
   ) {
     super(mechanicGroup, options);
-    this.currentState = options.initialState;
+    this.currentState = options.initialState || '';
   }
 
   public verifyState(): void {

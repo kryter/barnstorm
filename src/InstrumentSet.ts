@@ -2,47 +2,63 @@ import MechanicGroup from './MechanicGroup';
 import { ButtonInstrument } from './instruments/button/ButtonInstrument';
 import { CheckboxInstrument } from './instruments/checkbox/CheckboxInstrument';
 import {
-  ElementInstrument,
-  ElementInstrumentOptions,
-} from './instruments/element/ElementInstrument';
-import { KeyboardInstrument } from './instruments/keyboard/KeyboardInstrument';
+  KeyboardInstrument,
+  KEYBOARD_INSTRUMENT_ID,
+} from './instruments/keyboard/KeyboardInstrument';
 import { TextAreaInstrument } from './instruments/textArea/TextAreaInstrument';
 import { TextBoxInstrument } from './instruments/textBox/TextBoxInstrument';
-import { UrlInstrument } from './instruments/url/UrlInstrument';
+import {
+  UrlInstrument,
+  URL_INSTRUMENT_ID,
+} from './instruments/url/UrlInstrument';
 import {
   ListInstrument,
   ListInstrumentOptions,
 } from './instruments/list/ListInstrument';
-import { FlightPlan } from './FlightPlan';
 import { Instrument } from './Instrument';
-import { FlightPlanLeg } from './FlightPlanLeg';
+import { ElementInstrumentOptions } from './instruments/element/ElementInstrument';
+import { InstrumentOptions, INSTRUMENT_TYPES } from './InstrumentOptions';
+import {
+  InstrumentManager,
+  InstrumentSetupEvent,
+  InstrumentTeardownEvent,
+} from './InstrumentManager';
+import { SimpleElementInstrument } from './instruments/simpleElement/SimpleElementInstrument';
 
 export class InstrumentSet {
-  private instruments: Instrument<unknown>[] = [];
+  private instrumentManager: InstrumentManager = new InstrumentManager();
 
   private idToInstrument: Record<string, Instrument<unknown>> = {};
 
   constructor(protected mechanicGroup: MechanicGroup) {
-    this.trackInstrument(new KeyboardInstrument(this.mechanicGroup));
-    this.trackInstrument(new UrlInstrument(this.mechanicGroup));
-  }
+    // Setup instrument manager before setting up any instruments.
+    this.instrumentManager
+      .getInstrumentSetupObservable()
+      .subscribe(({ instrumentOptions }: InstrumentSetupEvent) => {
+        this.setup(instrumentOptions);
+      });
 
-  public fly(flightPlan: FlightPlan): void {
-    // Verify initial state.
-    this.verifyState();
+    this.instrumentManager
+      .getInstrumentTeardownObservable()
+      .subscribe(({ instrumentId }: InstrumentTeardownEvent) => {
+        this.teardown(instrumentId);
+      });
 
-    flightPlan.legs.forEach((leg: FlightPlanLeg) => {
-      // Do the test action.
-      leg.doTestAction();
-
-      // Update expectations based on the action and verify updated state.
-      leg.updateExpectations();
-      this.verifyState();
+    // By default setup a single instance of a keyboard and a URL bar.
+    this.instrumentManager.setupInstrument({
+      id: KEYBOARD_INSTRUMENT_ID,
+      instrumentType: INSTRUMENT_TYPES.KEYBOARD,
+    });
+    this.instrumentManager.setupInstrument({
+      id: URL_INSTRUMENT_ID,
+      instrumentType: INSTRUMENT_TYPES.URL,
     });
   }
 
-  protected verifyState(): void {
-    this.instruments.forEach((instrument) => instrument.verifyState());
+  public verifyState(): void {
+    Object.values(this.idToInstrument).forEach((instrument) =>
+      instrument.verifyState()
+    );
   }
 
   public use<TInstrument extends Instrument<unknown>>(
@@ -52,69 +68,105 @@ export class InstrumentSet {
   }
 
   /**
-   * Build and configure a button instrument with the current mechanics set.
+   * Get the instrument for a UI element within the row of a list
+   * using the rowIndex (zero based for convenience in test code),
+   * and the columnId which needs to match the columnId of the columnDefinitions
+   * in the list instrument options.
    */
-  public setupButton(instrumentOptions: ElementInstrumentOptions): void {
-    this.trackInstrument(
-      new ButtonInstrument(this.mechanicGroup, instrumentOptions)
-    );
+  public useColumnInstrument<TInstrument extends Instrument<unknown>>({
+    listInstrument,
+    rowIndex,
+    columnId,
+  }: {
+    listInstrument: ListInstrument;
+    rowIndex: number;
+    columnId: string;
+  }): TInstrument {
+    const columnDefinition = listInstrument.getColumnOptions(columnId);
+
+    return this.setup({
+      ...columnDefinition,
+      selector: `${listInstrument.listItemSelectorByIndex(rowIndex)} ${
+        columnDefinition.selector || ''
+      }`,
+    });
   }
 
   /**
-   * Build and configure  a checkbox instrument with the current mechanics set.
+   * Build and configure an instrument with the current mechanics set.
    */
-  public setupCheckbox(
-    instrumentOptions: ElementInstrumentOptions<boolean>
-  ): void {
-    this.trackInstrument(
-      new CheckboxInstrument(this.mechanicGroup, instrumentOptions)
-    );
+  public setup<
+    TInstrument extends Instrument<unknown>,
+    TInstrumentOptions extends InstrumentOptions<unknown>
+  >(instrumentOptions: TInstrumentOptions): TInstrument {
+    const existingInstrument = this.idToInstrument[instrumentOptions.id];
+    if (existingInstrument) {
+      return existingInstrument as TInstrument;
+    }
+
+    const instrument = this.createInstrument(instrumentOptions);
+    this.idToInstrument[instrument.getId()] = instrument;
+    return instrument as TInstrument;
   }
 
   /**
-   * Build and configure  a element instrument with the current mechanics set.
+   * Build and configure an instrument with the current mechanics set.
    */
-  public setupElement(instrumentOptions: ElementInstrumentOptions): void {
-    this.trackInstrument(
-      new ElementInstrument(this.mechanicGroup, instrumentOptions)
-    );
+  private teardown(instrumentId: string): void {
+    delete this.idToInstrument[instrumentId];
   }
 
-  /**
-   * Build and configure  a list instrument with the current mechanics set.
-   */
-  public setupList(instrumentOptions: ListInstrumentOptions): void {
-    this.trackInstrument(
-      new ListInstrument(this.mechanicGroup, instrumentOptions)
-    );
-  }
+  private createInstrument(
+    instrumentOptions: InstrumentOptions<unknown>
+  ): Instrument<unknown> {
+    switch (instrumentOptions.instrumentType) {
+      case INSTRUMENT_TYPES.BUTTON:
+        return new ButtonInstrument(
+          this.mechanicGroup,
+          <ElementInstrumentOptions>instrumentOptions
+        );
 
-  /**
-   * Build and configure  a text area instrument with the current mechanics set.
-   */
-  public setupTextArea(
-    instrumentOptions: ElementInstrumentOptions<string>
-  ): void {
-    this.trackInstrument(
-      new TextAreaInstrument(this.mechanicGroup, instrumentOptions)
-    );
-  }
+      case INSTRUMENT_TYPES.CHECKBOX:
+        return new CheckboxInstrument(
+          this.mechanicGroup,
+          <ElementInstrumentOptions<boolean>>instrumentOptions
+        );
 
-  /**
-   * Build and configure  a text box instrument with the current mechanics set.
-   */
-  public setupTextBox(
-    instrumentOptions: ElementInstrumentOptions<string>
-  ): void {
-    this.trackInstrument(
-      new TextBoxInstrument(this.mechanicGroup, instrumentOptions)
-    );
-  }
+      case INSTRUMENT_TYPES.SIMPLE_ELEMENT:
+        return new SimpleElementInstrument(
+          this.mechanicGroup,
+          <ElementInstrumentOptions<string>>instrumentOptions
+        );
 
-  protected trackInstrument(instrument: Instrument<unknown>) {
-    if (instrument) {
-      this.instruments.push(instrument);
-      this.idToInstrument[instrument.getId()] = instrument;
+      case INSTRUMENT_TYPES.KEYBOARD:
+        return new KeyboardInstrument(this.mechanicGroup);
+
+      case INSTRUMENT_TYPES.LIST:
+        return new ListInstrument(
+          this.mechanicGroup,
+          <ListInstrumentOptions>instrumentOptions,
+          this.instrumentManager
+        );
+
+      case INSTRUMENT_TYPES.TEXT_AREA:
+        return new TextAreaInstrument(
+          this.mechanicGroup,
+          <ElementInstrumentOptions<string>>instrumentOptions
+        );
+
+      case INSTRUMENT_TYPES.TEXT_BOX:
+        return new TextBoxInstrument(
+          this.mechanicGroup,
+          <ElementInstrumentOptions<string>>instrumentOptions
+        );
+
+      case INSTRUMENT_TYPES.URL:
+        return new UrlInstrument(this.mechanicGroup);
+
+      default:
+        throw new Error(
+          `Creating an instrument of type ${instrumentOptions.instrumentType}, id=\`${instrumentOptions.id}\` is not supported.`
+        );
     }
   }
 }

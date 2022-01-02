@@ -89,7 +89,7 @@ class TodoPage {
   }
 
   public todoList(): ListInstrument {
-    return instrumentSet.setupList({
+    return instrumentSet.setup({
       selector: '.todo-list',
       relativeItemSelector: 'li',
       initialState: []
@@ -97,7 +97,7 @@ class TodoPage {
   }
 
   public todoListItemCheckbox(itemNumber: number): CheckboxInstrument {
-    return instrumentSet.setupCheckbox({
+    return instrumentSet.setup({
       listInstrument: this.todoList(),
       itemNumber: itemNumber,
       selector: 'input[type="checkbox"].toggle'
@@ -105,13 +105,13 @@ class TodoPage {
   }
 
   public todoTextBox(): TextBoxInstrument {
-    return instrumentSet.setupTextBox({
+    return instrumentSet.setup({
       selector: '[data-test=new-todo]'
     });
   }
 
   public activeFilterButton(): ButtonInstrument {
-    return instrumentSet.setupButton({
+    return instrumentSet.setup({
       selector: '[href="#/active"]'
     });
   }

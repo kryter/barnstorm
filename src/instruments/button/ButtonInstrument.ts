@@ -16,10 +16,6 @@ export class ButtonInstrument extends ElementInstrument<
     return this.options.id;
   }
 
-  public getState(): void {
-    // TODO what is a button's state?
-  }
-
   public setState(): void {
     // TODO what is a button's state?
   }

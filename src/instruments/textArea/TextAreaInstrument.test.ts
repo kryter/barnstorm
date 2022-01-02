@@ -2,6 +2,7 @@ import { TextAreaInstrument } from './TextAreaInstrument';
 import TextAreaMechanicMock from '../../mechanics/textArea/TextAreaMechanicMock';
 import MechanicGroup from '../../MechanicGroup';
 import { InstrumentSet } from '../../InstrumentSet';
+import { INSTRUMENT_TYPES } from '../../InstrumentOptions';
 
 jest.mock('../../mechanics/textArea/TextAreaMechanicMock');
 
@@ -27,8 +28,9 @@ describe('TextAreaInstrument', () => {
 
     instrumentSet = new InstrumentSet(mechanicGroup);
 
-    instrumentSet.setupTextArea({
+    instrumentSet.setup({
       id: TEXT_AREA_INSTRUMENT_ID,
+      instrumentType: INSTRUMENT_TYPES.TEXT_AREA,
       selector,
       initialState: '',
     });

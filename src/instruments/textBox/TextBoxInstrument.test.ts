@@ -2,6 +2,7 @@ import { TextBoxInstrument } from './TextBoxInstrument';
 import TextBoxMechanicMock from '../../mechanics/textBox/TextBoxMechanicMock';
 import MechanicGroup from '../../MechanicGroup';
 import { InstrumentSet } from '../../InstrumentSet';
+import { INSTRUMENT_TYPES } from '../../InstrumentOptions';
 
 jest.mock('../../mechanics/textBox/TextBoxMechanicMock');
 
@@ -26,8 +27,9 @@ describe('TextBoxInstrument', () => {
 
     instrumentSet = new InstrumentSet(mechanicGroup);
 
-    instrumentSet.setupTextBox({
+    instrumentSet.setup({
       id: TEXT_BOX_INSTRUMENT_ID,
+      instrumentType: INSTRUMENT_TYPES.TEXT_BOX,
       selector,
       initialState: '',
     });

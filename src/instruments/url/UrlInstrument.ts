@@ -4,16 +4,12 @@ import { Instrument } from '../../Instrument';
 export const URL_INSTRUMENT_ID = 'URL_INSTRUMENT';
 
 export class UrlInstrument implements Instrument<string> {
-  private currentState: string = '';
+  private currentState: string;
 
   constructor(protected mechanicGroup: MechanicGroup) {}
 
   public getId(): string {
     return URL_INSTRUMENT_ID;
-  }
-
-  public getState(): string {
-    return this.currentState;
   }
 
   public setState(nextState: string): void {
