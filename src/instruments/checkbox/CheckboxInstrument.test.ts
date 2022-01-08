@@ -2,7 +2,7 @@ import { CheckboxInstrument } from './CheckboxInstrument';
 import CheckboxMechanicMock from '../../mechanics/checkbox/CheckboxMechanicMock';
 import MechanicGroup from '../../MechanicGroup';
 import { InstrumentSet } from '../../InstrumentSet';
-import { INSTRUMENT_TYPES } from '../../InstrumentOptions';
+import { INSTRUMENT_TYPES } from '../../INSTRUMENT_TYPES';
 
 jest.mock('../../mechanics/checkbox/CheckboxMechanicMock');
 
@@ -32,14 +32,18 @@ describe('CheckboxInstrument', () => {
       id: CHECKBOX_INSTRUMENT_ID,
       instrumentType: INSTRUMENT_TYPES.CHECKBOX,
       selector,
-      initialState: false,
+      initialState: {
+        isChecked: false,
+      },
     });
 
     instrumentSet.setup({
       id: CHECKED_CHECKBOX_INSTRUMENT_ID,
       instrumentType: INSTRUMENT_TYPES.CHECKBOX,
       selector,
-      initialState: true,
+      initialState: {
+        isChecked: true,
+      },
     });
   });
 
@@ -72,7 +76,9 @@ describe('CheckboxInstrument', () => {
     expect(mockCheckboxMechanic.verifyCheckedState).toHaveBeenCalledTimes(1);
 
     // Then set the state and verify it again to make sure the state has been updated.
-    checkboxInstrument.setState(true);
+    checkboxInstrument.updateState({
+      isChecked: true,
+    });
     checkboxInstrument.verifyState();
 
     expect(mockCheckboxMechanic.verifyCheckedState).toHaveBeenCalledWith(

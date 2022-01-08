@@ -73,7 +73,7 @@ For example:
 import {
   ButtonInstrument,
   CheckboxInstrument,
-  ElementInstrument,
+  UIElementInstrument,
   KeyboardInstrument,
   ListInstrument,
   TextBoxInstrument,

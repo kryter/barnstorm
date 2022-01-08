@@ -11,8 +11,10 @@
  * An example of an instrument with a void return type is a simple, naive button that can be
  * pressed to produce an action but does not have state that we are looking to check in a test.
  */
-export interface Instrument<TState = void> {
+export interface Instrument<
+  TState extends Record<string, unknown> = Record<string, unknown>
+> {
   getId: () => string;
-  setState: (nextState: TState) => void;
+  updateState: (nextState: TState) => void;
   verifyState: () => void;
 }

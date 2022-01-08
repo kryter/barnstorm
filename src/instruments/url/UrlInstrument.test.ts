@@ -24,9 +24,9 @@ describe('UrlInstrument', () => {
   });
 
   test('can visit and verify the url', () => {
-    instrumentSet.use<UrlInstrument>(URL_INSTRUMENT_ID).verifyUrl();
+    instrumentSet.use<UrlInstrument>(URL_INSTRUMENT_ID).verifyUrl('');
 
-    expect(mockUrlMechanic.verifyUrl).toHaveBeenCalledWith(undefined);
+    expect(mockUrlMechanic.verifyUrl).toHaveBeenCalledWith('');
     expect(mockUrlMechanic.verifyUrl).toHaveBeenCalledTimes(1);
 
     instrumentSet.use<UrlInstrument>(URL_INSTRUMENT_ID).visit(url);
@@ -34,7 +34,24 @@ describe('UrlInstrument', () => {
     expect(mockUrlMechanic.visit).toHaveBeenCalledWith(url);
     expect(mockUrlMechanic.visit).toHaveBeenCalledTimes(1);
 
-    instrumentSet.use<UrlInstrument>(URL_INSTRUMENT_ID).verifyUrl();
+    instrumentSet.use<UrlInstrument>(URL_INSTRUMENT_ID).verifyUrl(url);
+
+    expect(mockUrlMechanic.verifyUrl).toHaveBeenCalledWith(url);
+    expect(mockUrlMechanic.verifyUrl).toHaveBeenCalledTimes(2);
+  });
+
+  test('can visit and verify the state', () => {
+    instrumentSet.use<UrlInstrument>(URL_INSTRUMENT_ID).verifyState();
+
+    expect(mockUrlMechanic.verifyUrl).toHaveBeenCalledWith('');
+    expect(mockUrlMechanic.verifyUrl).toHaveBeenCalledTimes(1);
+
+    instrumentSet.use<UrlInstrument>(URL_INSTRUMENT_ID).visit(url);
+
+    expect(mockUrlMechanic.visit).toHaveBeenCalledWith(url);
+    expect(mockUrlMechanic.visit).toHaveBeenCalledTimes(1);
+
+    instrumentSet.use<UrlInstrument>(URL_INSTRUMENT_ID).verifyState();
 
     expect(mockUrlMechanic.verifyUrl).toHaveBeenCalledWith(url);
     expect(mockUrlMechanic.verifyUrl).toHaveBeenCalledTimes(2);

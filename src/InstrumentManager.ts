@@ -1,8 +1,8 @@
 import { Subject, Observable } from 'rxjs';
-import { InstrumentOptions } from './InstrumentOptions';
+import { InstrumentOptions } from './instruments/instrument/InstrumentOptions';
 
 export interface InstrumentSetupEvent {
-  instrumentOptions: InstrumentOptions<unknown>;
+  instrumentOptions: InstrumentOptions;
 }
 
 export interface InstrumentTeardownEvent {
@@ -24,7 +24,7 @@ export class InstrumentManager {
     return this.instrumentTeardownSubject.asObservable();
   }
 
-  public setupInstrument<TInstrumentOptions extends InstrumentOptions<unknown>>(
+  public setupInstrument<TInstrumentOptions extends InstrumentOptions>(
     instrumentOptions: TInstrumentOptions
   ) {
     this.instrumentSetupSubject.next({

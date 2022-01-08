@@ -1,10 +1,17 @@
 import MechanicGroup from '../../MechanicGroup';
-import { Instrument } from '../../Instrument';
-import { ElementInstrumentOptions } from '../element/ElementInstrument';
+import {
+  UIElementInstrument,
+  UIElementInstrumentOptions,
+  UIElementState,
+} from '../uiElement/UIElementInstrument';
 import { InstrumentManager } from '../../InstrumentManager';
 
+export interface ListState extends UIElementState {
+  rows?: Record<string, Record<string, unknown>>[];
+}
+
 export interface ListInstrumentOptions
-  extends ElementInstrumentOptions<Record<string, unknown>[]> {
+  extends UIElementInstrumentOptions<ListState> {
   /**
    * CSS selector to get an item in the list.
    * This selector is relative to the listSelector.
@@ -17,88 +24,126 @@ export interface ListInstrumentOptions
    * are specified by column keys.  The column options are used to create an instrument
    * for the column item within the row.
    */
-  columns: ElementInstrumentOptions<unknown>[];
+  columns: UIElementInstrumentOptions[];
 }
 
-export class ListInstrument implements Instrument<Record<string, unknown>[]> {
-  private columnIdToColumnOptions: Record<
-    string,
-    ElementInstrumentOptions<unknown>
-  > = {};
+export class ListInstrument extends UIElementInstrument<
+  ListState,
+  ListInstrumentOptions
+> {
+  private columnKeyToColumnOptions: Record<string, UIElementInstrumentOptions> =
+    {};
 
-  private rows: Record<string, string>[] = [];
+  private rowsOfColumnKeyToCellId: Record<string, string>[] = [];
 
   constructor(
-    protected mechanicGroup: MechanicGroup,
-    protected options: ListInstrumentOptions,
+    mechanicGroup: MechanicGroup,
+    options: ListInstrumentOptions,
     protected instrumentManager: InstrumentManager
   ) {
+    super(mechanicGroup, options);
+
     this.options.columns.forEach((columnOptions) => {
-      this.columnIdToColumnOptions[columnOptions.id] = columnOptions;
+      this.columnKeyToColumnOptions[columnOptions.id] = columnOptions;
     });
 
-    this.setState(options.initialState || []);
+    // Populate initial instruments.
+    this.populateContentInstruments();
   }
 
-  public getId(): string {
-    return this.options.id;
+  protected isStateKeySupported(stateKey: string): boolean {
+    if (super.isStateKeySupported(stateKey)) {
+      return true;
+    }
+    return stateKey === 'rows';
   }
 
-  public getCellId(rowIndex: number, columnId: string): string {
-    return `${this.getId()}--${rowIndex}--${columnId}`;
+  public verifyState(): void {
+    super.verifyState();
+
+    if (this.currentState.isVisible === false) {
+      return;
+    }
+
+    // Just check the length here.
+    // The cell instruments will check their own cell states.
+    this.verifyContentLength(this.rowsOfColumnKeyToCellId.length);
   }
 
-  public addRow(columnIdToState: Record<string, unknown>): void {
-    const newRow = this.createRow(this.rows.length, columnIdToState);
-    this.rows.push(newRow);
+  public getCellId(rowIndex: number, columnKey: string): string {
+    return `${this.getId()}--${rowIndex}--${columnKey}`;
+  }
+
+  public addRow(
+    columnKeyToState: Record<string, Record<string, unknown>>
+  ): void {
+    // Update expected state.
+    this.updateState({
+      ...this.currentState,
+      rows: [
+        ...this.currentState.rows,
+        columnKeyToState
+      ]
+    });
   }
 
   public createRow(
     rowIndex: number,
-    columnIdToState: Record<string, unknown>
+    columnKeyToState: Record<string, Record<string, unknown>>
   ): Record<string, string> {
-    const newRow = {};
-    Object.keys(columnIdToState).forEach((columnId: string) => {
+    const columnKeyToCellId = {};
+    Object.keys(columnKeyToState).forEach((columnKey: string) => {
       const cellId = this.setupInstrument(
         rowIndex,
-        columnId,
-        columnIdToState[columnId]
+        columnKey,
+        columnKeyToState[columnKey]
       );
-      newRow[columnId] = cellId;
+      columnKeyToCellId[columnKey] = cellId;
     });
-    return newRow;
+    return columnKeyToCellId;
   }
 
-  public setState(nextState: Record<string, unknown>[]): void {
-    // Clear out old state.
-    if (this.rows) {
-      this.rows.forEach((row: Record<string, string>) => {
-        Object.values(row).forEach((instrumentId: string) =>
-          this.instrumentManager.teardownInstrument(instrumentId)
-        );
-      });
-    }
+  public updateState(nextState: ListState): void {
+    // Update expected state.
+    super.updateState(nextState);
 
-    // Populate new state.
-    this.rows = nextState.map(
-      (columnIdToState: Record<string, unknown>, rowIndex: number) =>
-        this.createRow(rowIndex, columnIdToState)
-    );
+    // Clear out old state instruments.
+    this.rowsOfColumnKeyToCellId.forEach((columnIdToCellId: Record<string, string>) => {
+      Object.values(columnIdToCellId).forEach((cellId: string) =>
+        this.instrumentManager.teardownInstrument(cellId)
+      );
+    });
+
+    // Populate new state instruments.
+    this.populateContentInstruments();
+  }
+
+  private populateContentInstruments(): void {
+    if (this.currentState.rows) {
+      this.rowsOfColumnKeyToCellId = this.currentState.rows.map(
+        (
+          columnKeyToState: Record<string, Record<string, unknown>>,
+          rowIndex: number
+        ) => this.createRow(rowIndex, columnKeyToState)
+      );
+    } else {
+      this.rowsOfColumnKeyToCellId = [];
+    }
   }
 
   private setupInstrument(
     rowIndex: number,
-    columnId: string,
-    initialState: unknown
+    columnKey: string,
+    initialState: Record<string, unknown>
   ): string {
-    const columnOptions: ElementInstrumentOptions<unknown> =
-      this.getColumnOptions(columnId);
+    const columnOptions: UIElementInstrumentOptions =
+      this.getColumnOptions(columnKey);
 
-    const cellId = this.getCellId(rowIndex, columnId);
+    const cellId = this.getCellId(rowIndex, columnKey);
 
     this.instrumentManager.setupInstrument({
       ...columnOptions,
-      id: this.getCellId(rowIndex, columnId),
+      id: cellId,
       initialState,
       selector: `${this.listItemSelectorByIndex(rowIndex)} ${
         columnOptions.selector || ''
@@ -108,19 +153,13 @@ export class ListInstrument implements Instrument<Record<string, unknown>[]> {
     return cellId;
   }
 
-  public verifyState(): void {
-    // Just check the length here.
-    // The cell instruments will check their own cell states.
-    this.verifyContentLength(this.rows.length);
-  }
-
-  public getColumnOptions(columnId: string): ElementInstrumentOptions<unknown> {
-    const columnOptions = this.columnIdToColumnOptions[columnId];
+  public getColumnOptions(columnKey: string): UIElementInstrumentOptions {
+    const columnOptions = this.columnKeyToColumnOptions[columnKey];
 
     if (!columnOptions) {
       throw new Error(
-        `Column key \`columnId = ${columnId} \` was not found in the column definitions: ${Object.keys(
-          this.columnIdToColumnOptions
+        `Column key \`columnKey = ${columnKey} \` was not found in the column definitions: ${Object.keys(
+          this.columnKeyToColumnOptions
         ).join(', ')}`
       );
     }

@@ -31,4 +31,14 @@ describe('KeyboardInstrument', () => {
 
     expect(mockKeyboardMechanic.pressEnter).toHaveBeenCalledTimes(1);
   });
+
+  test('can type keys', () => {
+    const contentToType = 'hello world';
+    instrumentSet
+      .use<KeyboardInstrument>(KEYBOARD_INSTRUMENT_ID)
+      .typeKeys(contentToType);
+
+    expect(mockKeyboardMechanic.typeKeys).toHaveBeenCalledWith(contentToType);
+    expect(mockKeyboardMechanic.typeKeys).toHaveBeenCalledTimes(1);
+  });
 });

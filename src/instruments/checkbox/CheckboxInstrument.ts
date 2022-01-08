@@ -1,33 +1,48 @@
 import MechanicGroup from '../../MechanicGroup';
 import {
-  ElementInstrument,
-  ElementInstrumentOptions,
-} from '../element/ElementInstrument';
+  UIElementInstrument,
+  UIElementInstrumentOptions,
+  UIElementState,
+} from '../uiElement/UIElementInstrument';
 
-export class CheckboxInstrument extends ElementInstrument<
-  boolean,
-  ElementInstrumentOptions<boolean>
-> {
+export interface CheckboxState extends UIElementState {
+  isChecked?: boolean;
+}
+
+export class CheckboxInstrument extends UIElementInstrument<CheckboxState> {
   constructor(
     mechanicGroup: MechanicGroup,
-    options: ElementInstrumentOptions<boolean>
+    options: UIElementInstrumentOptions<CheckboxState>
   ) {
     super(mechanicGroup, options);
+  }
 
-    this.currentState = options.initialState || false;
+  protected isStateKeySupported(stateKey: string): boolean {
+    if (super.isStateKeySupported(stateKey)) {
+      return true;
+    }
+    return stateKey === 'isChecked';
   }
 
   public verifyState(): void {
-    if (this.currentState) {
+    super.verifyState();
+
+    if (this.currentState.isVisible === false) {
+      return;
+    }
+
+    if (this.currentState.isChecked) {
       this.verifyIsChecked();
-    } else {
+    } else if (this.currentState.isChecked === false) {
       this.verifyIsNotChecked();
     }
   }
 
   public toggle(): void {
     this.mechanicGroup.checkbox.toggle(this.options.selector);
-    this.currentState = !this.currentState;
+    this.updateState({
+      isChecked: !this.currentState.isChecked,
+    });
   }
 
   public verifyIsChecked(): void {

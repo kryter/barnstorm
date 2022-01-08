@@ -1,23 +1,42 @@
 import MechanicGroup from '../../MechanicGroup';
 import {
-  ElementInstrument,
-  ElementInstrumentOptions,
-} from '../element/ElementInstrument';
+  UIElementInstrument,
+  UIElementInstrumentOptions,
+  UIElementState,
+} from '../uiElement/UIElementInstrument';
 
-export class TextAreaInstrument extends ElementInstrument<
-  string,
-  ElementInstrumentOptions<string>
+export interface TextAreaState extends UIElementState {
+  inputText?: string;
+}
+
+export class TextAreaInstrument extends UIElementInstrument<
+  TextAreaState,
+  UIElementInstrumentOptions<TextAreaState>
 > {
   constructor(
     mechanicGroup: MechanicGroup,
-    options: ElementInstrumentOptions<string>
+    options: UIElementInstrumentOptions<TextAreaState>
   ) {
     super(mechanicGroup, options);
-    this.currentState = options.initialState || '';
+  }
+
+  protected isStateKeySupported(stateKey: string): boolean {
+    if (super.isStateKeySupported(stateKey)) {
+      return true;
+    }
+    return stateKey === 'inputText';
   }
 
   public verifyState(): void {
-    this.verifyText(this.currentState);
+    super.verifyState();
+
+    if (this.currentState.isVisible === false) {
+      return;
+    }
+
+    if (this.currentState.inputText) {
+      this.verifyText(this.currentState.inputText);
+    }
   }
 
   public enterText(textToType: string): void {

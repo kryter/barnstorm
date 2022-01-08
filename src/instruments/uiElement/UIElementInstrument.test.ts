@@ -1,14 +1,14 @@
 import ElementMechanicMock from '../../mechanics/element/ElementMechanicMock';
 import MechanicGroup from '../../MechanicGroup';
 import { InstrumentSet } from '../../InstrumentSet';
-import { INSTRUMENT_TYPES } from '../../InstrumentOptions';
-import { SimpleElementInstrument } from './SimpleElementInstrument';
+import { INSTRUMENT_TYPES } from '../../INSTRUMENT_TYPES';
+import { UIElementInstrument } from './UIElementInstrument';
 
 jest.mock('../../mechanics/element/ElementMechanicMock');
 
-const ELEMENT_INSTRUMENT_ID = 'ELEMENT_INSTRUMENT_ID';
+const UI_ELEMENT_INSTRUMENT = 'UI_ELEMENT_INSTRUMENT';
 
-describe('SimpleElementInstrument', () => {
+describe('UIElementInstrument', () => {
   const selector = '.the-element-selector';
   const classToCheck = 'selected';
 
@@ -28,15 +28,16 @@ describe('SimpleElementInstrument', () => {
     instrumentSet = new InstrumentSet(mechanicGroup);
 
     instrumentSet.setup({
-      id: ELEMENT_INSTRUMENT_ID,
-      instrumentType: INSTRUMENT_TYPES.SIMPLE_ELEMENT,
+      id: UI_ELEMENT_INSTRUMENT,
+      instrumentType: INSTRUMENT_TYPES.UI_ELEMENT,
       selector,
+      initialState: {},
     });
   });
 
   test('can verify is not visible', () => {
     instrumentSet
-      .use<SimpleElementInstrument>(ELEMENT_INSTRUMENT_ID)
+      .use<UIElementInstrument>(UI_ELEMENT_INSTRUMENT)
       .verifyIsNotVisible();
 
     expect(mockElementMechanic.verifyIsNotVisible).toHaveBeenCalledWith(
@@ -48,7 +49,7 @@ describe('SimpleElementInstrument', () => {
   test('can verify text content', () => {
     const textContent = 'hello world';
     instrumentSet
-      .use<SimpleElementInstrument>(ELEMENT_INSTRUMENT_ID)
+      .use<UIElementInstrument>(UI_ELEMENT_INSTRUMENT)
       .verifyTextContent(textContent);
 
     expect(mockElementMechanic.verifyTextContent).toHaveBeenCalledWith(
@@ -60,7 +61,7 @@ describe('SimpleElementInstrument', () => {
 
   test('can verify has a class', () => {
     instrumentSet
-      .use<SimpleElementInstrument>(ELEMENT_INSTRUMENT_ID)
+      .use<UIElementInstrument>(UI_ELEMENT_INSTRUMENT)
       .verifyHasClass(classToCheck);
 
     expect(mockElementMechanic.verifyHasClass).toHaveBeenCalledWith(
@@ -72,7 +73,7 @@ describe('SimpleElementInstrument', () => {
 
   test('can verify does not have a class', () => {
     instrumentSet
-      .use<SimpleElementInstrument>(ELEMENT_INSTRUMENT_ID)
+      .use<UIElementInstrument>(UI_ELEMENT_INSTRUMENT)
       .verifyDoesNotHaveClass(classToCheck);
 
     expect(mockElementMechanic.verifyDoesNotHaveClass).toHaveBeenCalledWith(
@@ -84,7 +85,7 @@ describe('SimpleElementInstrument', () => {
 
   test('can verify is in focus', () => {
     instrumentSet
-      .use<SimpleElementInstrument>(ELEMENT_INSTRUMENT_ID)
+      .use<UIElementInstrument>(UI_ELEMENT_INSTRUMENT)
       .verifyIsInFocus();
 
     expect(mockElementMechanic.verifyIsInFocus).toHaveBeenCalledWith(selector);

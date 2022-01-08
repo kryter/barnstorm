@@ -1,31 +1,40 @@
 import MechanicGroup from '../../MechanicGroup';
-import { Instrument } from '../../Instrument';
+import { InstrumentBase } from '../instrument/InstrumentBase';
+import { INSTRUMENT_TYPES } from '../../INSTRUMENT_TYPES';
 
 export const URL_INSTRUMENT_ID = 'URL_INSTRUMENT';
 
-export class UrlInstrument implements Instrument<string> {
-  private currentState: string;
+export interface URLState extends Record<string, unknown> {
+  currentUrl: string;
+}
 
-  constructor(protected mechanicGroup: MechanicGroup) {}
-
-  public getId(): string {
-    return URL_INSTRUMENT_ID;
+export class UrlInstrument extends InstrumentBase<URLState> {
+  constructor(mechanicGroup: MechanicGroup) {
+    super(mechanicGroup, {
+      id: URL_INSTRUMENT_ID,
+      instrumentType: INSTRUMENT_TYPES.URL,
+      initialState: {
+        currentUrl: '',
+      },
+    });
   }
 
-  public setState(nextState: string): void {
-    this.currentState = nextState;
+  protected isStateKeySupported(stateKey: string): boolean {
+    return stateKey === 'currentUrl';
   }
 
   public verifyState(): void {
-    this.verifyUrl();
+    this.verifyUrl(this.currentState.currentUrl);
   }
 
   public visit(nextUrl: string): void {
-    this.currentState = nextUrl;
     this.mechanicGroup.url.visit(nextUrl);
+    this.updateState({
+      currentUrl: nextUrl,
+    });
   }
 
-  public verifyUrl(): void {
-    this.mechanicGroup.url.verifyUrl(this.currentState);
+  public verifyUrl(url: string): void {
+    this.mechanicGroup.url.verifyUrl(url);
   }
 }
