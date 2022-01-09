@@ -10,8 +10,22 @@ export class KeyboardInstrument implements Instrument {
     return KEYBOARD_INSTRUMENT_ID;
   }
 
-  public updateState(): void {
-    throw new Error(`Setting state is not supported for keyboard instrument.`);
+  public getStateString(): string {
+    throw new Error(
+      `getStateString: Getting and setting state is not supported for keyboard instrument.`
+    );
+  }
+
+  public getState(): Record<string, unknown> {
+    throw new Error(
+      `getState: Getting and setting state is not supported for keyboard instrument.`
+    );
+  }
+
+  public updateState(nextState: Record<string, unknown>): void {
+    throw new Error(
+      `updateState: Getting and setting state is not supported for keyboard instrument.`
+    );
   }
 
   public verifyState(): void {

@@ -14,7 +14,32 @@
 export interface Instrument<
   TState extends Record<string, unknown> = Record<string, unknown>
 > {
+  /**
+   * The id that the test or flight plans will use to get the instrument from the instrument set.
+   */
   getId: () => string;
+
+  /**
+   * The current expected state of the instrument as a string that is ready to be
+   * written to the console.  This can be used for logging to make debugging tests easier.
+   */
+  getStateString: () => string;
+
+  /**
+   * The current expected state of the instrument.
+   * This is sometimes useful for calculating the next state in order
+   * to update state.
+   */
+  getState: () => TState;
+
+  /**
+   * Update the current expected state of the instrument.
+   * This new state will be verified at the end of the next test step.
+   */
   updateState: (nextState: TState) => void;
+
+  /**
+   * Verify all the expected state of the instrument.
+   */
   verifyState: () => void;
 }

@@ -80,10 +80,7 @@ export class ListInstrument extends UIElementInstrument<
     // Update expected state.
     this.updateState({
       ...this.currentState,
-      rows: [
-        ...this.currentState.rows,
-        columnKeyToState
-      ]
+      rows: [...this.currentState.rows, columnKeyToState],
     });
   }
 
@@ -108,11 +105,13 @@ export class ListInstrument extends UIElementInstrument<
     super.updateState(nextState);
 
     // Clear out old state instruments.
-    this.rowsOfColumnKeyToCellId.forEach((columnIdToCellId: Record<string, string>) => {
-      Object.values(columnIdToCellId).forEach((cellId: string) =>
-        this.instrumentManager.teardownInstrument(cellId)
-      );
-    });
+    this.rowsOfColumnKeyToCellId.forEach(
+      (columnIdToCellId: Record<string, string>) => {
+        Object.values(columnIdToCellId).forEach((cellId: string) =>
+          this.instrumentManager.teardownInstrument(cellId)
+        );
+      }
+    );
 
     // Populate new state instruments.
     this.populateContentInstruments();

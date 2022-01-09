@@ -25,6 +25,10 @@ export abstract class InstrumentBase<
     return JSON.stringify(this.currentState, null, 2);
   }
 
+  public getState(): TState {
+    return this.currentState;
+  }
+
   public updateState(nextState: TState): void {
     this.verifyStateKeys(nextState);
 

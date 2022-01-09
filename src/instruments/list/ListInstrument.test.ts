@@ -14,7 +14,8 @@ jest.mock('../../mechanics/checkbox/CheckboxMechanicMock');
 jest.mock('../../mechanics/list/ListMechanicMock');
 
 const LIST_INSTRUMENT_ID = 'LIST_INSTRUMENT';
-const LIST_INSTRUMENT_WITH_INITIAL_STATE_ID = 'LIST_INSTRUMENT_WITH_INITIAL_STATE';
+const LIST_INSTRUMENT_WITH_INITIAL_STATE_ID =
+  'LIST_INSTRUMENT_WITH_INITIAL_STATE';
 const CHECKBOX_INSTRUMENT_ID = 'CHECKBOX_INSTRUMENT';
 const TEXT_INSTRUMENT_ID = 'TEXT_INSTRUMENT';
 
@@ -136,7 +137,7 @@ describe('ListInstrument', () => {
 
   test('can verify initial content', () => {
     const initialState = {
-      rows: listContent
+      rows: listContent,
     };
     instrumentSet.setup({
       id: LIST_INSTRUMENT_WITH_INITIAL_STATE_ID,
@@ -158,16 +159,24 @@ describe('ListInstrument', () => {
       ],
     });
 
-    expect(instrumentSet.use<ListInstrument>(LIST_INSTRUMENT_WITH_INITIAL_STATE_ID).getStateString()).toBe(JSON.stringify(initialState, null, 2));
+    expect(
+      instrumentSet
+        .use<ListInstrument>(LIST_INSTRUMENT_WITH_INITIAL_STATE_ID)
+        .getStateString()
+    ).toBe(JSON.stringify(initialState, null, 2));
   });
 
   test('can verify list content', () => {
     const updatedState = {
       rows: listContent,
     };
-    instrumentSet.use<ListInstrument>(LIST_INSTRUMENT_ID).updateState(updatedState);
+    instrumentSet
+      .use<ListInstrument>(LIST_INSTRUMENT_ID)
+      .updateState(updatedState);
     instrumentSet.verifyState();
-    expect(instrumentSet.use<ListInstrument>(LIST_INSTRUMENT_ID).getStateString()).toBe(JSON.stringify(updatedState, null, 2));
+    expect(
+      instrumentSet.use<ListInstrument>(LIST_INSTRUMENT_ID).getStateString()
+    ).toBe(JSON.stringify(updatedState, null, 2));
 
     // The verification should check the text column state for each row.
     expect(mockElementMechanic.verifyTextContent).toHaveBeenCalledWith(
@@ -222,7 +231,7 @@ describe('ListInstrument', () => {
 
   test('can add a row with partial content', () => {
     const initialState = {
-      rows: []
+      rows: [],
     };
 
     const newRowText = 'four';
@@ -233,14 +242,18 @@ describe('ListInstrument', () => {
     };
 
     const firstRowState = {
-      rows: [ newRow ]
+      rows: [newRow],
     };
 
-    expect(instrumentSet.use<ListInstrument>(LIST_INSTRUMENT_ID).getStateString()).toBe(JSON.stringify(initialState, null, 2));
+    expect(
+      instrumentSet.use<ListInstrument>(LIST_INSTRUMENT_ID).getStateString()
+    ).toBe(JSON.stringify(initialState, null, 2));
 
     instrumentSet.use<ListInstrument>(LIST_INSTRUMENT_ID).addRow(newRow);
 
-    expect(instrumentSet.use<ListInstrument>(LIST_INSTRUMENT_ID).getStateString()).toBe(JSON.stringify(firstRowState, null, 2));
+    expect(
+      instrumentSet.use<ListInstrument>(LIST_INSTRUMENT_ID).getStateString()
+    ).toBe(JSON.stringify(firstRowState, null, 2));
 
     instrumentSet.verifyState();
 
@@ -268,12 +281,14 @@ describe('ListInstrument', () => {
     };
 
     const secondRowState = {
-      rows: [ newRow, newRow2 ]
+      rows: [newRow, newRow2],
     };
 
     instrumentSet.use<ListInstrument>(LIST_INSTRUMENT_ID).addRow(newRow2);
 
-    expect(instrumentSet.use<ListInstrument>(LIST_INSTRUMENT_ID).getStateString()).toBe(JSON.stringify(secondRowState, null, 2));
+    expect(
+      instrumentSet.use<ListInstrument>(LIST_INSTRUMENT_ID).getStateString()
+    ).toBe(JSON.stringify(secondRowState, null, 2));
 
     instrumentSet.verifyState();
 
