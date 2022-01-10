@@ -3,9 +3,11 @@ import { ElementMechanic } from './ElementMechanic';
 export default class ElementMechanicMock implements ElementMechanic {
   verifyIsVisible(selector: string): void {}
 
-  verifyIsNotPresent(selector: string): void {}
-
   verifyIsNotVisible(selector: string): void {}
+
+  verifyIsPresent(selector: string): void {}
+
+  verifyIsNotPresent(selector: string): void {}
 
   verifyTextContent(selector: string, content: string): void {}
 

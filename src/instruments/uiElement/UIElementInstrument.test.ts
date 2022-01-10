@@ -5,6 +5,7 @@ import { INSTRUMENT_TYPES } from '../../INSTRUMENT_TYPES';
 import { UIElementInstrument } from './UIElementInstrument';
 
 jest.mock('../../mechanics/element/ElementMechanicMock');
+jest.mock('../../mechanics/element/ElementMechanicMock');
 
 const UI_ELEMENT_INSTRUMENT = 'UI_ELEMENT_INSTRUMENT';
 

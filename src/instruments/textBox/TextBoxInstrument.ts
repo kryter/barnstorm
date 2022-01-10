@@ -30,7 +30,7 @@ export class TextBoxInstrument extends UIElementInstrument<
   public verifyState(): void {
     super.verifyState();
 
-    if (this.currentState.isVisible === false) {
+    if (!this.canVerifyState()) {
       return;
     }
 

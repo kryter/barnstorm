@@ -139,6 +139,17 @@ export class InstrumentSet {
     });
   }
 
+  /**
+   * Update the instruments expected existence.
+   */
+  public setIsPresent(instrumentIds: string[], isPresent: boolean): void {
+    instrumentIds.forEach((id) => {
+      this.use(id).updateState({
+        isPresent,
+      });
+    });
+  }
+
   protected createInstrument(instrumentOptions: InstrumentOptions): Instrument {
     switch (instrumentOptions.instrumentType) {
       case INSTRUMENT_TYPES.BUTTON:

@@ -16,12 +16,27 @@ jest.mock('../../mechanics/list/ListMechanicMock');
 const LIST_INSTRUMENT_ID = 'LIST_INSTRUMENT';
 const LIST_INSTRUMENT_WITH_INITIAL_STATE_ID =
   'LIST_INSTRUMENT_WITH_INITIAL_STATE';
+const LIST_INSTRUMENT_WITH_INVISIBLE_CONTENT_ID =
+  'LIST_INSTRUMENT_WITH_INVISIBLE_CONTENT_ID';
 const CHECKBOX_INSTRUMENT_ID = 'CHECKBOX_INSTRUMENT';
 const TEXT_INSTRUMENT_ID = 'TEXT_INSTRUMENT';
 
 describe('ListInstrument', () => {
   const selector = '.the-list-selector';
+  const selectorWithInvisible = '.the-list-selector-with-invisible';
   const relativeItemSelector = '.a-list-item-selector';
+
+  const checkboxItemSelectors = [
+    '.the-list-selector .a-list-item-selector:nth-child(1) .the-checkbox-selector',
+    '.the-list-selector .a-list-item-selector:nth-child(2) .the-checkbox-selector',
+    '.the-list-selector .a-list-item-selector:nth-child(3) .the-checkbox-selector',
+  ];
+  const textItemSelectors = [
+    '.the-list-selector .a-list-item-selector:nth-child(1) .the-text-selector',
+    '.the-list-selector .a-list-item-selector:nth-child(2) .the-text-selector',
+    '.the-list-selector .a-list-item-selector:nth-child(3) .the-text-selector',
+  ];
+
   const listContent = [
     {
       [CHECKBOX_INSTRUMENT_ID]: {
@@ -130,7 +145,7 @@ describe('ListInstrument', () => {
     instrumentSet.use<CheckboxInstrument>(cellInstrumentId).toggle();
 
     expect(mockCheckboxMechanic.toggle).toHaveBeenCalledWith(
-      '.the-list-selector .a-list-item-selector:nth-child(3) .the-checkbox-selector'
+      checkboxItemSelectors[2]
     );
     expect(mockCheckboxMechanic.toggle).toHaveBeenCalledTimes(1);
   });
@@ -169,6 +184,8 @@ describe('ListInstrument', () => {
   test('can verify list content', () => {
     const updatedState = {
       rows: listContent,
+      isPresent: true,
+      isVisible: true,
     };
     instrumentSet
       .use<ListInstrument>(LIST_INSTRUMENT_ID)
@@ -178,32 +195,76 @@ describe('ListInstrument', () => {
       instrumentSet.use<ListInstrument>(LIST_INSTRUMENT_ID).getStateString()
     ).toBe(JSON.stringify(updatedState, null, 2));
 
+    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(selector);
+    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(
+      textItemSelectors[0]
+    );
+    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(
+      textItemSelectors[1]
+    );
+    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(
+      textItemSelectors[2]
+    );
+    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(
+      checkboxItemSelectors[0]
+    );
+    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(
+      checkboxItemSelectors[1]
+    );
+    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(
+      checkboxItemSelectors[2]
+    );
+
+    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledTimes(7);
+
+    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(selector);
+    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(
+      textItemSelectors[0]
+    );
+    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(
+      textItemSelectors[1]
+    );
+    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(
+      textItemSelectors[2]
+    );
+    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(
+      checkboxItemSelectors[0]
+    );
+    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(
+      checkboxItemSelectors[1]
+    );
+    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(
+      checkboxItemSelectors[2]
+    );
+
+    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledTimes(7);
+
     // The verification should check the text column state for each row.
     expect(mockElementMechanic.verifyTextContent).toHaveBeenCalledWith(
-      '.the-list-selector .a-list-item-selector:nth-child(1) .the-text-selector',
+      textItemSelectors[0],
       listContent[0][TEXT_INSTRUMENT_ID].textContent
     );
     expect(mockElementMechanic.verifyTextContent).toHaveBeenCalledWith(
-      '.the-list-selector .a-list-item-selector:nth-child(2) .the-text-selector',
+      textItemSelectors[1],
       listContent[1][TEXT_INSTRUMENT_ID].textContent
     );
     expect(mockElementMechanic.verifyTextContent).toHaveBeenCalledWith(
-      '.the-list-selector .a-list-item-selector:nth-child(3) .the-text-selector',
+      textItemSelectors[2],
       listContent[2][TEXT_INSTRUMENT_ID].textContent
     );
     expect(mockElementMechanic.verifyTextContent).toHaveBeenCalledTimes(3);
 
     // The verification should check the checkbox column state for each row.
     expect(mockCheckboxMechanic.verifyCheckedState).toHaveBeenCalledWith(
-      '.the-list-selector .a-list-item-selector:nth-child(1) .the-checkbox-selector',
+      checkboxItemSelectors[0],
       listContent[0][CHECKBOX_INSTRUMENT_ID].isChecked
     );
     expect(mockCheckboxMechanic.verifyCheckedState).toHaveBeenCalledWith(
-      '.the-list-selector .a-list-item-selector:nth-child(2) .the-checkbox-selector',
+      checkboxItemSelectors[1],
       listContent[1][CHECKBOX_INSTRUMENT_ID].isChecked
     );
     expect(mockCheckboxMechanic.verifyCheckedState).toHaveBeenCalledWith(
-      '.the-list-selector .a-list-item-selector:nth-child(3) .the-checkbox-selector',
+      checkboxItemSelectors[2],
       listContent[2][CHECKBOX_INSTRUMENT_ID].isChecked
     );
     expect(mockCheckboxMechanic.verifyCheckedState).toHaveBeenCalledTimes(3);
@@ -232,6 +293,8 @@ describe('ListInstrument', () => {
   test('can add a row with partial content', () => {
     const initialState = {
       rows: [],
+      isPresent: true,
+      isVisible: true,
     };
 
     const newRowText = 'four';
@@ -243,6 +306,8 @@ describe('ListInstrument', () => {
 
     const firstRowState = {
       rows: [newRow],
+      isPresent: true,
+      isVisible: true,
     };
 
     expect(
@@ -257,9 +322,23 @@ describe('ListInstrument', () => {
 
     instrumentSet.verifyState();
 
+    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(selector);
+    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(
+      textItemSelectors[0]
+    );
+
+    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledTimes(2);
+
+    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(selector);
+    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(
+      textItemSelectors[0]
+    );
+
+    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledTimes(2);
+
     // The verification should check the text column state for each row.
     expect(mockElementMechanic.verifyTextContent).toHaveBeenCalledWith(
-      '.the-list-selector .a-list-item-selector:nth-child(1) .the-text-selector',
+      textItemSelectors[0],
       newRowText
     );
     expect(mockElementMechanic.verifyTextContent).toHaveBeenCalledTimes(1);
@@ -282,6 +361,8 @@ describe('ListInstrument', () => {
 
     const secondRowState = {
       rows: [newRow, newRow2],
+      isPresent: true,
+      isVisible: true,
     };
 
     instrumentSet.use<ListInstrument>(LIST_INSTRUMENT_ID).addRow(newRow2);
@@ -292,16 +373,36 @@ describe('ListInstrument', () => {
 
     instrumentSet.verifyState();
 
+    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(selector);
+    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(
+      textItemSelectors[0]
+    );
+    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(
+      checkboxItemSelectors[1]
+    );
+
+    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledTimes(5);
+
+    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(selector);
+    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(
+      textItemSelectors[0]
+    );
+    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(
+      checkboxItemSelectors[1]
+    );
+
+    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledTimes(5);
+
     // The verification should check the text column state for each row.
     expect(mockElementMechanic.verifyTextContent).toHaveBeenCalledWith(
-      '.the-list-selector .a-list-item-selector:nth-child(1) .the-text-selector',
+      textItemSelectors[0],
       newRowText
     );
     expect(mockElementMechanic.verifyTextContent).toHaveBeenCalledTimes(2);
 
     // The verification should check the checkbox column state for each row.
     expect(mockCheckboxMechanic.verifyCheckedState).toHaveBeenCalledWith(
-      '.the-list-selector .a-list-item-selector:nth-child(2) .the-checkbox-selector',
+      checkboxItemSelectors[1],
       true
     );
 
@@ -313,5 +414,180 @@ describe('ListInstrument', () => {
       2
     );
     expect(mockListMechanic.verifyListLength).toHaveBeenCalledTimes(2);
+  });
+
+  test('can add a column with invisible content', () => {
+    const initialState = {
+      rows: [],
+      isPresent: true,
+      isVisible: true,
+    };
+
+    instrumentSet.setup({
+      id: LIST_INSTRUMENT_WITH_INVISIBLE_CONTENT_ID,
+      instrumentType: INSTRUMENT_TYPES.LIST,
+      selector,
+      relativeItemSelector,
+      initialState,
+      columns: [
+        {
+          id: CHECKBOX_INSTRUMENT_ID,
+          instrumentType: INSTRUMENT_TYPES.CHECKBOX,
+          selector: '.the-checkbox-selector',
+          verifyStateWhenInvisible: true,
+        },
+        {
+          id: TEXT_INSTRUMENT_ID,
+          instrumentType: INSTRUMENT_TYPES.UI_ELEMENT,
+          selector: '.the-text-selector',
+        },
+      ],
+    });
+
+    const newRowText = 'four';
+    const newRow = {
+      [TEXT_INSTRUMENT_ID]: {
+        textContent: newRowText,
+      },
+    };
+
+    const firstRowState = {
+      rows: [newRow],
+      isPresent: true,
+      isVisible: true,
+    };
+
+    expect(
+      instrumentSet
+        .use<ListInstrument>(LIST_INSTRUMENT_WITH_INVISIBLE_CONTENT_ID)
+        .getStateString()
+    ).toBe(JSON.stringify(initialState, null, 2));
+
+    instrumentSet
+      .use<ListInstrument>(LIST_INSTRUMENT_WITH_INVISIBLE_CONTENT_ID)
+      .addRow(newRow);
+
+    expect(
+      instrumentSet
+        .use<ListInstrument>(LIST_INSTRUMENT_WITH_INVISIBLE_CONTENT_ID)
+        .getStateString()
+    ).toBe(JSON.stringify(firstRowState, null, 2));
+
+    instrumentSet.verifyState();
+
+    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(selector);
+    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(selector);
+    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(
+      textItemSelectors[0]
+    );
+
+    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledTimes(3);
+
+    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(selector);
+    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(selector);
+    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(
+      textItemSelectors[0]
+    );
+
+    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledTimes(3);
+
+    // The verification should check the text column state for each row.
+    expect(mockElementMechanic.verifyTextContent).toHaveBeenCalledWith(
+      textItemSelectors[0],
+      newRowText
+    );
+    expect(mockElementMechanic.verifyTextContent).toHaveBeenCalledTimes(1);
+
+    // The verification should check the checkbox column state for each row.
+    expect(mockCheckboxMechanic.verifyCheckedState).toHaveBeenCalledTimes(0);
+
+    // The verification should check the the row count.
+    expect(mockListMechanic.verifyListLength).toHaveBeenCalledWith(
+      '.the-list-selector .a-list-item-selector',
+      1
+    );
+    expect(mockListMechanic.verifyListLength).toHaveBeenCalledWith(
+      '.the-list-selector .a-list-item-selector',
+      0
+    );
+    expect(mockListMechanic.verifyListLength).toHaveBeenCalledTimes(2);
+
+    const newRow2 = {
+      [CHECKBOX_INSTRUMENT_ID]: {
+        isChecked: true,
+        isVisible: false,
+      },
+    };
+
+    const secondRowState = {
+      rows: [newRow, newRow2],
+      isPresent: true,
+      isVisible: true,
+    };
+
+    instrumentSet
+      .use<ListInstrument>(LIST_INSTRUMENT_WITH_INVISIBLE_CONTENT_ID)
+      .addRow(newRow2);
+
+    expect(
+      instrumentSet
+        .use<ListInstrument>(LIST_INSTRUMENT_WITH_INVISIBLE_CONTENT_ID)
+        .getStateString()
+    ).toBe(JSON.stringify(secondRowState, null, 2));
+
+    instrumentSet.verifyState();
+
+    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(selector);
+    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(
+      textItemSelectors[0]
+    );
+    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(
+      checkboxItemSelectors[1]
+    );
+
+    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledTimes(7);
+
+    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(selector);
+    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(selector);
+    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(
+      textItemSelectors[0]
+    );
+
+    expect(mockElementMechanic.verifyIsNotVisible).toHaveBeenCalledWith(
+      checkboxItemSelectors[1]
+    );
+
+    expect(mockElementMechanic.verifyIsNotVisible).toHaveBeenCalledWith(
+      checkboxItemSelectors[1]
+    );
+
+    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledTimes(6);
+    expect(mockElementMechanic.verifyIsNotVisible).toHaveBeenCalledTimes(1);
+
+    // The verification should check the text column state for each row.
+    expect(mockElementMechanic.verifyTextContent).toHaveBeenCalledWith(
+      textItemSelectors[0],
+      newRowText
+    );
+    expect(mockElementMechanic.verifyTextContent).toHaveBeenCalledTimes(2);
+
+    // The verification should check the checkbox column state for each row.
+    expect(mockCheckboxMechanic.verifyCheckedState).toHaveBeenCalledWith(
+      checkboxItemSelectors[1],
+      true
+    );
+
+    expect(mockCheckboxMechanic.verifyCheckedState).toHaveBeenCalledTimes(1);
+
+    // The verification should check the the row count.
+    expect(mockListMechanic.verifyListLength).toHaveBeenCalledWith(
+      '.the-list-selector .a-list-item-selector',
+      2
+    );
+    expect(mockListMechanic.verifyListLength).toHaveBeenCalledWith(
+      '.the-list-selector .a-list-item-selector',
+      1
+    );
+    expect(mockListMechanic.verifyListLength).toHaveBeenCalledTimes(4);
   });
 });

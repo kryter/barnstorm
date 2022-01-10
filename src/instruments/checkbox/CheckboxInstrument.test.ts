@@ -3,8 +3,10 @@ import CheckboxMechanicMock from '../../mechanics/checkbox/CheckboxMechanicMock'
 import MechanicGroup from '../../MechanicGroup';
 import { InstrumentSet } from '../../InstrumentSet';
 import { INSTRUMENT_TYPES } from '../../INSTRUMENT_TYPES';
+import ElementMechanicMock from '../../mechanics/element/ElementMechanicMock';
 
 jest.mock('../../mechanics/checkbox/CheckboxMechanicMock');
+jest.mock('../../mechanics/element/ElementMechanicMock');
 
 const CHECKBOX_INSTRUMENT_ID = 'CHECKBOX_INSTRUMENT';
 const CHECKED_CHECKBOX_INSTRUMENT_ID = 'CHECKED_CHECKBOX_INSTRUMENT';
@@ -14,16 +16,20 @@ describe('CheckboxInstrument', () => {
 
   let instrumentSet: InstrumentSet;
   let mockCheckboxMechanic;
+  let mockElementMechanic;
   let mockIndex = 0;
 
   beforeEach(() => {
     const mechanicGroup: MechanicGroup = {
       checkbox: new CheckboxMechanicMock(),
+      element: new ElementMechanicMock(),
     };
 
     mockCheckboxMechanic = (<jest.Mock<CheckboxMechanicMock>>(
       CheckboxMechanicMock
     )).mock.instances[mockIndex];
+    mockElementMechanic = (<jest.Mock<ElementMechanicMock>>ElementMechanicMock)
+      .mock.instances[mockIndex];
     mockIndex += 1;
 
     instrumentSet = new InstrumentSet(mechanicGroup);
@@ -56,6 +62,15 @@ describe('CheckboxInstrument', () => {
     instrumentSet
       .use<CheckboxInstrument>(CHECKED_CHECKBOX_INSTRUMENT_ID)
       .verifyState();
+
+    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(selector);
+
+    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledTimes(1);
+
+    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(selector);
+
+    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledTimes(1);
+
     expect(mockCheckboxMechanic.verifyCheckedState).toHaveBeenCalledWith(
       selector,
       true
@@ -69,6 +84,15 @@ describe('CheckboxInstrument', () => {
 
     // First make sure the checkbox state starts as false.
     checkboxInstrument.verifyState();
+
+    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(selector);
+
+    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledTimes(1);
+
+    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(selector);
+
+    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledTimes(1);
+
     expect(mockCheckboxMechanic.verifyCheckedState).toHaveBeenCalledWith(
       selector,
       false
@@ -80,6 +104,14 @@ describe('CheckboxInstrument', () => {
       isChecked: true,
     });
     checkboxInstrument.verifyState();
+
+    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(selector);
+
+    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledTimes(2);
+
+    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(selector);
+
+    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledTimes(2);
 
     expect(mockCheckboxMechanic.verifyCheckedState).toHaveBeenCalledWith(
       selector,

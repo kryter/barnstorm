@@ -27,7 +27,7 @@ export class CheckboxInstrument extends UIElementInstrument<CheckboxState> {
   public verifyState(): void {
     super.verifyState();
 
-    if (this.currentState.isVisible === false) {
+    if (!this.canVerifyState()) {
       return;
     }
 
