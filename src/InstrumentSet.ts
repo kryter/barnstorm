@@ -121,11 +121,22 @@ export class InstrumentSet {
   }
 
   /**
-   * Remove the instrument from the instrument set so its state
+   * Remove the instruments from the instrument set so their state
    * is no longer verified at the end of each test step.
    */
   public teardown(instrumentIds: string[]): void {
     instrumentIds.forEach((id) => delete this.idToInstrument[id]);
+  }
+
+  /**
+   * Update the instruments expected visibility.
+   */
+  public setIsVisible(instrumentIds: string[], isVisible: boolean): void {
+    instrumentIds.forEach((id) => {
+      this.use(id).updateState({
+        isVisible,
+      });
+    });
   }
 
   protected createInstrument(instrumentOptions: InstrumentOptions): Instrument {

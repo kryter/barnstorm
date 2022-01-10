@@ -74,6 +74,10 @@ export class UIElementInstrument<
     this.mechanicGroup.element.verifyIsNotVisible(this.options.selector);
   }
 
+  public verifyIsNotPresent(): void {
+    this.mechanicGroup.element.verifyIsNotPresent(this.options.selector);
+  }
+
   public verifyIsVisible(): void {
     this.mechanicGroup.element.verifyIsVisible(this.options.selector);
   }

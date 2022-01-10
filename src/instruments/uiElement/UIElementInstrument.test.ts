@@ -46,6 +46,17 @@ describe('UIElementInstrument', () => {
     expect(mockElementMechanic.verifyIsNotVisible).toHaveBeenCalledTimes(1);
   });
 
+  test('can verify is not present', () => {
+    instrumentSet
+      .use<UIElementInstrument>(UI_ELEMENT_INSTRUMENT)
+      .verifyIsNotPresent();
+
+    expect(mockElementMechanic.verifyIsNotPresent).toHaveBeenCalledWith(
+      selector
+    );
+    expect(mockElementMechanic.verifyIsNotPresent).toHaveBeenCalledTimes(1);
+  });
+
   test('can verify text content', () => {
     const textContent = 'hello world';
     instrumentSet
