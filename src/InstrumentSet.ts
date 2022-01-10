@@ -128,7 +128,7 @@ export class InstrumentSet {
     instrumentIds.forEach((id) => delete this.idToInstrument[id]);
   }
 
-  private createInstrument(instrumentOptions: InstrumentOptions): Instrument {
+  protected createInstrument(instrumentOptions: InstrumentOptions): Instrument {
     switch (instrumentOptions.instrumentType) {
       case INSTRUMENT_TYPES.BUTTON:
         return new ButtonInstrument(
