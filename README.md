@@ -1,9 +1,10 @@
-# Barnstorm
+# Barnstorm ![Barnstorm Icon](./favicon.png "Let's go storm some barns!")
 
 Barnstorm provides organization for end to end tests that goes beyond just adding page files. Barnstorm also provides generic methods that make tests faster to write and more robust to changes from the application or the test tools.
 
-[Get Started with Barnstorm](/docs/getting-started.md)
-[Write Tests with Barnstorm](/docs/writing-tests.md)
+ 1. [Get Started with Barnstorm](/docs/getting-started.md)
+ 2. [Writing Tests with Barnstorm](/docs/writing-tests.md)
+ 3. [Using Instruments](/docs/using-instruments.md)
 
 ## Why Barnstorm?
 
