@@ -32,6 +32,66 @@ describe('KeyboardInstrument', () => {
     expect(mockKeyboardMechanic.pressEnter).toHaveBeenCalledTimes(1);
   });
 
+  test('can press the escape key', () => {
+    instrumentSet.use<KeyboardInstrument>(KEYBOARD_INSTRUMENT_ID).pressEscape();
+
+    expect(mockKeyboardMechanic.pressEscape).toHaveBeenCalledTimes(1);
+  });
+
+  test('can press the enter key', () => {
+    instrumentSet
+      .use<KeyboardInstrument>(KEYBOARD_INSTRUMENT_ID)
+      .pressSpacebar();
+
+    expect(mockKeyboardMechanic.pressSpacebar).toHaveBeenCalledTimes(1);
+  });
+
+  test('can press the enter key', () => {
+    instrumentSet.use<KeyboardInstrument>(KEYBOARD_INSTRUMENT_ID).pressDelete();
+
+    expect(mockKeyboardMechanic.pressDelete).toHaveBeenCalledTimes(1);
+  });
+
+  test('can press the enter key', () => {
+    instrumentSet
+      .use<KeyboardInstrument>(KEYBOARD_INSTRUMENT_ID)
+      .pressBackspace();
+
+    expect(mockKeyboardMechanic.pressBackspace).toHaveBeenCalledTimes(1);
+  });
+
+  test('can press the enter key', () => {
+    instrumentSet
+      .use<KeyboardInstrument>(KEYBOARD_INSTRUMENT_ID)
+      .pressUpArrow();
+
+    expect(mockKeyboardMechanic.pressUpArrow).toHaveBeenCalledTimes(1);
+  });
+
+  test('can press the enter key', () => {
+    instrumentSet
+      .use<KeyboardInstrument>(KEYBOARD_INSTRUMENT_ID)
+      .pressDownArrow();
+
+    expect(mockKeyboardMechanic.pressDownArrow).toHaveBeenCalledTimes(1);
+  });
+
+  test('can press the enter key', () => {
+    instrumentSet
+      .use<KeyboardInstrument>(KEYBOARD_INSTRUMENT_ID)
+      .pressRightArrow();
+
+    expect(mockKeyboardMechanic.pressRightArrow).toHaveBeenCalledTimes(1);
+  });
+
+  test('can press the enter key', () => {
+    instrumentSet
+      .use<KeyboardInstrument>(KEYBOARD_INSTRUMENT_ID)
+      .pressLeftArrow();
+
+    expect(mockKeyboardMechanic.pressLeftArrow).toHaveBeenCalledTimes(1);
+  });
+
   test('can type keys', () => {
     const contentToType = 'hello world';
     instrumentSet

@@ -37,6 +37,38 @@ export class KeyboardInstrument implements Instrument {
     this.mechanicGroup.keyboard.pressEnter();
   }
 
+  public pressEscape(): void {
+    this.mechanicGroup.keyboard.pressEscape();
+  }
+
+  public pressSpacebar(): void {
+    this.mechanicGroup.keyboard.pressSpacebar();
+  }
+
+  public pressDelete(): void {
+    this.mechanicGroup.keyboard.pressDelete();
+  }
+
+  public pressBackspace(): void {
+    this.mechanicGroup.keyboard.pressBackspace();
+  }
+
+  public pressUpArrow(): void {
+    this.mechanicGroup.keyboard.pressUpArrow();
+  }
+
+  public pressDownArrow(): void {
+    this.mechanicGroup.keyboard.pressDownArrow();
+  }
+
+  public pressRightArrow(): void {
+    this.mechanicGroup.keyboard.pressRightArrow();
+  }
+
+  public pressLeftArrow(): void {
+    this.mechanicGroup.keyboard.pressLeftArrow();
+  }
+
   public typeKeys(keys: string): void {
     this.mechanicGroup.keyboard.typeKeys(keys);
   }

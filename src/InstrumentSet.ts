@@ -101,7 +101,11 @@ export class InstrumentSet {
     }
 
     throw new Error(
-      `Unable to find instrument by id ${instrumentId} in order to use it.  Available connected instruments are "${Object.keys(this.idToInstrument)}" and disconnected instruments are "${Object.keys(this.idToDisconnectedInstrument)}"`
+      `Unable to find instrument by id ${instrumentId} in order to use it.  Available connected instruments are "${Object.keys(
+        this.idToInstrument
+      )}" and disconnected instruments are "${Object.keys(
+        this.idToDisconnectedInstrument
+      )}"`
     );
   }
 
