@@ -32,8 +32,8 @@ import {
 import { InstrumentOptions } from './instruments/instrument/InstrumentOptions';
 import {
   InstrumentManager,
-  InstrumentSetupEvent,
-  InstrumentTeardownEvent,
+  InstrumentToCreateEvent,
+  InstrumentToDestroyEvent,
 } from './InstrumentManager';
 import { INSTRUMENT_TYPES } from './INSTRUMENT_TYPES';
 
@@ -42,27 +42,35 @@ export class InstrumentSet {
 
   private idToInstrument: Record<string, Instrument> = {};
 
+  /**
+   * Keep track of instruments whose state we potentially
+   * want to keep and reconnect to begin verifications of
+   * expected state once again.
+   */
+  private idToDisconnectedInstrument: Record<string, Instrument> = {};
+
   constructor(protected mechanicGroup: MechanicGroup) {
-    // Setup instrument manager before setting up any instruments.
+    // Setup instrument manager before creating any instruments.
     this.instrumentManager
-      .getInstrumentSetupObservable()
-      .subscribe(({ instrumentOptions }: InstrumentSetupEvent) => {
-        this.setup(instrumentOptions);
+      .getInstrumentToCreateObservable()
+      .subscribe(({ instrumentOptions }: InstrumentToCreateEvent) => {
+        this.createInstrument(instrumentOptions);
       });
 
     this.instrumentManager
-      .getInstrumentTeardownObservable()
-      .subscribe(({ instrumentId }: InstrumentTeardownEvent) => {
-        this.teardown([instrumentId]);
+      .getInstrumentsToDestroyObservable()
+      .subscribe(({ instrumentId }: InstrumentToDestroyEvent) => {
+        this.destroyInstruments([instrumentId]);
       });
 
-    // By default setup a single instance of a keyboard and a URL bar.
-    this.instrumentManager.setupInstrument({
+    // By default, build a keyboard instrument and a URL instrument.
+    this.instrumentManager.triggerCreateInstrument({
       id: KEYBOARD_INSTRUMENT_ID,
       instrumentType: INSTRUMENT_TYPES.KEYBOARD,
       initialState: {},
     });
-    this.instrumentManager.setupInstrument({
+
+    this.instrumentManager.triggerCreateInstrument({
       id: URL_INSTRUMENT_ID,
       instrumentType: INSTRUMENT_TYPES.URL,
       initialState: {
@@ -72,7 +80,7 @@ export class InstrumentSet {
   }
 
   /**
-   * Verify all instruments that are currently set up.
+   * Verify the expected state of all connected instruments.
    */
   public verifyState(): void {
     Object.values(this.idToInstrument).forEach((instrument) =>
@@ -81,51 +89,138 @@ export class InstrumentSet {
   }
 
   /**
-   * Get an instrument that has been setup previously.
+   * Get any existing instrument by its id.
+   * Throws an error if the instrument is not found.
    */
   public use<TInstrument extends Instrument>(
     instrumentId: string
   ): TInstrument {
-    return this.idToInstrument[instrumentId] as TInstrument;
+    const instrument = this.findInstrument(instrumentId) as TInstrument;
+    if (instrument) {
+      return instrument;
+    }
+
+    throw new Error(
+      `Unable to find instrument by id ${instrumentId} in order to use it.  Available connected instruments are "${Object.keys(this.idToInstrument)}" and disconnected instruments are "${Object.keys(this.idToDisconnectedInstrument)}"`
+    );
   }
 
   /**
-   * Get the keyboard instrument singleton.
+   * Get any existing instrument by its id.
+   * Returns null if the instrument is not found.
+   */
+  public findInstrument<TInstrument extends Instrument>(
+    instrumentId: string
+  ): TInstrument | null {
+    const instrument = this.idToInstrument[instrumentId] as TInstrument;
+    if (instrument) {
+      return instrument;
+    }
+
+    const disconnectedInstrument = this.idToDisconnectedInstrument[
+      instrumentId
+    ] as TInstrument;
+    if (disconnectedInstrument) {
+      return disconnectedInstrument;
+    }
+
+    return null;
+  }
+
+  /**
+   * Get the one keyboard instrument.
    */
   public keyboard(): KeyboardInstrument {
     return this.use<KeyboardInstrument>(KEYBOARD_INSTRUMENT_ID);
   }
 
   /**
-   * Get the url instrument singleton.
+   * Get the one url instrument.
    */
   public url(): UrlInstrument {
     return this.use<UrlInstrument>(URL_INSTRUMENT_ID);
   }
 
   /**
-   * Build and configure an instrument with the current mechanics set.
+   * Create an instrument using the configuration and mechanics group and connect it by default and configure an instrument with the current mechanics set.
    */
-  public setup<
+  public createInstrument<
     TInstrument extends Instrument,
     TInstrumentOptions extends InstrumentOptions
   >(instrumentOptions: TInstrumentOptions): TInstrument {
-    const existingInstrument = this.idToInstrument[instrumentOptions.id];
+    const existingInstrument = this.findInstrument(instrumentOptions.id);
     if (existingInstrument) {
-      return existingInstrument as TInstrument;
+      throw new Error(
+        `Instrument with id "${instrumentOptions.id}" has already been created.  Check for duplicate ids (especially prevalent from copy/paste omissions).`
+      );
     }
 
-    const instrument = this.createInstrument(instrumentOptions);
-    this.idToInstrument[instrument.getId()] = instrument;
+    const instrument = this.buildInstrument(instrumentOptions);
+    this.idToInstrument[instrumentOptions.id] = instrument;
     return instrument as TInstrument;
   }
 
   /**
-   * Remove the instruments from the instrument set so their state
-   * is no longer verified at the end of each test step.
+   * Build and configure an instrument with the current mechanics set.
    */
-  public teardown(instrumentIds: string[]): void {
+  public createInstruments(instrumentOptionsGroup: InstrumentOptions[]): void {
+    instrumentOptionsGroup.forEach((instrumentOptions: InstrumentOptions) =>
+      this.createInstrument(instrumentOptions)
+    );
+  }
+
+  /**
+   * Disconnect a group of instruments so their state is no longer validated.
+   * A disconnected instrument can be reconnected later.
+   */
+  public disconnect(instrumentIds: string[]): void {
+    instrumentIds.forEach((instrumentId) =>
+      this.disconnectInstrument(instrumentId)
+    );
+  }
+
+  /**
+   * Reconnect a group of instruments so their state will be verified again.
+   */
+  public reconnect(instrumentIds: string[]): void {
+    instrumentIds.forEach((instrumentId) =>
+      this.reconnectInstrument(instrumentId)
+    );
+  }
+
+  private disconnectInstrument(instrumentId: string): void {
+    const instrument = this.idToInstrument[instrumentId];
+    if (instrument) {
+      // Disconnect the instrument.
+      this.idToDisconnectedInstrument[instrumentId] = instrument;
+      delete this.idToInstrument[instrumentId];
+    } else {
+      throw new Error(
+        `Unable to find a connected instrument for id "${instrumentId}" to disconnect.`
+      );
+    }
+  }
+
+  private reconnectInstrument(instrumentId: string): void {
+    const instrument = this.idToDisconnectedInstrument[instrumentId];
+    if (instrument) {
+      // Connect the instrument.
+      this.idToInstrument[instrumentId] = instrument;
+      delete this.idToDisconnectedInstrument[instrumentId];
+    } else {
+      throw new Error(
+        `Unable to find disconnected instrument for id "${instrumentId}" to reconnect.`
+      );
+    }
+  }
+
+  /**
+   * Disconnect and destroy the instruments and references to the instruments
+   * Once destroyed, instruments cannot be reconnected.
+   */
+  public destroyInstruments(instrumentIds: string[]): void {
     instrumentIds.forEach((id) => delete this.idToInstrument[id]);
+    instrumentIds.forEach((id) => delete this.idToDisconnectedInstrument[id]);
   }
 
   /**
@@ -150,7 +245,11 @@ export class InstrumentSet {
     });
   }
 
-  protected createInstrument(instrumentOptions: InstrumentOptions): Instrument {
+  /**
+   * Build an instrument based on its instrument type and config.
+   * Can be overridden to support custom instrument types.
+   */
+  protected buildInstrument(instrumentOptions: InstrumentOptions): Instrument {
     switch (instrumentOptions.instrumentType) {
       case INSTRUMENT_TYPES.BUTTON:
         return new ButtonInstrument(

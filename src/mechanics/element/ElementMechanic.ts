@@ -7,4 +7,9 @@ export interface ElementMechanic {
   verifyHasClass(selector: string, className: string): void;
   verifyDoesNotHaveClass(selector: string, className: string): void;
   verifyIsInFocus(selector: string): void;
+  verifyCssProperty(
+    selector: string,
+    propertyKey: string,
+    propertyValue: string
+  ): void;
 }

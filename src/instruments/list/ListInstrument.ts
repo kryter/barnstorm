@@ -108,7 +108,7 @@ export class ListInstrument extends UIElementInstrument<
     this.rowsOfColumnKeyToCellId.forEach(
       (columnIdToCellId: Record<string, string>) => {
         Object.values(columnIdToCellId).forEach((cellId: string) =>
-          this.instrumentManager.teardownInstrument(cellId)
+          this.instrumentManager.triggerDestroyInstrument(cellId)
         );
       }
     );
@@ -140,7 +140,7 @@ export class ListInstrument extends UIElementInstrument<
 
     const cellId = this.getCellId(rowIndex, columnKey);
 
-    this.instrumentManager.setupInstrument({
+    this.instrumentManager.triggerCreateInstrument({
       ...columnOptions,
       id: cellId,
       initialState,

@@ -70,7 +70,7 @@ const aButton = {
 Once you've added the button instrument to your instrument set, you can interact with the button:
 
 ```typescript
-thePage.aButton().click();
+theTower.aButton().click();
 ```
 
 ## Checkbox Instrument
@@ -109,8 +109,8 @@ const itemCheckbox = {
 Once you've added the checkbox instrument to your instrument set, you can interact with the checkbox:
 
 ```typescript
-thePage.itemCheckbox().check();
-thePage.itemCheckbox().uncheck();
+theTower.itemCheckbox().check();
+theTower.itemCheckbox().uncheck();
 ```
 
 Like the `url instrument` the checkbox instrument will automatically update its expected state when `.check()` or `.uncheck()` is called.  This can be overridden with a call to `.updateState()`.
@@ -175,14 +175,14 @@ const todoListConfig = {
 Once you've added the list instrument to your instrument set, you can interact with the automatically created instruments for each cell in each row in the expected row state in the list:
 
 ```typescript
-const cellId = todoPage.todoList().getCellId(rowIndex, TODO_ITEM_CHECKBOX);
+const cellId = todotheTower.todoList().getCellId(rowIndex, TODO_ITEM_CHECKBOX);
 instrumentSet.use<CheckboxInstrument>(cellId).check();
 ```
 
 Updating the expected state for a list is a little verbose (intentional for clarity and to support multiple columns), so it takes a little getting used to.  Here is the expected results for a list with one row containing two column items:
 
 ```typescript
-todoPage.todoList().updateState({
+todotheTower.todoList().updateState({
   rows: [
     {
       [TODO_ITEM_TEXT]: {
@@ -200,7 +200,7 @@ todoPage.todoList().updateState({
 Here is the expected results for a list with two rows.  Notice that the first row only contains one column item but the second row has two column items.  This is useful when not all rows will have all column items:
 
 ```typescript
-todoPage.todoList().updateState({
+todotheTower.todoList().updateState({
   rows: [
     {
       [TODO_ITEM_TEXT]: {
@@ -240,14 +240,14 @@ const aTextArea = {
 Once you've added the text area instrument to your instrument set, you can interact with the text area:
 
 ```typescript
-thePage.aTextArea().enterText('123');
-thePage.aTextArea().enterText('abc');
+theTower.aTextArea().enterText('123');
+theTower.aTextArea().enterText('abc');
 ```
 
 When using a text area, you'll need to manually update the expected state after entering text:
 
 ```typescript
-thePage.aTextArea().updateState({
+theTower.aTextArea().updateState({
     inputText: '123abc',
   });
 ```
@@ -272,14 +272,14 @@ const aTextBox = {
 Once you've added the text box instrument to your instrument set, you can interact with the text box:
 
 ```typescript
-thePage.aTextBox().enterText('123');
-thePage.aTextBox().enterText('abc');
+theTower.aTextBox().enterText('123');
+theTower.aTextBox().enterText('abc');
 ```
 
 When using a text box, you'll need to manually update the expected state after entering text:
 
 ```typescript
-thePage.aTextBox().updateState({
+theTower.aTextBox().updateState({
     inputText: '123abc',
   });
 ```

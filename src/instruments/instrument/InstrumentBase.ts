@@ -29,13 +29,22 @@ export abstract class InstrumentBase<
     return this.currentState;
   }
 
-  public updateState(nextState: TState): void {
-    this.verifyStateKeys(nextState);
+  public updateState(stateUpdates: TState): void {
+    // Verify the keys.
+    this.verifyStateKeys(stateUpdates);
 
-    // Update only the fields specified by the update.
-    this.currentState = {
+    // Update the values.
+    this.currentState = this.createUpdatedState(stateUpdates);
+  }
+
+  /**
+   * Update only the fields specified by the update.
+   * Can be overwritten in instruments with more complex state.
+   */
+  protected createUpdatedState(stateUpdates: TState): TState {
+    return {
       ...this.currentState,
-      ...nextState,
+      ...stateUpdates,
     };
   }
 

@@ -34,7 +34,7 @@ describe('ButtonInstrument', () => {
 
     instrumentSet = new InstrumentSet(mechanicGroup);
 
-    instrumentSet.setup({
+    instrumentSet.createInstrument({
       id: BUTTON_INSTRUMENT_ID,
       instrumentType: INSTRUMENT_TYPES.BUTTON,
       initialState: {

@@ -90,7 +90,7 @@ describe('ListInstrument', () => {
 
     instrumentSet = new InstrumentSet(mechanicGroup);
 
-    instrumentSet.setup({
+    instrumentSet.createInstrument({
       id: LIST_INSTRUMENT_ID,
       instrumentType: INSTRUMENT_TYPES.LIST,
       selector,
@@ -154,7 +154,7 @@ describe('ListInstrument', () => {
     const initialState = {
       rows: listContent,
     };
-    instrumentSet.setup({
+    instrumentSet.createInstrument({
       id: LIST_INSTRUMENT_WITH_INITIAL_STATE_ID,
       instrumentType: INSTRUMENT_TYPES.LIST,
       selector,
@@ -186,6 +186,7 @@ describe('ListInstrument', () => {
       rows: listContent,
       isPresent: true,
       isVisible: true,
+      css: {},
     };
     instrumentSet
       .use<ListInstrument>(LIST_INSTRUMENT_ID)
@@ -308,6 +309,7 @@ describe('ListInstrument', () => {
       rows: [newRow],
       isPresent: true,
       isVisible: true,
+      css: {},
     };
 
     expect(
@@ -363,6 +365,7 @@ describe('ListInstrument', () => {
       rows: [newRow, newRow2],
       isPresent: true,
       isVisible: true,
+      css: {},
     };
 
     instrumentSet.use<ListInstrument>(LIST_INSTRUMENT_ID).addRow(newRow2);
@@ -423,7 +426,7 @@ describe('ListInstrument', () => {
       isVisible: true,
     };
 
-    instrumentSet.setup({
+    instrumentSet.createInstrument({
       id: LIST_INSTRUMENT_WITH_INVISIBLE_CONTENT_ID,
       instrumentType: INSTRUMENT_TYPES.LIST,
       selector,
@@ -455,6 +458,7 @@ describe('ListInstrument', () => {
       rows: [newRow],
       isPresent: true,
       isVisible: true,
+      css: {},
     };
 
     expect(
@@ -523,6 +527,7 @@ describe('ListInstrument', () => {
       rows: [newRow, newRow2],
       isPresent: true,
       isVisible: true,
+      css: {},
     };
 
     instrumentSet

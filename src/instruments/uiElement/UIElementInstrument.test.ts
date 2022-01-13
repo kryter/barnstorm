@@ -28,7 +28,7 @@ describe('UIElementInstrument', () => {
 
     instrumentSet = new InstrumentSet(mechanicGroup);
 
-    instrumentSet.setup({
+    instrumentSet.createInstrument({
       id: UI_ELEMENT_INSTRUMENT,
       instrumentType: INSTRUMENT_TYPES.UI_ELEMENT,
       selector,
@@ -102,5 +102,21 @@ describe('UIElementInstrument', () => {
 
     expect(mockElementMechanic.verifyIsInFocus).toHaveBeenCalledWith(selector);
     expect(mockElementMechanic.verifyIsInFocus).toHaveBeenCalledTimes(1);
+  });
+
+  test('can verify any CSS property key and value', () => {
+    const propertyKey = 'background-color';
+    const propertyValue = 'rgb(0, 0, 0)';
+
+    instrumentSet
+      .use<UIElementInstrument>(UI_ELEMENT_INSTRUMENT)
+      .verifyCssProperty(propertyKey, propertyValue);
+
+    expect(mockElementMechanic.verifyCssProperty).toHaveBeenCalledWith(
+      selector,
+      propertyKey,
+      propertyValue
+    );
+    expect(mockElementMechanic.verifyCssProperty).toHaveBeenCalledTimes(1);
   });
 });

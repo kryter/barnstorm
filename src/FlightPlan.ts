@@ -1,4 +1,4 @@
-import { FlightPlanLeg } from './FlightPlanLeg';
+import { FlightLeg } from './FlightLeg';
 
 export interface FlightPlan {
   /**
@@ -9,5 +9,5 @@ export interface FlightPlan {
    */
   notes?: string[];
 
-  legs: FlightPlanLeg[];
+  legs: FlightLeg[];
 }

@@ -9,6 +9,7 @@ const SUPPORTED_STATE_KEYS = [
   'inFocus',
   'isVisible',
   'isPresent',
+  'css',
 ];
 
 export interface UIElementState extends Record<string, unknown> {
@@ -18,6 +19,7 @@ export interface UIElementState extends Record<string, unknown> {
   inFocus?: boolean;
   isVisible?: boolean;
   isPresent?: boolean;
+  css?: Record<string, string>;
 }
 
 export interface UIElementInstrumentOptions<
@@ -108,6 +110,25 @@ export class UIElementInstrument<
     if (this.currentState.inFocus) {
       this.verifyIsInFocus();
     }
+    if (this.currentState.css) {
+      Object.keys(this.currentState.css).forEach((cssPropertyKey: string) => {
+        this.verifyCssProperty(
+          cssPropertyKey,
+          this.currentState.css[cssPropertyKey]
+        );
+      });
+    }
+  }
+
+  protected createUpdatedState(stateUpdates: TState): TState {
+    return {
+      ...this.currentState,
+      ...stateUpdates,
+      css: {
+        ...this.currentState.css,
+        ...stateUpdates.css,
+      },
+    };
   }
 
   public verifyIsNotVisible(): void {
@@ -146,5 +167,13 @@ export class UIElementInstrument<
 
   public verifyIsInFocus(): void {
     this.mechanicGroup.element.verifyIsInFocus(this.options.selector);
+  }
+
+  public verifyCssProperty(propertyKey: string, propertyValue: string): void {
+    this.mechanicGroup.element.verifyCssProperty(
+      this.options.selector,
+      propertyKey,
+      propertyValue
+    );
   }
 }

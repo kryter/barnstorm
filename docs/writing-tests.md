@@ -1,15 +1,15 @@
 # Writing Tests
 
-## Pages
+## Towers
 
-To begin writing end to end tests using Barnstorm, start by creating `page` files for the different areas of your app.  You'll configure an `instrument` to test each UI element in the area.
+To begin writing end to end tests using Barnstorm, start by creating `towers` each area or group of UI elements in the app.  You'll configure an `instrument` to work with each UI element in the area.
 
-`Barnstorm` uses `page` files that contain a mapping of CSS selectors needed to access each UI element contained in a component.  The idea is that each component should have a corresponding `page` file that exposes all the component's visual and interactive functionality to the tests.
+`Barnstorm` uses `towers` that contain a mapping of CSS selectors needed to access each UI element contained in a component.  The idea is that each component should have a corresponding `tower` that exposes all the component's visual and interactive functionality to the tests.
 
 When specifying an `instrument`, you need to pass some basic information:
 
-* a unique id that you'll use to reference the instrument later
-* the type of instrument (use the appropriate instrument type for each UI element type)
+* a unique id that anyone can use to reference the instrument later
+* the type of instrument (use the appropriate instrument type for the associated UI element type)
 * a CSS selector and any other information needed to find the UI element and any of its sub-elements
 * the initial expected state of the UI element
 
@@ -30,51 +30,67 @@ const counterButton = {
 
 For more details about what instruments and UI elements are supported, see [Using Instruments](./using-instruments.md).  If the instrument you need is not available, or you have a custom UI element, you can easily write your own custom instruments.
 
-Once we specify instruments configurations for all the UI elements, we can use them to setup instruments in our `instrument set`:
+Once we specify instruments configurations for all the UI elements, we can use them to create instruments in our `instrument set`:
 
 ```typescript
-const configs = [
-  counterButton
+export const BUTTON_BACKGROUND_COLOR = 'rgb(0, 0, 0)';
+export const BUTTON_TEXT_COLOR = 'rgb(255, 255, 255)';
+
+const theButton = {
+  id: 'THE_BUTTON',
+  instrumentType: INSTRUMENT_TYPES.BUTTON,
+  selector: '[data-id="the-button"]',
+  initialState: {
+    textContent: 'Click me',
+    css: {
+      color: BUTTON_TEXT_COLOR,
+      'background-color': BUTTON_BACKGROUND_COLOR
+    },
+  }
+};
+
+const configs: InstrumentOptions[] = [
+  theButton
 ];
 
-export function setupCounterPage(instrumentSet: InstrumentSet) {
-  configs.forEach(config => instrumentSet.setup(config));
+export function activateXYZTower(instruments: InstrumentSet) {
+  instruments.createInstruments(configs);
 
   return {
-    countButton: () => instrumentSet.use<ButtonInstrument>(COUNT_BUTTON),
-    teardownCounterPage: () => instrumentSet.teardown(configs.map(config => config.id))
+    theButton: () => instrumentSet.use<ButtonInstrument>(theButton.id),
+    instrumentIds: () => configs.map((config) => config.id)
   };
 }
 
-export type CounterPage = ReturnType<typeof setupCounterPage>;
+export type XYZTower = ReturnType<typeof activateXYZTower>;
 ```
 
-The page file will expose a function, `setupCounterPage`, that will configure the instrument set with the instruments when called.  This function returns convenience methods for each instrument, for example `counterPage.countButton()` to make these instruments easy to use in `flight plans` and tests.  We also include a type for the return type so we can use `let counterPage: CounterPage` in our tests to make the types especially readable.
+The theTower file will expose a function, `setupCountertheTower`, that will configure the instrument set with the instruments when called.  This function returns convenience methods for each instrument, for example `countertheTower.countButton()` to make these instruments easy to use in `flight plans` and tests.  We also include a type for the return type so we can use `let countertheTower: CountertheTower` in our tests to make the types especially readable.
 
 Once the `instruments` are set up, you are ready to interact with the UI elements and update their expected state, which is automatically verified by Barnstorm at the end of each `flight plan leg` (i.e. "test step") within a `flight plan`.
 
 ## Flight Plans
 
-Once you have a `page` file where you've configured `instruments`, you're ready to use those instruments to write a `flight plan` file.  In the flight plan file, you'll specify common actions that you want to perform in the tests.
+Once you have a `theTower` file where you've configured `instruments`, you're ready to use those instruments to write a `flight plan` file.  In the flight plan file, you'll specify common actions that you want to perform in the tests.
 
 These `flight plan` files provide reusable blocks of testing that can be used in any test.  This is particularly handy when you are building a feature that builds on a previous feature and you need to do test setup of the previous feature in order to test the new feature.
 
 ```typescript
 export interface ClickToIncrementTheCountOptions {
-  counterPage: CounterPage;
+  countertheTower: CountertheTower;
   expectedCount: number;
 }
 
-export function clickToIncrementTheCount({counterPage, expectedCount}: ClickToIncrementTheCountOptions): FlightPlan {
+export function clickToIncrementTheCount({countertheTower, expectedCount}: ClickToIncrementTheCountOptions): FlightPlan {
   return {
     notes: ['Tests the fix for BUG-101'],
     legs: [
       {
         doTestAction: (instruments: AppInstruments) => {
-          counterPage.countButton().click();
+          countertheTower.countButton().click();
         },
         updateExpectations: (instruments: AppInstruments) => {
-          counterPage.countButton().updateState({
+          countertheTower.countButton().updateState({
             textContent: `count is: ${expectedCount}`
           });
         }
@@ -94,26 +110,26 @@ Once the `flight plans` are set up, you are ready to write a test (finally!).
 
 ## Tests
 
-To setup a test using Barnstorm, you'll need to first create an instance of the `app instrument set` from the project setup, then set up the `page` file(s) that are needed in the test, either for accessing `instruments` directly or for passing to `flight plans`.
+To setup a test using Barnstorm, you'll need to first create an instance of the `app instrument set` from the project setup, then set up the `theTower` file(s) that are needed in the test, either for accessing `instruments` directly or for passing to `flight plans`.
 
 ```typescript
 describe('Counter Test', () => {
   let instruments: AppInstruments;
-  let counterPage: CounterPage;
+  let countertheTower: CountertheTower;
 
-  it('Setup instruments and pages', () => {
+  it('Setup instruments and theTowers', () => {
     instruments = buildAppInstruments();
-    counterPage = setupCounterPage(instruments);
+    countertheTower = setupCountertheTower(instruments);
   });
 });
 ```
 
-Once your `instrument set` instance and `page` instance(s) are ready, use the `Url Instrument` on the `instrument set` to navigate to your app:
+Once your `instrument set` instance and `theTower` instance(s) are ready, use the `Url Instrument` on the `instrument set` to navigate to your app:
 
 ```typescript
-  it('Setup instruments and pages, and visit the entry url', () => {
+  it('Setup instruments and theTowers, and visit the entry url', () => {
     instruments = buildAppInstruments();
-    counterPage = setupCounterPage(instruments);
+    countertheTower = setupCountertheTower(instruments);
 
     instruments.url().visit(ENTRY_URL);
   });
@@ -124,18 +140,18 @@ Once you've navigated to the app, `fly` your `flight plans` to explore the app:
 ```typescript
 describe('Counter', () => {
   let instruments: AppInstruments;
-  let counterPage: CounterPage;
+  let countertheTower: CountertheTower;
 
-  it('Setup instruments and pages, and visit the entry url', () => {
+  it('Setup instruments and theTowers, and visit the entry url', () => {
     instruments = buildAppInstruments();
-    counterPage = setupCounterPage(instruments);
+    countertheTower = setupCountertheTower(instruments);
 
     instruments.url().visit(ENTRY_URL);
   });
 
   it('Click the counter button to increment the count displayed on the button', () => {
     fly(instruments, clickToIncrementTheCount({
-      counterPage,
+      countertheTower,
       expectedCount: 1
     }));
   });

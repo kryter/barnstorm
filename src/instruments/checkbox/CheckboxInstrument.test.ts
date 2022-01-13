@@ -34,7 +34,7 @@ describe('CheckboxInstrument', () => {
 
     instrumentSet = new InstrumentSet(mechanicGroup);
 
-    instrumentSet.setup({
+    instrumentSet.createInstrument({
       id: CHECKBOX_INSTRUMENT_ID,
       instrumentType: INSTRUMENT_TYPES.CHECKBOX,
       selector,
@@ -43,7 +43,7 @@ describe('CheckboxInstrument', () => {
       },
     });
 
-    instrumentSet.setup({
+    instrumentSet.createInstrument({
       id: CHECKED_CHECKBOX_INSTRUMENT_ID,
       instrumentType: INSTRUMENT_TYPES.CHECKBOX,
       selector,

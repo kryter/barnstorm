@@ -28,7 +28,7 @@ describe('TextAreaInstrument', () => {
 
     instrumentSet = new InstrumentSet(mechanicGroup);
 
-    instrumentSet.setup({
+    instrumentSet.createInstrument({
       id: TEXT_AREA_INSTRUMENT_ID,
       instrumentType: INSTRUMENT_TYPES.TEXT_AREA,
       selector,

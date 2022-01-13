@@ -16,4 +16,10 @@ export default class ElementMechanicMock implements ElementMechanic {
   verifyDoesNotHaveClass(selector: string, className: string): void {}
 
   verifyIsInFocus(selector: string): void {}
+
+  verifyCssProperty(
+    selector: string,
+    propertyKey: string,
+    propertyValue: string
+  ): void {}
 }

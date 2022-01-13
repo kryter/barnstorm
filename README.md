@@ -1,6 +1,6 @@
 # Barnstorm ![Barnstorm Icon](./favicon.png "Let's go storm some barns!")
 
-Barnstorm provides organization for end to end tests that goes beyond just adding page files. Barnstorm also provides generic methods that make tests faster to write and more robust to changes from the application or the test tools.
+Barnstorm provides organization and generic methods for end to end tests that make tests faster to write and more robust to changes from the application or the test tools.
 
  1. [Get Started with Barnstorm](/docs/getting-started.md)
  2. [Writing Tests with Barnstorm](/docs/writing-tests.md)
@@ -8,7 +8,7 @@ Barnstorm provides organization for end to end tests that goes beyond just addin
 
 ## Why Barnstorm?
 
-Barnstorm provides flight instruments to make it easier to interact with UI components as well as track their expected state.  Barnstorm automatically verifies the full state of the application at the end of each test step.
+Barnstorm provides flight instruments to make it easier to interact with UI components as well as track their expected state.  Barnstorm makes it easy to build towers for the areas of your app so you can create a group of instruments for the UI elements in the area to make it simple to test the area.  At the end of each flight leg, Barnstorm automatically verifies the state of all connected instruments.
 
 Barnstorm provides a flight plan mechanism to make it easier to organize common test actions and enable them to be reused across tests.  With Barnstorm, test code becomes less imperative and more declarative so that the developer can focus more on the intent of the test and less on the implementation details of the test framework.
 
@@ -16,15 +16,15 @@ Barnstorm puts all test framework specific common code into mechanics which can 
 
 ## Barnstorm Metaphor
 
-Barnstorm is based on an aviation metaphor: Imagine yourself, the tester, as the pilot of an airplane that is flying around a landscape which is the application.  Your page files are your maps of points of interest on the landscape (i.e. any UI element that you can see an/or interact with).  Your flight instruments provide the means to get you to the point of interest, interact with a point of interest, and take measurements for verification.  It’s always important to talk to your mechanics before your flight to make sure they’ve fully equipped your airplane for the current mission and make sure you have a flight plan in place so you know your route before you climb in the cockpit.
+Barnstorm is based on an aviation metaphor: Imagine yourself, the tester, as the pilot of an airplane that is flying around a landscape which is the application.  Your towers are your maps of points of interest on the landscape (i.e. any UI element that you can see an/or interact with).  Your flight instruments provide the means to get you to the point of interest, interact with a point of interest, and take measurements for verification.  It’s always important to talk to your mechanics before your flight to make sure they’ve fully equipped your airplane for the current mission and make sure you have a flight plan in place so you know your route before you climb in the cockpit.
 
-### Pages
+### Towers
 
-Pages are maps that help your pilots and instruments determine where to find UI elements to manipulate and verify.  Pages act like a phone book of the UI elements in the application.
+Towers contain maps of areas of the UI elements in the app and they can help you find UI elements to manipulate and verify.  Towers act like a phone book of the UI elements in the application.
 
-`Page` files are great because they turn CSS selectors from "magic strings" into reusable named strings that are neatly organized.
+`Towers` are great because they turn CSS selectors from "magic strings" into reusable named strings that are neatly organized.
 
-In `Barnstorm`, we will add `flight instruments` to our `page` files to make it easier to interact with the UI controls when we write our tests.  This means that instead of returning CSS selectors directly, the `page` files will return `flight instruments`.
+We will add flight `instruments` to our `towers` to make it easier to interact with the UI controls when we write our tests.  This means that instead of returning CSS selectors directly, the `tower` files will return flight `instruments`.
 
 ### Mechanics
 

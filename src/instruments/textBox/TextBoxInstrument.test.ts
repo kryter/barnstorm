@@ -27,7 +27,7 @@ describe('TextBoxInstrument', () => {
 
     instrumentSet = new InstrumentSet(mechanicGroup);
 
-    instrumentSet.setup({
+    instrumentSet.createInstrument({
       id: TEXT_BOX_INSTRUMENT_ID,
       instrumentType: INSTRUMENT_TYPES.TEXT_BOX,
       selector,
