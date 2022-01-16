@@ -1,24 +1,24 @@
 import MechanicGroup from '../../MechanicGroup';
-import { InstrumentOptions } from './InstrumentOptions';
+import { InstrumentConfig } from './InstrumentConfig';
 import { Instrument } from './Instrument';
 
 export abstract class InstrumentBase<
   TState extends Record<string, unknown>,
-  TOptions extends InstrumentOptions<TState> = InstrumentOptions<TState>
+  TConfig extends InstrumentConfig<TState> = InstrumentConfig<TState>
 > implements Instrument<TState>
 {
   protected currentState: TState;
 
   constructor(
     protected mechanicGroup: MechanicGroup,
-    protected options: TOptions
+    protected config: TConfig
   ) {
-    this.verifyStateKeys(options.initialState);
-    this.currentState = options.initialState;
+    this.verifyStateKeys(config.initialState);
+    this.currentState = config.initialState;
   }
 
   public getId(): string {
-    return this.options.id;
+    return this.config.id;
   }
 
   public getStateString(): string {

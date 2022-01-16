@@ -1,7 +1,7 @@
 import MechanicGroup from '../../MechanicGroup';
 import {
   UIElementInstrument,
-  UIElementInstrumentOptions,
+  UIElementInstrumentConfig,
   UIElementState,
 } from '../uiElement/UIElementInstrument';
 import { InstrumentManager } from '../../InstrumentManager';
@@ -10,8 +10,8 @@ export interface ListState extends UIElementState {
   rows?: Record<string, Record<string, unknown>>[];
 }
 
-export interface ListInstrumentOptions
-  extends UIElementInstrumentOptions<ListState> {
+export interface ListInstrumentConfig
+  extends UIElementInstrumentConfig<ListState> {
   /**
    * CSS selector to get an item in the list.
    * This selector is relative to the listSelector.
@@ -21,29 +21,29 @@ export interface ListInstrumentOptions
   /**
    * A list instrument operates on a set of rows.
    * Each row contains zero or more columns.  The possible columns a row can have
-   * are specified by column keys.  The column options are used to create an instrument
+   * are specified by column keys.  The column config are used to create an instrument
    * for the column item within the row.
    */
-  columns: UIElementInstrumentOptions[];
+  columns: UIElementInstrumentConfig[];
 }
 
 export class ListInstrument extends UIElementInstrument<
   ListState,
-  ListInstrumentOptions
+  ListInstrumentConfig
 > {
-  private columnKeyToColumnOptions: Record<string, UIElementInstrumentOptions> =
+  private columnKeyToColumnOptions: Record<string, UIElementInstrumentConfig> =
     {};
 
   private rowsOfColumnKeyToCellId: Record<string, string>[] = [];
 
   constructor(
     mechanicGroup: MechanicGroup,
-    options: ListInstrumentOptions,
+    config: ListInstrumentConfig,
     protected instrumentManager: InstrumentManager
   ) {
-    super(mechanicGroup, options);
+    super(mechanicGroup, config);
 
-    this.options.columns.forEach((columnOptions) => {
+    this.config.columns.forEach((columnOptions) => {
       this.columnKeyToColumnOptions[columnOptions.id] = columnOptions;
     });
 
@@ -135,7 +135,7 @@ export class ListInstrument extends UIElementInstrument<
     columnKey: string,
     initialState: Record<string, unknown>
   ): string {
-    const columnOptions: UIElementInstrumentOptions =
+    const columnOptions: UIElementInstrumentConfig =
       this.getColumnOptions(columnKey);
 
     const cellId = this.getCellId(rowIndex, columnKey);
@@ -152,7 +152,7 @@ export class ListInstrument extends UIElementInstrument<
     return cellId;
   }
 
-  public getColumnOptions(columnKey: string): UIElementInstrumentOptions {
+  public getColumnOptions(columnKey: string): UIElementInstrumentConfig {
     const columnOptions = this.columnKeyToColumnOptions[columnKey];
 
     if (!columnOptions) {
@@ -184,7 +184,7 @@ export class ListInstrument extends UIElementInstrument<
   }
 
   protected genericListItemSelector(): string {
-    return `${this.options.selector} ${this.options.relativeItemSelector}`;
+    return `${this.config.selector} ${this.config.relativeItemSelector}`;
   }
 
   public verifyContentLength(expectedLength: number): void {

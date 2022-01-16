@@ -1,6 +1,6 @@
 import MechanicGroup from '../../MechanicGroup';
 import { InstrumentBase } from '../instrument/InstrumentBase';
-import { InstrumentOptions } from '../instrument/InstrumentOptions';
+import { InstrumentConfig } from '../instrument/InstrumentConfig';
 
 const SUPPORTED_STATE_KEYS = [
   'hasClasses',
@@ -22,9 +22,9 @@ export interface UIElementState extends Record<string, unknown> {
   css?: Record<string, string>;
 }
 
-export interface UIElementInstrumentOptions<
+export interface UIElementInstrumentConfig<
   TState extends UIElementState = UIElementState
-> extends InstrumentOptions<TState> {
+> extends InstrumentConfig<TState> {
   /**
    * CSS selector to get the HTML element.
    */
@@ -41,17 +41,17 @@ export interface UIElementInstrumentOptions<
 
 export class UIElementInstrument<
   TState extends UIElementState = UIElementState,
-  TOptions extends UIElementInstrumentOptions<TState> = UIElementInstrumentOptions<TState>
-> extends InstrumentBase<TState, TOptions> {
-  constructor(mechanicGroup: MechanicGroup, options: TOptions) {
-    super(mechanicGroup, options);
-    this.currentState = options.initialState;
+  TConfig extends UIElementInstrumentConfig<TState> = UIElementInstrumentConfig<TState>
+> extends InstrumentBase<TState, TConfig> {
+  constructor(mechanicGroup: MechanicGroup, config: TConfig) {
+    super(mechanicGroup, config);
+    this.currentState = config.initialState;
 
     // Default the instrument to expect that the UI control is visible and present unless specified otherwise.
-    if (options.initialState.isPresent !== false) {
+    if (config.initialState.isPresent !== false) {
       this.currentState.isPresent = true;
     }
-    if (options.initialState.isVisible !== false) {
+    if (config.initialState.isVisible !== false) {
       this.currentState.isVisible = true;
     }
   }
@@ -65,7 +65,7 @@ export class UIElementInstrument<
       return false;
     }
 
-    if (this.options.verifyStateWhenInvisible) {
+    if (this.config.verifyStateWhenInvisible) {
       return true;
     }
 
@@ -87,7 +87,7 @@ export class UIElementInstrument<
 
       // Since the element isn't visible, we don't need to check
       // any of its other state.
-      if (!this.options.verifyStateWhenInvisible) {
+      if (!this.config.verifyStateWhenInvisible) {
         return;
       }
     } else {
@@ -132,46 +132,43 @@ export class UIElementInstrument<
   }
 
   public verifyIsNotVisible(): void {
-    this.mechanicGroup.element.verifyIsNotVisible(this.options.selector);
+    this.mechanicGroup.element.verifyIsNotVisible(this.config.selector);
   }
 
   public verifyIsVisible(): void {
-    this.mechanicGroup.element.verifyIsVisible(this.options.selector);
+    this.mechanicGroup.element.verifyIsVisible(this.config.selector);
   }
 
   public verifyIsNotPresent(): void {
-    this.mechanicGroup.element.verifyIsNotPresent(this.options.selector);
+    this.mechanicGroup.element.verifyIsNotPresent(this.config.selector);
   }
 
   public verifyIsPresent(): void {
-    this.mechanicGroup.element.verifyIsPresent(this.options.selector);
+    this.mechanicGroup.element.verifyIsPresent(this.config.selector);
   }
 
   public verifyTextContent(content: string): void {
-    this.mechanicGroup.element.verifyTextContent(
-      this.options.selector,
-      content
-    );
+    this.mechanicGroup.element.verifyTextContent(this.config.selector, content);
   }
 
   public verifyHasClass(className: string): void {
-    this.mechanicGroup.element.verifyHasClass(this.options.selector, className);
+    this.mechanicGroup.element.verifyHasClass(this.config.selector, className);
   }
 
   public verifyDoesNotHaveClass(className: string): void {
     this.mechanicGroup.element.verifyDoesNotHaveClass(
-      this.options.selector,
+      this.config.selector,
       className
     );
   }
 
   public verifyIsInFocus(): void {
-    this.mechanicGroup.element.verifyIsInFocus(this.options.selector);
+    this.mechanicGroup.element.verifyIsInFocus(this.config.selector);
   }
 
   public verifyCssProperty(propertyKey: string, propertyValue: string): void {
     this.mechanicGroup.element.verifyCssProperty(
-      this.options.selector,
+      this.config.selector,
       propertyKey,
       propertyValue
     );

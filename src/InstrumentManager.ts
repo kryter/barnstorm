@@ -1,8 +1,8 @@
 import { Subject, Observable } from 'rxjs';
-import { InstrumentOptions } from './instruments/instrument/InstrumentOptions';
+import { InstrumentConfig } from './instruments/instrument/InstrumentConfig';
 
 export interface InstrumentToCreateEvent {
-  instrumentOptions: InstrumentOptions;
+  instrumentConfig: InstrumentConfig;
 }
 
 export interface InstrumentToDestroyEvent {
@@ -24,11 +24,11 @@ export class InstrumentManager {
     return this.instrumentToDestroySubject.asObservable();
   }
 
-  public triggerCreateInstrument<TInstrumentOptions extends InstrumentOptions>(
-    instrumentOptions: TInstrumentOptions
+  public triggerCreateInstrument<TInstrumentConfig extends InstrumentConfig>(
+    instrumentConfig: TInstrumentConfig
   ) {
     this.instrumentToCreateSubject.next({
-      instrumentOptions,
+      instrumentConfig,
     });
   }
 

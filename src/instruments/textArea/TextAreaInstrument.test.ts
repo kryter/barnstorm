@@ -33,7 +33,7 @@ describe('TextAreaInstrument', () => {
       instrumentType: INSTRUMENT_TYPES.TEXT_AREA,
       selector,
       initialState: {
-        inputText: '',
+        textContent: '',
       },
     });
   });
@@ -53,12 +53,12 @@ describe('TextAreaInstrument', () => {
   test('can verify text', () => {
     instrumentSet
       .use<TextAreaInstrument>(TEXT_AREA_INSTRUMENT_ID)
-      .verifyText(expectedText);
+      .verifyTextContent(expectedText);
 
-    expect(mockTextAreaMechanic.verifyText).toHaveBeenCalledWith(
+    expect(mockTextAreaMechanic.verifyTextContent).toHaveBeenCalledWith(
       selector,
       expectedText
     );
-    expect(mockTextAreaMechanic.verifyText).toHaveBeenCalledTimes(1);
+    expect(mockTextAreaMechanic.verifyTextContent).toHaveBeenCalledTimes(1);
   });
 });

@@ -32,7 +32,7 @@ describe('TextBoxInstrument', () => {
       instrumentType: INSTRUMENT_TYPES.TEXT_BOX,
       selector,
       initialState: {
-        inputText: '',
+        textContent: '',
       },
     });
   });
@@ -52,12 +52,12 @@ describe('TextBoxInstrument', () => {
   test('can verify text', () => {
     instrumentSet
       .use<TextBoxInstrument>(TEXT_BOX_INSTRUMENT_ID)
-      .verifyText(expectedText);
+      .verifyTextContent(expectedText);
 
-    expect(mockTextBoxMechanic.verifyText).toHaveBeenCalledWith(
+    expect(mockTextBoxMechanic.verifyTextContent).toHaveBeenCalledWith(
       selector,
       expectedText
     );
-    expect(mockTextBoxMechanic.verifyText).toHaveBeenCalledTimes(1);
+    expect(mockTextBoxMechanic.verifyTextContent).toHaveBeenCalledTimes(1);
   });
 });

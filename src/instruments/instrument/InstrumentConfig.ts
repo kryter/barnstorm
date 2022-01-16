@@ -1,4 +1,4 @@
-export interface InstrumentOptions<
+export interface InstrumentConfig<
   TState extends Record<string, unknown> = Record<string, unknown>
 > {
   /**

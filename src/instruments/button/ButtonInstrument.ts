@@ -1,5 +1,5 @@
 import {
-  UIElementInstrumentOptions,
+  UIElementInstrumentConfig,
   UIElementInstrument,
   UIElementState,
 } from '../uiElement/UIElementInstrument';
@@ -8,12 +8,12 @@ import MechanicGroup from '../../MechanicGroup';
 export class ButtonInstrument extends UIElementInstrument {
   constructor(
     mechanicGroup: MechanicGroup,
-    options: UIElementInstrumentOptions<UIElementState>
+    config: UIElementInstrumentConfig<UIElementState>
   ) {
-    super(mechanicGroup, options);
+    super(mechanicGroup, config);
   }
 
   public click(): void {
-    this.mechanicGroup.button.click(this.options.selector);
+    this.mechanicGroup.button.click(this.config.selector);
   }
 }

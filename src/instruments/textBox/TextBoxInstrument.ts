@@ -1,49 +1,22 @@
 import MechanicGroup from '../../MechanicGroup';
 import {
   UIElementInstrument,
-  UIElementInstrumentOptions,
-  UIElementState,
+  UIElementInstrumentConfig,
 } from '../uiElement/UIElementInstrument';
 
-export interface TextBoxState extends UIElementState {
-  inputText?: string;
-}
-
-export class TextBoxInstrument extends UIElementInstrument<
-  TextBoxState,
-  UIElementInstrumentOptions<TextBoxState>
-> {
-  constructor(
-    mechanicGroup: MechanicGroup,
-    options: UIElementInstrumentOptions<TextBoxState>
-  ) {
-    super(mechanicGroup, options);
-  }
-
-  protected isStateKeySupported(stateKey: string): boolean {
-    if (super.isStateKeySupported(stateKey)) {
-      return true;
-    }
-    return stateKey === 'inputText';
-  }
-
-  public verifyState(): void {
-    super.verifyState();
-
-    if (!this.canVerifyState()) {
-      return;
-    }
-
-    if (this.currentState.inputText) {
-      this.verifyText(this.currentState.inputText);
-    }
+export class TextBoxInstrument extends UIElementInstrument {
+  constructor(mechanicGroup: MechanicGroup, config: UIElementInstrumentConfig) {
+    super(mechanicGroup, config);
   }
 
   public enterText(textToType: string): void {
-    this.mechanicGroup.textBox.enterText(this.options.selector, textToType);
+    this.mechanicGroup.textBox.enterText(this.config.selector, textToType);
   }
 
-  public verifyText(expectedText: string): void {
-    this.mechanicGroup.textBox.verifyText(this.options.selector, expectedText);
+  public verifyTextContent(expectedText: string): void {
+    this.mechanicGroup.textBox.verifyTextContent(
+      this.config.selector,
+      expectedText
+    );
   }
 }

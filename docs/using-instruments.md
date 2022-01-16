@@ -14,7 +14,7 @@ instruments.keyboard().pressEnter();
 The `url instrument` enables the test to visit specific URLs and verify the current URL.  There is only one url instrument and it is configured by default on every `instrument set`.  To use the url instrument, use the convenience method on the instrument set:
 
 ```typescript
-instruments.url().visit(ENTRY_URL);
+instruments.url().visit(useUrls().entryUrl);
 ```
 
 When the `visit()` method is called, the url instrument will automatically update its expected URL state to the new URL.  However, if the URL will change based on some other action (or the expected URL is different from the one that was passed to `visit()`), then you'll need to update the URL instrument manually to expect the new state:
@@ -32,10 +32,8 @@ The `ui element instrument` is the base level instrument for interacting with an
 The base `ui element instrument` is typically used for elements that have a display state but are not interactive (such as a label or heading element).
 
 ```typescript
-const UI_ELEMENT = 'UI_ELEMENT';
-
-const uiElement = {
-    id: UI_ELEMENT,
+const someUiElement = {
+    id: 'someUiElement',
     instrumentType: INSTRUMENT_TYPES.UI_ELEMENT,
     selector: '.simplest-possible-css-path-to-element',
     initialState: {
@@ -52,13 +50,11 @@ In general, when specifying any instrument, specify as much initial state as pos
 
 ## Button Instrument
 
-A `button instrument` has all the features of a `ui element instrument` plus it has a `.click()` method to click on the DOM element (which can be any HTML element with a click handler -- it does not need to be a `<button>` element to be used with a `button instrument`).
+A `button instrument` has all the features of a `ui element instrument` plus it has a `.click()` method to click on the DOM element (which can be any HTML element that the user would click on -- it does not need to be a `<button>` element specifically to be used with a `button instrument`).
 
 ```typescript
-const A_BUTTON = 'A_BUTTON';
-
 const aButton = {
-  id: A_BUTTON,
+  id: 'aButton',
   instrumentType: INSTRUMENT_TYPES.BUTTON,
   selector: '.simplest-possible-css-path-to-element',
   initialState: {
@@ -78,10 +74,8 @@ theTower.aButton().click();
 A `checkbox instrument` has all the features of a `ui element instrument` plus it has a methods to check and uncheck the checkbox.
 
 ```typescript
-const ITEM_CHECKBOX = 'ITEM_CHECKBOX';
-
-const itemCheckbox = {
-  id: ITEM_CHECKBOX,
+const aCheckbox = {
+  id: 'aCheckbox',
   instrumentType: INSTRUMENT_TYPES.CHECKBOX,
   selector: 'input[type="checkbox"].toggle',
   initialState: {
@@ -90,13 +84,11 @@ const itemCheckbox = {
 };
 ```
 
-If you've hidden your checkbox (and painted some other shape to the screen so the user is aware is a checkbox), you'll need to let the test know that the checkbox is invisible, but still interactive by adding the `verifyStateWhenInvisible` option when configuring the checkbox.  This flag works for any UI element.
+If you've hidden your checkbox (and painted some other shape to the screen so the user is aware is a checkbox), you'll need to let the test know that the checkbox is invisible, but still interactive by adding the `verifyStateWhenInvisible` option when configuring the checkbox.  This flag works for any UI element, but is most commonly used with a checkbox.
 
 ```typescript
-const ITEM_CHECKBOX = 'ITEM_CHECKBOX';
-
-const itemCheckbox = {
-  id: ITEM_CHECKBOX,
+const aCheckbox = {
+  id: 'aCheckbox',
   instrumentType: INSTRUMENT_TYPES.CHECKBOX,
   selector: 'input[type="checkbox"].toggle',
   verifyStateWhenInvisible: true,
@@ -109,15 +101,15 @@ const itemCheckbox = {
 Once you've added the checkbox instrument to your instrument set, you can interact with the checkbox:
 
 ```typescript
-theTower.itemCheckbox().check();
-theTower.itemCheckbox().uncheck();
+theTower.aCheckbox().check();
+theTower.aCheckbox().uncheck();
 ```
 
 Like the `url instrument` the checkbox instrument will automatically update its expected state when `.check()` or `.uncheck()` is called.  This can be overridden with a call to `.updateState()`.
 
 ## List Instrument
 
-A `list instrument` has all the features of a `ui element instrument` plus it has a methods to handle its list content.
+A `list instrument` has all the features of a `ui element instrument` plus it has methods to handle its list content.
 
 When specifying the list, you'll need to specify all the possible columns for each row so that the `list instrument` can create instruments for each cell in each row, based on the presence of expected row state in the list.
 
@@ -128,12 +120,11 @@ The selector passed to the column configs is the path from the list item row to 
 ```typescript
 // Export the column keys for a list for reference in expected data
 // updates during tests.
-const TODO_LIST = 'TODO_LIST';
 export const TODO_ITEM_TEXT = 'TODO_ITEM_TEXT';
 export const TODO_ITEM_CHECKBOX = 'TODO_ITEM_CHECKBOX';
 
-const todoListConfig = {
-  id: TODO_LIST,
+const todoList = {
+  id: 'todoList',
   instrumentType: INSTRUMENT_TYPES.LIST,
   selector: '.todo-list',
   relativeItemSelector: 'li',
@@ -175,14 +166,14 @@ const todoListConfig = {
 Once you've added the list instrument to your instrument set, you can interact with the automatically created instruments for each cell in each row in the expected row state in the list:
 
 ```typescript
-const cellId = todotheTower.todoList().getCellId(rowIndex, TODO_ITEM_CHECKBOX);
+const cellId = todoTower.todoList().getCellId(rowIndex, TODO_ITEM_CHECKBOX);
 instrumentSet.use<CheckboxInstrument>(cellId).check();
 ```
 
 Updating the expected state for a list is a little verbose (intentional for clarity and to support multiple columns), so it takes a little getting used to.  Here is the expected results for a list with one row containing two column items:
 
 ```typescript
-todotheTower.todoList().updateState({
+todoTower.todoList().updateState({
   rows: [
     {
       [TODO_ITEM_TEXT]: {
@@ -197,10 +188,10 @@ todotheTower.todoList().updateState({
 });
 ```
 
-Here is the expected results for a list with two rows.  Notice that the first row only contains one column item but the second row has two column items.  This is useful when not all rows will have all column items:
+Here is the expected results for a list with two rows.  Notice that the first row only contains one column item but the second row has two column items.  This is useful when not all rows will have all column items (or when you only care about checking a subset of items):
 
 ```typescript
-todotheTower.todoList().updateState({
+todoTower.todoList().updateState({
   rows: [
     {
       [TODO_ITEM_TEXT]: {
@@ -225,14 +216,12 @@ todotheTower.todoList().updateState({
 A `text area instrument` has all the features of a `ui element instrument` plus it has a methods to interact with its text.
 
 ```typescript
-const A_TEXT_AREA = 'A_TEXT_AREA';
-
 const aTextArea = {
-  id: A_TEXT_AREA,
+  id: 'aTextArea',
   instrumentType: INSTRUMENT_TYPES.TEXT_AREA,
   selector: '.simplest-possible-css-path-to-element',
   initialState: {
-    inputText: '',
+    textContent: '',
   }
 };
 ```
@@ -248,7 +237,7 @@ When using a text area, you'll need to manually update the expected state after 
 
 ```typescript
 theTower.aTextArea().updateState({
-    inputText: '123abc',
+    textContent: '123abc',
   });
 ```
 
@@ -257,14 +246,12 @@ theTower.aTextArea().updateState({
 A `text box instrument` has all the features of a `ui element instrument` plus it has a methods to interact with its text.
 
 ```typescript
-const A_TEXT_BOX = 'A_TEXT_BOX';
-
 const aTextBox = {
-  id: A_TEXT_BOX,
+  id: 'aTextBox',
   instrumentType: INSTRUMENT_TYPES.TEXT_BOX,
   selector: '.simplest-possible-css-path-to-element',
   initialState: {
-    inputText: '',
+    textContent: '',
   }
 };
 ```
@@ -280,6 +267,6 @@ When using a text box, you'll need to manually update the expected state after e
 
 ```typescript
 theTower.aTextBox().updateState({
-    inputText: '123abc',
-  });
+  textContent: '123abc',
+});
 ```

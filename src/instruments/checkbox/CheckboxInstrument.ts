@@ -1,7 +1,7 @@
 import MechanicGroup from '../../MechanicGroup';
 import {
   UIElementInstrument,
-  UIElementInstrumentOptions,
+  UIElementInstrumentConfig,
   UIElementState,
 } from '../uiElement/UIElementInstrument';
 
@@ -12,9 +12,9 @@ export interface CheckboxState extends UIElementState {
 export class CheckboxInstrument extends UIElementInstrument<CheckboxState> {
   constructor(
     mechanicGroup: MechanicGroup,
-    options: UIElementInstrumentOptions<CheckboxState>
+    config: UIElementInstrumentConfig<CheckboxState>
   ) {
-    super(mechanicGroup, options);
+    super(mechanicGroup, config);
   }
 
   protected isStateKeySupported(stateKey: string): boolean {
@@ -39,21 +39,18 @@ export class CheckboxInstrument extends UIElementInstrument<CheckboxState> {
   }
 
   public toggle(): void {
-    this.mechanicGroup.checkbox.toggle(this.options.selector);
+    this.mechanicGroup.checkbox.toggle(this.config.selector);
     this.updateState({
       isChecked: !this.currentState.isChecked,
     });
   }
 
   public verifyIsChecked(): void {
-    this.mechanicGroup.checkbox.verifyCheckedState(this.options.selector, true);
+    this.mechanicGroup.checkbox.verifyCheckedState(this.config.selector, true);
   }
 
   public verifyIsNotChecked(): void {
-    this.mechanicGroup.checkbox.verifyCheckedState(
-      this.options.selector,
-      false
-    );
+    this.mechanicGroup.checkbox.verifyCheckedState(this.config.selector, false);
   }
 
   public uncheck(): void {

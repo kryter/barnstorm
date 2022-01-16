@@ -8,28 +8,22 @@ import {
   KeyboardInstrument,
   KEYBOARD_INSTRUMENT_ID,
 } from './instruments/keyboard/KeyboardInstrument';
-import {
-  TextAreaInstrument,
-  TextAreaState,
-} from './instruments/textArea/TextAreaInstrument';
-import {
-  TextBoxInstrument,
-  TextBoxState,
-} from './instruments/textBox/TextBoxInstrument';
+import { TextAreaInstrument } from './instruments/textArea/TextAreaInstrument';
+import { TextBoxInstrument } from './instruments/textBox/TextBoxInstrument';
 import {
   UrlInstrument,
   URL_INSTRUMENT_ID,
 } from './instruments/url/UrlInstrument';
 import {
   ListInstrument,
-  ListInstrumentOptions,
+  ListInstrumentConfig,
 } from './instruments/list/ListInstrument';
 import { Instrument } from './instruments/instrument/Instrument';
 import {
   UIElementInstrument,
-  UIElementInstrumentOptions,
+  UIElementInstrumentConfig,
 } from './instruments/uiElement/UIElementInstrument';
-import { InstrumentOptions } from './instruments/instrument/InstrumentOptions';
+import { InstrumentConfig } from './instruments/instrument/InstrumentConfig';
 import {
   InstrumentManager,
   InstrumentToCreateEvent,
@@ -53,8 +47,8 @@ export class InstrumentSet {
     // Setup instrument manager before creating any instruments.
     this.instrumentManager
       .getInstrumentToCreateObservable()
-      .subscribe(({ instrumentOptions }: InstrumentToCreateEvent) => {
-        this.createInstrument(instrumentOptions);
+      .subscribe(({ instrumentConfig }: InstrumentToCreateEvent) => {
+        this.createInstrument(instrumentConfig);
       });
 
     this.instrumentManager
@@ -150,26 +144,26 @@ export class InstrumentSet {
    */
   public createInstrument<
     TInstrument extends Instrument,
-    TInstrumentOptions extends InstrumentOptions
-  >(instrumentOptions: TInstrumentOptions): TInstrument {
-    const existingInstrument = this.findInstrument(instrumentOptions.id);
+    TInstrumentConfig extends InstrumentConfig
+  >(instrumentConfig: TInstrumentConfig): TInstrument {
+    const existingInstrument = this.findInstrument(instrumentConfig.id);
     if (existingInstrument) {
       throw new Error(
-        `Instrument with id "${instrumentOptions.id}" has already been created.  Check for duplicate ids (especially prevalent from copy/paste omissions).`
+        `Instrument with id "${instrumentConfig.id}" has already been created.  Check for duplicate ids (especially prevalent from copy/paste omissions).`
       );
     }
 
-    const instrument = this.buildInstrument(instrumentOptions);
-    this.idToInstrument[instrumentOptions.id] = instrument;
+    const instrument = this.buildInstrument(instrumentConfig);
+    this.idToInstrument[instrumentConfig.id] = instrument;
     return instrument as TInstrument;
   }
 
   /**
    * Build and configure an instrument with the current mechanics set.
    */
-  public createInstruments(instrumentOptionsGroup: InstrumentOptions[]): void {
-    instrumentOptionsGroup.forEach((instrumentOptions: InstrumentOptions) =>
-      this.createInstrument(instrumentOptions)
+  public createInstruments(instrumentConfigs: InstrumentConfig[]): void {
+    instrumentConfigs.forEach((instrumentConfig: InstrumentConfig) =>
+      this.createInstrument(instrumentConfig)
     );
   }
 
@@ -230,7 +224,7 @@ export class InstrumentSet {
   /**
    * Update the instruments expected visibility.
    */
-  public setIsVisible(instrumentIds: string[], isVisible: boolean): void {
+  public setAreVisible(instrumentIds: string[], isVisible: boolean): void {
     instrumentIds.forEach((id) => {
       this.use(id).updateState({
         isVisible,
@@ -241,7 +235,7 @@ export class InstrumentSet {
   /**
    * Update the instruments expected existence.
    */
-  public setIsPresent(instrumentIds: string[], isPresent: boolean): void {
+  public setArePresent(instrumentIds: string[], isPresent: boolean): void {
     instrumentIds.forEach((id) => {
       this.use(id).updateState({
         isPresent,
@@ -253,18 +247,18 @@ export class InstrumentSet {
    * Build an instrument based on its instrument type and config.
    * Can be overridden to support custom instrument types.
    */
-  protected buildInstrument(instrumentOptions: InstrumentOptions): Instrument {
-    switch (instrumentOptions.instrumentType) {
+  protected buildInstrument(instrumentConfig: InstrumentConfig): Instrument {
+    switch (instrumentConfig.instrumentType) {
       case INSTRUMENT_TYPES.BUTTON:
         return new ButtonInstrument(
           this.mechanicGroup,
-          <UIElementInstrumentOptions>instrumentOptions
+          <UIElementInstrumentConfig>instrumentConfig
         );
 
       case INSTRUMENT_TYPES.CHECKBOX:
         return new CheckboxInstrument(
           this.mechanicGroup,
-          <UIElementInstrumentOptions<CheckboxState>>instrumentOptions
+          <UIElementInstrumentConfig<CheckboxState>>instrumentConfig
         );
 
       case INSTRUMENT_TYPES.KEYBOARD:
@@ -273,26 +267,26 @@ export class InstrumentSet {
       case INSTRUMENT_TYPES.LIST:
         return new ListInstrument(
           this.mechanicGroup,
-          <ListInstrumentOptions>instrumentOptions,
+          <ListInstrumentConfig>instrumentConfig,
           this.instrumentManager
         );
 
       case INSTRUMENT_TYPES.TEXT_AREA:
         return new TextAreaInstrument(
           this.mechanicGroup,
-          <UIElementInstrumentOptions<TextAreaState>>instrumentOptions
+          <UIElementInstrumentConfig>instrumentConfig
         );
 
       case INSTRUMENT_TYPES.TEXT_BOX:
         return new TextBoxInstrument(
           this.mechanicGroup,
-          <UIElementInstrumentOptions<TextBoxState>>instrumentOptions
+          <UIElementInstrumentConfig>instrumentConfig
         );
 
       case INSTRUMENT_TYPES.UI_ELEMENT:
         return new UIElementInstrument(
           this.mechanicGroup,
-          <UIElementInstrumentOptions>instrumentOptions
+          <UIElementInstrumentConfig>instrumentConfig
         );
 
       case INSTRUMENT_TYPES.URL:
@@ -300,7 +294,7 @@ export class InstrumentSet {
 
       default:
         throw new Error(
-          `Creating an instrument of type ${instrumentOptions.instrumentType}, id=\`${instrumentOptions.id}\` is not supported.`
+          `Creating an instrument of type ${instrumentConfig.instrumentType}, id=\`${instrumentConfig.id}\` is not supported.`
         );
     }
   }
