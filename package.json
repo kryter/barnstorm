@@ -1,6 +1,6 @@
 {
   "name": "@kryter/barnstorm",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Organize end to end test code",
   "sideEffects": false,
   "scripts": {
@@ -10,6 +10,14 @@
     "format": "prettier --write 'src/**'",
     "precommit": "tsc && eslint --fix 'src/**' && prettier --write 'src/**' && jest",
     "test": "jest"
+  },
+  "files":  [
+    "docs",
+    "lib"
+  ],
+  "directories": {
+    "docs": "docs",
+    "lib": "lib"
   },
   "repository": {
     "type": "git",
