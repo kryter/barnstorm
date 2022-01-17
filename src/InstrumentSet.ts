@@ -299,3 +299,7 @@ export class InstrumentSet {
     }
   }
 }
+
+export function useInstrumentSet(mechanics: MechanicGroup): InstrumentSet {
+  return new InstrumentSet(mechanics);
+}

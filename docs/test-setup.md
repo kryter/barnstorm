@@ -1,16 +1,14 @@
-# Writing Tests
+# Test Setup
 
 ## Towers
 
-To begin writing end to end tests using Barnstorm, start by creating `towers` each area or group of UI elements in the app.  You'll configure an `instrument` to work with each UI element in the area.
+Start by creating a `tower` for an area of the app.  A `tower` provides `instruments` that interact with a specific group of UI elements in the app.  You'll configure an `instrument` to work with each UI element in the area.
 
-`Barnstorm` uses `towers` that contain a mapping of CSS selectors needed to access each UI element contained in a component.  The idea is that each area of the app should have a corresponding `tower` that exposes all the component's visual and interactive functionality to the tests.
-
-A tower contains one `instrument` per UI element to be tested in the app area.
+`Towers` contain a mapping of CSS selectors needed to access each UI element.  The idea is that each area of the app should have a corresponding `tower` that exposes all the component's visual and interactive functionality to the tests.
 
 When specifying an `instrument`, you need to pass some basic information:
 
-* a unique id that anyone can use to reference the instrument later
+* a unique id that can be used to reference the instrument later
 * the type of instrument (use the appropriate instrument type for the associated UI element type)
 * a CSS selector and any other information needed to find the UI element (and any of its sub-elements, if it has sub elements)
 * the initial expected state of the UI element
@@ -28,7 +26,7 @@ const counterButton = {
 };
 ```
 
-For more details about what instruments and UI elements are supported, see [Using Instruments](./using-instruments.md).  If the instrument you need is not available, or you have a custom UI element, you can easily write your own custom instruments.
+For more details about what instruments and UI elements are supported, see the [Instrument Guide](./instrument-guide.md).  If the instrument you need is not available, or you have a custom UI element, you can write a custom instrument and make it available by overriding the `buildInstrument()` method on `InstrumentSet`.
 
 Once we specify instrument configurations for all the UI elements, we can use them to create instruments in our `instrument set`:
 
@@ -80,17 +78,17 @@ export function setupXYZTower(instruments: InstrumentSet) {
 export type XYZTower = ReturnType<typeof setupXYZTower>;
 ```
 
-The tower file will expose a function, `setupXYZTower`, that will configure the instrument set with the instruments when called.  This function returns convenience methods for each instrument, for example `xyzTower.theButton()` to make these instruments easy to use in `flight legs`, `flight plans` and tests.  We also include a type for the return type so we can use `let xyzTower: XYZTower` in our tests to make the types more readable.
+The tower file will expose a function, `setupXYZTower`, that will configure the instrument set with the instruments when called.  This function returns convenience methods for each instrument, for example `xyzTower.theButton()` to make these instruments easy to use in `flight legs` and `flight plans`.  We also include a type for the return type so we can use `let xyzTower: XYZTower` in our tests to make the types more readable.
 
 Once the `instruments` are set up in a `tower`, you are ready to interact with the UI elements and update their expected state, which is automatically verified by Barnstorm at the end of each `flight leg` (i.e. "test step") within a `flight plan`.
 
 ## Flight Plans
 
-Once you have a `tower` file where you've configured `instruments`, you're ready to use those instruments to write a `flight plan` file.  In the flight plan file, you'll specify the actions that you want to perform in the tests.
+Once you have a `tower` file where you've configured `instruments`, you're ready to use those instruments to write a `flight plans` file.  In the `flight plans` file, you'll specify the actions that you want to perform in tests.
 
-These `flight plan` files provide reusable blocks of testing that can be used in any test.  This is particularly handy when you are building a feature that builds on a previous feature and you need to do test setup of the previous feature in order to test the new feature.
+These `flight plans` files provide reusable blocks that can be used in any test.  This is particularly handy when you are building a feature that builds on a previous feature and you need to do test setup of the previous feature in order to test the new feature.
 
-In Barnstorm, you don't have to think about whether a block needs to be reusable or not, you just write it in the flight plan.  Later, if you find that you want to reuse it, there is little to no refactoring required because the structure is already in place.
+With Barnstorm, you don't have to think about whether a block needs to be reusable or not, you just write everything to be reusable.  Later, if you find that you want to reuse it, there is little to no refactoring required because the structure is already in place.
 
 ```typescript
 export interface ClickToIncrementTheCountOptions {
@@ -119,18 +117,18 @@ export function clickToIncrementTheCount({counterTower, expectedCount}: ClickToI
 
 First, you'll notice that the flight plan options are specified as an object rather than multiple parameters to the `flight plan` creator function.  This is intentional for readability in the tests where we don't want magic numbers and other mystery data being passed to the flight plan.
 
-This flight plan is very short, and only contains one flight plan leg, but flight plans can contain as many legs (steps) as needed.  There is also an optional `notes` field on the flight plan and on the flight legs to track what bugs or features are tested by each flight plan or flight leg.
+This flight plan is very short, and only contains one flight plan leg, but flight plans can contain as many legs (test steps) as needed.  There is also an optional `notes` field on the flight plan and on the flight legs to track what bugs or features are tested by each flight plan or flight leg.
 
 Each `flight leg` has two functions: `doTestAction()` and `updateExpectations()`.  The idea is that for every user action we do in the test, there is some state in the app that changes, and we want to immediately verify those changes as soon as the user action has completed.  The content of `doTestAction()` should represent something the user would do, like click or type.  The content of `updateExpectations()` should represent updates to the expected state of the app instruments.  Barnstorm will run `doTestAction()` followed by `updateExpectations()` and then will make a call to the `instruments.verifyState()` to verify the state of all instruments.  This sequence of `act`, `update expectations`, and `verify` becomes a single test step.
 
-Once the `flight plans` are set up, you are ready to write a test (finally!).
+Once the `flight plans` are set up, you are ready to write a test.
 
 ## Tests
 
 To setup a test using Barnstorm, you'll need:
 
 * an `instrument set` (from the project setup)
-* a `fly` method to fly the flight plans, which you can get by calling Barnstorm's `useAirplane()` function
+* a `fly()` function to fly the flight plans, which you can get by calling Barnstorm's `useAirplane()` function
 * any `towers` that are needed by the `flight plans`
 
 ```typescript
@@ -191,6 +189,4 @@ describe('Counter', () => {
 });
 ```
 
-Discover more [instrument types](./using-instruments.md).
-
-Happy flying!
+Discover more instrument types in the [Instrument Guide](./instrument-guide.md).

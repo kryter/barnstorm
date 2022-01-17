@@ -1,8 +1,8 @@
-# Getting Started
+# Project Setup
 
 ## Prerequisites
 
-To use `Barnstorm`, you'll need to have your end to end test infrastructure set up to run tests.
+To use `Barnstorm`, you'll need to have your end to end test infrastructure set up to run tests.  For this guide, we've set up our project with [Cypress](https://www.cypress.io/) as our test framework.
 
 ## Install Barnstorm
 
@@ -14,7 +14,7 @@ npm install --save-dev barnstorm
 
 ## Install Barnstorm Test Framework Plugin
 
-You'll also need a Barnstorm plugin for your specific test framework.  For this guide we will be using the `Cypress` end to end test framework, so we'll use the `@kryter/barnstorm-cypress` plugin for Cypress:
+You'll also need a Barnstorm plugin for your specific test framework.  For this guide we will be using the `Cypress` test framework, so we'll use the `@kryter/barnstorm-cypress` plugin for Cypress:
 
 ```bash
 npm install --save-dev @kryter/barnstorm-cypress
@@ -28,22 +28,22 @@ The idea behind a Barnstorm plugin is to provide `mechanics` that know how to in
 
 A Barnstorm plugin provides a set of test framework specific mechanics via a `useMechanics()` method.  Use the resulting `mechanics group` to create an `instrument set` that can be used by any test.
 
-We can create `useInstruments.ts` in a location conveniently available to the test files.  For convenience, we can put this file in a new `barnstorm` folder in the `cypress` directory.
+We can create a `useInstruments.ts` file in a location available to the test files.  For convenience, we can put this file (and others we will create) in a new `barnstorm` folder in the `cypress` directory.
 
 ```typescript
-import { InstrumentSet } from '@kryter/barnstorm/lib/InstrumentSet';
+import { useInstrumentSet, InstrumentSet } from '@kryter/barnstorm/lib/InstrumentSet';
 import { useMechanics } from '@kryter/barnstorm-cypress/lib/useMechanics';
 
 const mechanicGroup = useMechanics();
 
 export function useInstruments(): InstrumentSet {
-  return new InstrumentSet(mechanicGroup);
+  return useInstrumentSet(mechanicGroup);
 }
 ```
 
-We can now use an `instrument set` that is configured with `mechanics` that match the test framework being used for the app.
+We can now use an `instrument set` that is configured with `mechanics` that match our test framework.
 
-We can also file with our expected urls, `useUrls.ts`, in the same location for tracking our app's expected URLs:
+We can also create file with our expected urls, `useUrls.ts`, in the same location for tracking our app's expected URLs:
 
 ```typescript
 export function useUrls(): Record<string, string> {
@@ -57,4 +57,4 @@ export function useUrls(): Record<string, string> {
 }
 ```
 
-Now with the project setup completed, we can start [writing tests!](./writing-tests.md)
+Now with the project setup completed, we can begin our [test setup](./test-setup.md).

@@ -30,7 +30,7 @@
   "bugs": {
     "url": "https://github.com/kryter/barnstorm/issues"
   },
-  "hometheTower": "https://github.com/kryter/barnstorm#readme",
+  "home": "https://github.com/kryter/barnstorm#readme",
   "devDependencies": {
     "@babel/core": "^7.16.7",
     "@babel/preset-env": "^7.16.8",
