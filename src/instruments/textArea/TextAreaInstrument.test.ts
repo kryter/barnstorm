@@ -10,6 +10,7 @@ const TEXT_AREA_INSTRUMENT_ID = 'TEXT_AREA_INSTRUMENT';
 
 describe('TextAreaInstrument', () => {
   const selector = '.the-textArea-selector';
+  const iFrameSelector = 'iframe#the-iframe';
   const expectedText = 'hello world';
 
   let instrumentSet: InstrumentSet;
@@ -32,6 +33,7 @@ describe('TextAreaInstrument', () => {
       id: TEXT_AREA_INSTRUMENT_ID,
       instrumentType: INSTRUMENT_TYPES.TEXT_AREA,
       selector,
+      iFrameSelector,
       initialState: {
         textContent: '',
       },
@@ -45,7 +47,8 @@ describe('TextAreaInstrument', () => {
 
     expect(mockTextAreaMechanic.enterText).toHaveBeenCalledWith(
       selector,
-      expectedText
+      expectedText,
+      iFrameSelector
     );
     expect(mockTextAreaMechanic.enterText).toHaveBeenCalledTimes(1);
   });
@@ -57,7 +60,8 @@ describe('TextAreaInstrument', () => {
 
     expect(mockTextAreaMechanic.verifyTextContent).toHaveBeenCalledWith(
       selector,
-      expectedText
+      expectedText,
+      iFrameSelector
     );
     expect(mockTextAreaMechanic.verifyTextContent).toHaveBeenCalledTimes(1);
   });

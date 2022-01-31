@@ -1,25 +1,38 @@
 import { ElementMechanic } from './ElementMechanic';
 
 export default class ElementMechanicMock implements ElementMechanic {
-  verifyIsVisible(selector: string): void {}
+  verifyIsVisible(selector: string, iFrameSelector?: string): void {}
 
-  verifyIsNotVisible(selector: string): void {}
+  verifyIsNotVisible(selector: string, iFrameSelector?: string): void {}
 
-  verifyIsPresent(selector: string): void {}
+  verifyIsPresent(selector: string, iFrameSelector?: string): void {}
 
-  verifyIsNotPresent(selector: string): void {}
+  verifyIsNotPresent(selector: string, iFrameSelector?: string): void {}
 
-  verifyTextContent(selector: string, content: string): void {}
+  verifyTextContent(
+    selector: string,
+    content: string,
+    iFrameSelector?: string
+  ): void {}
 
-  verifyHasClass(selector: string, className: string): void {}
+  verifyHasClass(
+    selector: string,
+    className: string,
+    iFrameSelector?: string
+  ): void {}
 
-  verifyDoesNotHaveClass(selector: string, className: string): void {}
+  verifyDoesNotHaveClass(
+    selector: string,
+    className: string,
+    iFrameSelector?: string
+  ): void {}
 
-  verifyIsInFocus(selector: string): void {}
+  verifyIsInFocus(selector: string, iFrameSelector?: string): void {}
 
   verifyCssProperty(
     selector: string,
     propertyKey: string,
-    propertyValue: string
+    propertyValue: string,
+    iFrameSelector?: string
   ): void {}
 }

@@ -23,7 +23,7 @@ const TEXT_INSTRUMENT_ID = 'TEXT_INSTRUMENT';
 
 describe('ListInstrument', () => {
   const selector = '.the-list-selector';
-  const selectorWithInvisible = '.the-list-selector-with-invisible';
+  const iFrameSelector = 'iframe#the-iframe';
   const relativeItemSelector = '.a-list-item-selector';
 
   const checkboxItemSelectors = [
@@ -94,6 +94,7 @@ describe('ListInstrument', () => {
       id: LIST_INSTRUMENT_ID,
       instrumentType: INSTRUMENT_TYPES.LIST,
       selector,
+      iFrameSelector,
       relativeItemSelector,
       initialState: {
         rows: [],
@@ -145,7 +146,8 @@ describe('ListInstrument', () => {
     instrumentSet.use<CheckboxInstrument>(cellInstrumentId).toggle();
 
     expect(mockCheckboxMechanic.toggle).toHaveBeenCalledWith(
-      checkboxItemSelectors[2]
+      checkboxItemSelectors[2],
+      iFrameSelector
     );
     expect(mockCheckboxMechanic.toggle).toHaveBeenCalledTimes(1);
   });
@@ -158,6 +160,7 @@ describe('ListInstrument', () => {
       id: LIST_INSTRUMENT_WITH_INITIAL_STATE_ID,
       instrumentType: INSTRUMENT_TYPES.LIST,
       selector,
+      iFrameSelector,
       relativeItemSelector,
       initialState,
       columns: [
@@ -196,46 +199,64 @@ describe('ListInstrument', () => {
       instrumentSet.use<ListInstrument>(LIST_INSTRUMENT_ID).getStateString()
     ).toBe(JSON.stringify(updatedState, null, 2));
 
-    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(selector);
     expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(
-      textItemSelectors[0]
+      selector,
+      iFrameSelector
     );
     expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(
-      textItemSelectors[1]
+      textItemSelectors[0],
+      iFrameSelector
     );
     expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(
-      textItemSelectors[2]
+      textItemSelectors[1],
+      iFrameSelector
     );
     expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(
-      checkboxItemSelectors[0]
+      textItemSelectors[2],
+      iFrameSelector
     );
     expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(
-      checkboxItemSelectors[1]
+      checkboxItemSelectors[0],
+      iFrameSelector
     );
     expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(
-      checkboxItemSelectors[2]
+      checkboxItemSelectors[1],
+      iFrameSelector
+    );
+    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(
+      checkboxItemSelectors[2],
+      iFrameSelector
     );
 
     expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledTimes(7);
 
-    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(selector);
     expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(
-      textItemSelectors[0]
+      selector,
+      iFrameSelector
     );
     expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(
-      textItemSelectors[1]
+      textItemSelectors[0],
+      iFrameSelector
     );
     expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(
-      textItemSelectors[2]
+      textItemSelectors[1],
+      iFrameSelector
     );
     expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(
-      checkboxItemSelectors[0]
+      textItemSelectors[2],
+      iFrameSelector
     );
     expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(
-      checkboxItemSelectors[1]
+      checkboxItemSelectors[0],
+      iFrameSelector
     );
     expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(
-      checkboxItemSelectors[2]
+      checkboxItemSelectors[1],
+      iFrameSelector
+    );
+    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(
+      checkboxItemSelectors[2],
+      iFrameSelector
     );
 
     expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledTimes(7);
@@ -243,37 +264,44 @@ describe('ListInstrument', () => {
     // The verification should check the text column state for each row.
     expect(mockElementMechanic.verifyTextContent).toHaveBeenCalledWith(
       textItemSelectors[0],
-      listContent[0][TEXT_INSTRUMENT_ID].textContent
+      listContent[0][TEXT_INSTRUMENT_ID].textContent,
+      iFrameSelector
     );
     expect(mockElementMechanic.verifyTextContent).toHaveBeenCalledWith(
       textItemSelectors[1],
-      listContent[1][TEXT_INSTRUMENT_ID].textContent
+      listContent[1][TEXT_INSTRUMENT_ID].textContent,
+      iFrameSelector
     );
     expect(mockElementMechanic.verifyTextContent).toHaveBeenCalledWith(
       textItemSelectors[2],
-      listContent[2][TEXT_INSTRUMENT_ID].textContent
+      listContent[2][TEXT_INSTRUMENT_ID].textContent,
+      iFrameSelector
     );
     expect(mockElementMechanic.verifyTextContent).toHaveBeenCalledTimes(3);
 
     // The verification should check the checkbox column state for each row.
     expect(mockCheckboxMechanic.verifyCheckedState).toHaveBeenCalledWith(
       checkboxItemSelectors[0],
-      listContent[0][CHECKBOX_INSTRUMENT_ID].isChecked
+      listContent[0][CHECKBOX_INSTRUMENT_ID].isChecked,
+      iFrameSelector
     );
     expect(mockCheckboxMechanic.verifyCheckedState).toHaveBeenCalledWith(
       checkboxItemSelectors[1],
-      listContent[1][CHECKBOX_INSTRUMENT_ID].isChecked
+      listContent[1][CHECKBOX_INSTRUMENT_ID].isChecked,
+      iFrameSelector
     );
     expect(mockCheckboxMechanic.verifyCheckedState).toHaveBeenCalledWith(
       checkboxItemSelectors[2],
-      listContent[2][CHECKBOX_INSTRUMENT_ID].isChecked
+      listContent[2][CHECKBOX_INSTRUMENT_ID].isChecked,
+      iFrameSelector
     );
     expect(mockCheckboxMechanic.verifyCheckedState).toHaveBeenCalledTimes(3);
 
     // The verification should check the the row count.
     expect(mockListMechanic.verifyListLength).toHaveBeenCalledWith(
       '.the-list-selector .a-list-item-selector',
-      listContent.length
+      listContent.length,
+      iFrameSelector
     );
     expect(mockListMechanic.verifyListLength).toHaveBeenCalledTimes(1);
   });
@@ -286,7 +314,8 @@ describe('ListInstrument', () => {
 
     expect(mockListMechanic.verifyListLength).toHaveBeenCalledWith(
       '.the-list-selector .a-list-item-selector',
-      expectedLength
+      expectedLength,
+      iFrameSelector
     );
     expect(mockListMechanic.verifyListLength).toHaveBeenCalledTimes(1);
   });
@@ -324,16 +353,24 @@ describe('ListInstrument', () => {
 
     instrumentSet.verifyState();
 
-    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(selector);
     expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(
-      textItemSelectors[0]
+      selector,
+      iFrameSelector
+    );
+    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(
+      textItemSelectors[0],
+      iFrameSelector
     );
 
     expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledTimes(2);
 
-    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(selector);
     expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(
-      textItemSelectors[0]
+      selector,
+      iFrameSelector
+    );
+    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(
+      textItemSelectors[0],
+      iFrameSelector
     );
 
     expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledTimes(2);
@@ -341,7 +378,8 @@ describe('ListInstrument', () => {
     // The verification should check the text column state for each row.
     expect(mockElementMechanic.verifyTextContent).toHaveBeenCalledWith(
       textItemSelectors[0],
-      newRowText
+      newRowText,
+      iFrameSelector
     );
     expect(mockElementMechanic.verifyTextContent).toHaveBeenCalledTimes(1);
 
@@ -351,7 +389,8 @@ describe('ListInstrument', () => {
     // The verification should check the the row count.
     expect(mockListMechanic.verifyListLength).toHaveBeenCalledWith(
       '.the-list-selector .a-list-item-selector',
-      1
+      1,
+      iFrameSelector
     );
     expect(mockListMechanic.verifyListLength).toHaveBeenCalledTimes(1);
 
@@ -376,22 +415,32 @@ describe('ListInstrument', () => {
 
     instrumentSet.verifyState();
 
-    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(selector);
     expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(
-      textItemSelectors[0]
+      selector,
+      iFrameSelector
     );
     expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(
-      checkboxItemSelectors[1]
+      textItemSelectors[0],
+      iFrameSelector
+    );
+    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(
+      checkboxItemSelectors[1],
+      iFrameSelector
     );
 
     expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledTimes(5);
 
-    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(selector);
     expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(
-      textItemSelectors[0]
+      selector,
+      iFrameSelector
     );
     expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(
-      checkboxItemSelectors[1]
+      textItemSelectors[0],
+      iFrameSelector
+    );
+    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(
+      checkboxItemSelectors[1],
+      iFrameSelector
     );
 
     expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledTimes(5);
@@ -399,14 +448,16 @@ describe('ListInstrument', () => {
     // The verification should check the text column state for each row.
     expect(mockElementMechanic.verifyTextContent).toHaveBeenCalledWith(
       textItemSelectors[0],
-      newRowText
+      newRowText,
+      iFrameSelector
     );
     expect(mockElementMechanic.verifyTextContent).toHaveBeenCalledTimes(2);
 
     // The verification should check the checkbox column state for each row.
     expect(mockCheckboxMechanic.verifyCheckedState).toHaveBeenCalledWith(
       checkboxItemSelectors[1],
-      true
+      true,
+      iFrameSelector
     );
 
     expect(mockCheckboxMechanic.verifyCheckedState).toHaveBeenCalledTimes(1);
@@ -414,7 +465,8 @@ describe('ListInstrument', () => {
     // The verification should check the the row count.
     expect(mockListMechanic.verifyListLength).toHaveBeenCalledWith(
       '.the-list-selector .a-list-item-selector',
-      2
+      2,
+      iFrameSelector
     );
     expect(mockListMechanic.verifyListLength).toHaveBeenCalledTimes(2);
   });
@@ -430,6 +482,7 @@ describe('ListInstrument', () => {
       id: LIST_INSTRUMENT_WITH_INVISIBLE_CONTENT_ID,
       instrumentType: INSTRUMENT_TYPES.LIST,
       selector,
+      iFrameSelector,
       relativeItemSelector,
       initialState,
       columns: [
@@ -479,18 +532,32 @@ describe('ListInstrument', () => {
 
     instrumentSet.verifyState();
 
-    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(selector);
-    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(selector);
     expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(
-      textItemSelectors[0]
+      selector,
+      iFrameSelector
+    );
+    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(
+      selector,
+      iFrameSelector
+    );
+    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(
+      textItemSelectors[0],
+      iFrameSelector
     );
 
     expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledTimes(3);
 
-    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(selector);
-    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(selector);
     expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(
-      textItemSelectors[0]
+      selector,
+      iFrameSelector
+    );
+    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(
+      selector,
+      iFrameSelector
+    );
+    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(
+      textItemSelectors[0],
+      iFrameSelector
     );
 
     expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledTimes(3);
@@ -498,7 +565,8 @@ describe('ListInstrument', () => {
     // The verification should check the text column state for each row.
     expect(mockElementMechanic.verifyTextContent).toHaveBeenCalledWith(
       textItemSelectors[0],
-      newRowText
+      newRowText,
+      iFrameSelector
     );
     expect(mockElementMechanic.verifyTextContent).toHaveBeenCalledTimes(1);
 
@@ -508,11 +576,13 @@ describe('ListInstrument', () => {
     // The verification should check the the row count.
     expect(mockListMechanic.verifyListLength).toHaveBeenCalledWith(
       '.the-list-selector .a-list-item-selector',
-      1
+      1,
+      iFrameSelector
     );
     expect(mockListMechanic.verifyListLength).toHaveBeenCalledWith(
       '.the-list-selector .a-list-item-selector',
-      0
+      0,
+      iFrameSelector
     );
     expect(mockListMechanic.verifyListLength).toHaveBeenCalledTimes(2);
 
@@ -542,28 +612,42 @@ describe('ListInstrument', () => {
 
     instrumentSet.verifyState();
 
-    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(selector);
     expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(
-      textItemSelectors[0]
+      selector,
+      iFrameSelector
     );
     expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(
-      checkboxItemSelectors[1]
+      textItemSelectors[0],
+      iFrameSelector
+    );
+    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(
+      checkboxItemSelectors[1],
+      iFrameSelector
     );
 
     expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledTimes(7);
 
-    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(selector);
-    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(selector);
     expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(
-      textItemSelectors[0]
+      selector,
+      iFrameSelector
+    );
+    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(
+      selector,
+      iFrameSelector
+    );
+    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(
+      textItemSelectors[0],
+      iFrameSelector
     );
 
     expect(mockElementMechanic.verifyIsNotVisible).toHaveBeenCalledWith(
-      checkboxItemSelectors[1]
+      checkboxItemSelectors[1],
+      iFrameSelector
     );
 
     expect(mockElementMechanic.verifyIsNotVisible).toHaveBeenCalledWith(
-      checkboxItemSelectors[1]
+      checkboxItemSelectors[1],
+      iFrameSelector
     );
 
     expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledTimes(6);
@@ -572,14 +656,16 @@ describe('ListInstrument', () => {
     // The verification should check the text column state for each row.
     expect(mockElementMechanic.verifyTextContent).toHaveBeenCalledWith(
       textItemSelectors[0],
-      newRowText
+      newRowText,
+      iFrameSelector
     );
     expect(mockElementMechanic.verifyTextContent).toHaveBeenCalledTimes(2);
 
     // The verification should check the checkbox column state for each row.
     expect(mockCheckboxMechanic.verifyCheckedState).toHaveBeenCalledWith(
       checkboxItemSelectors[1],
-      true
+      true,
+      iFrameSelector
     );
 
     expect(mockCheckboxMechanic.verifyCheckedState).toHaveBeenCalledTimes(1);
@@ -587,11 +673,13 @@ describe('ListInstrument', () => {
     // The verification should check the the row count.
     expect(mockListMechanic.verifyListLength).toHaveBeenCalledWith(
       '.the-list-selector .a-list-item-selector',
-      2
+      2,
+      iFrameSelector
     );
     expect(mockListMechanic.verifyListLength).toHaveBeenCalledWith(
       '.the-list-selector .a-list-item-selector',
-      1
+      1,
+      iFrameSelector
     );
     expect(mockListMechanic.verifyListLength).toHaveBeenCalledTimes(4);
   });

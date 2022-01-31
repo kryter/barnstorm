@@ -1,3 +1,3 @@
 export interface ButtonMechanic {
-  click(selector: string): void;
+  click(selector: string, iFrameSelector?: string): void;
 }

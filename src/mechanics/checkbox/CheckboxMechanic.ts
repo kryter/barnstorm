@@ -1,4 +1,8 @@
 export interface CheckboxMechanic {
-  toggle(selector: string): void;
-  verifyCheckedState(selector: string, expectedIsChecked: boolean): void;
+  toggle(selector: string, iFrameSelector?: string): void;
+  verifyCheckedState(
+    selector: string,
+    expectedIsChecked: boolean,
+    iFrameSelector?: string
+  ): void;
 }

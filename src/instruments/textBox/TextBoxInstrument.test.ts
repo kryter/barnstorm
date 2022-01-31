@@ -10,6 +10,7 @@ const TEXT_BOX_INSTRUMENT_ID = 'TEXT_BOX_INSTRUMENT';
 
 describe('TextBoxInstrument', () => {
   const selector = '.the-textBox-selector';
+  const iFrameSelector = 'iframe#the-iframe';
   const expectedText = 'hello world';
 
   let instrumentSet: InstrumentSet;
@@ -31,6 +32,7 @@ describe('TextBoxInstrument', () => {
       id: TEXT_BOX_INSTRUMENT_ID,
       instrumentType: INSTRUMENT_TYPES.TEXT_BOX,
       selector,
+      iFrameSelector,
       initialState: {
         textContent: '',
       },
@@ -44,7 +46,8 @@ describe('TextBoxInstrument', () => {
 
     expect(mockTextBoxMechanic.enterText).toHaveBeenCalledWith(
       selector,
-      expectedText
+      expectedText,
+      iFrameSelector
     );
     expect(mockTextBoxMechanic.enterText).toHaveBeenCalledTimes(1);
   });
@@ -56,7 +59,8 @@ describe('TextBoxInstrument', () => {
 
     expect(mockTextBoxMechanic.verifyTextContent).toHaveBeenCalledWith(
       selector,
-      expectedText
+      expectedText,
+      iFrameSelector
     );
     expect(mockTextBoxMechanic.verifyTextContent).toHaveBeenCalledTimes(1);
   });

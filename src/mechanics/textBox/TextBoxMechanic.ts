@@ -1,4 +1,12 @@
 export interface TextBoxMechanic {
-  enterText(selector: string, textToType: string): void;
-  verifyTextContent(selector: string, expectedText: string): void;
+  enterText(
+    selector: string,
+    textToType: string,
+    iFrameSelector?: string
+  ): void;
+  verifyTextContent(
+    selector: string,
+    expectedText: string,
+    iFrameSelector?: string
+  ): void;
 }

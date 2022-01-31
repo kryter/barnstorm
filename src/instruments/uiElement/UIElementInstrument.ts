@@ -31,12 +31,18 @@ export interface UIElementInstrumentConfig<
   selector: string;
 
   /**
+   * If this element lives within an iFrame, use this selector to find
+   * the iFrame before searching for the element.
+   */
+  iFrameSelector?: string;
+
+  /**
    * In general, Barnstorm will not try to interact with hidden elements.
    * However, there are cases where an element is hidden visually but is still
    * interactive.  Set this flag if we should verify the state of the instrument
    * when the instrument is present but invisible.
    */
-  verifyStateWhenInvisible: boolean;
+  verifyStateWhenInvisible?: boolean;
 }
 
 export class UIElementInstrument<
@@ -132,45 +138,70 @@ export class UIElementInstrument<
   }
 
   public verifyIsNotVisible(): void {
-    this.mechanicGroup.element.verifyIsNotVisible(this.config.selector);
+    this.mechanicGroup.element.verifyIsNotVisible(
+      this.config.selector,
+      this.config.iFrameSelector
+    );
   }
 
   public verifyIsVisible(): void {
-    this.mechanicGroup.element.verifyIsVisible(this.config.selector);
+    this.mechanicGroup.element.verifyIsVisible(
+      this.config.selector,
+      this.config.iFrameSelector
+    );
   }
 
   public verifyIsNotPresent(): void {
-    this.mechanicGroup.element.verifyIsNotPresent(this.config.selector);
+    this.mechanicGroup.element.verifyIsNotPresent(
+      this.config.selector,
+      this.config.iFrameSelector
+    );
   }
 
   public verifyIsPresent(): void {
-    this.mechanicGroup.element.verifyIsPresent(this.config.selector);
+    this.mechanicGroup.element.verifyIsPresent(
+      this.config.selector,
+      this.config.iFrameSelector
+    );
   }
 
   public verifyTextContent(content: string): void {
-    this.mechanicGroup.element.verifyTextContent(this.config.selector, content);
+    this.mechanicGroup.element.verifyTextContent(
+      this.config.selector,
+      content,
+      this.config.iFrameSelector
+    );
   }
 
   public verifyHasClass(className: string): void {
-    this.mechanicGroup.element.verifyHasClass(this.config.selector, className);
+    this.mechanicGroup.element.verifyHasClass(
+      this.config.selector,
+      className,
+      this.config.iFrameSelector
+    );
   }
 
   public verifyDoesNotHaveClass(className: string): void {
     this.mechanicGroup.element.verifyDoesNotHaveClass(
       this.config.selector,
-      className
+      className,
+      this.config.iFrameSelector
     );
   }
 
   public verifyIsInFocus(): void {
-    this.mechanicGroup.element.verifyIsInFocus(this.config.selector);
+    this.mechanicGroup.element.verifyIsInFocus(
+      this.config.selector,
+      this.config.iFrameSelector
+    );
   }
 
   public verifyCssProperty(propertyKey: string, propertyValue: string): void {
     this.mechanicGroup.element.verifyCssProperty(
       this.config.selector,
       propertyKey,
-      propertyValue
+      propertyValue,
+      this.config.iFrameSelector
     );
   }
 }

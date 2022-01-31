@@ -147,6 +147,7 @@ export class ListInstrument extends UIElementInstrument<
       selector: `${this.listItemSelectorByIndex(rowIndex)} ${
         columnOptions.selector || ''
       }`,
+      iFrameSelector: this.config.iFrameSelector,
     });
 
     return cellId;
@@ -190,7 +191,8 @@ export class ListInstrument extends UIElementInstrument<
   public verifyContentLength(expectedLength: number): void {
     this.mechanicGroup.list.verifyListLength(
       this.genericListItemSelector(),
-      expectedLength
+      expectedLength,
+      this.config.iFrameSelector
     );
   }
 }

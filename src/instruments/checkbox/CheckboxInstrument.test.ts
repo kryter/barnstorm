@@ -13,6 +13,7 @@ const CHECKED_CHECKBOX_INSTRUMENT_ID = 'CHECKED_CHECKBOX_INSTRUMENT';
 
 describe('CheckboxInstrument', () => {
   const selector = '.the-checkbox-selector';
+  const iFrameSelector = 'iframe#the-iframe';
 
   let instrumentSet: InstrumentSet;
   let mockCheckboxMechanic;
@@ -38,6 +39,7 @@ describe('CheckboxInstrument', () => {
       id: CHECKBOX_INSTRUMENT_ID,
       instrumentType: INSTRUMENT_TYPES.CHECKBOX,
       selector,
+      iFrameSelector,
       initialState: {
         isChecked: false,
       },
@@ -47,6 +49,7 @@ describe('CheckboxInstrument', () => {
       id: CHECKED_CHECKBOX_INSTRUMENT_ID,
       instrumentType: INSTRUMENT_TYPES.CHECKBOX,
       selector,
+      iFrameSelector,
       initialState: {
         isChecked: true,
       },
@@ -63,17 +66,24 @@ describe('CheckboxInstrument', () => {
       .use<CheckboxInstrument>(CHECKED_CHECKBOX_INSTRUMENT_ID)
       .verifyState();
 
-    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(selector);
+    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(
+      selector,
+      iFrameSelector
+    );
 
     expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledTimes(1);
 
-    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(selector);
+    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(
+      selector,
+      iFrameSelector
+    );
 
     expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledTimes(1);
 
     expect(mockCheckboxMechanic.verifyCheckedState).toHaveBeenCalledWith(
       selector,
-      true
+      true,
+      iFrameSelector
     );
   });
 
@@ -85,17 +95,24 @@ describe('CheckboxInstrument', () => {
     // First make sure the checkbox state starts as false.
     checkboxInstrument.verifyState();
 
-    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(selector);
+    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(
+      selector,
+      iFrameSelector
+    );
 
     expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledTimes(1);
 
-    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(selector);
+    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(
+      selector,
+      iFrameSelector
+    );
 
     expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledTimes(1);
 
     expect(mockCheckboxMechanic.verifyCheckedState).toHaveBeenCalledWith(
       selector,
-      false
+      false,
+      iFrameSelector
     );
     expect(mockCheckboxMechanic.verifyCheckedState).toHaveBeenCalledTimes(1);
 
@@ -105,17 +122,24 @@ describe('CheckboxInstrument', () => {
     });
     checkboxInstrument.verifyState();
 
-    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(selector);
+    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(
+      selector,
+      iFrameSelector
+    );
 
     expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledTimes(2);
 
-    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(selector);
+    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(
+      selector,
+      iFrameSelector
+    );
 
     expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledTimes(2);
 
     expect(mockCheckboxMechanic.verifyCheckedState).toHaveBeenCalledWith(
       selector,
-      true
+      true,
+      iFrameSelector
     );
     expect(mockCheckboxMechanic.verifyCheckedState).toHaveBeenCalledTimes(2);
   });
@@ -124,32 +148,42 @@ describe('CheckboxInstrument', () => {
     // Check section
     instrumentSet.use<CheckboxInstrument>(CHECKBOX_INSTRUMENT_ID).check();
 
-    expect(mockCheckboxMechanic.toggle).toHaveBeenCalledWith(selector);
+    expect(mockCheckboxMechanic.toggle).toHaveBeenCalledWith(
+      selector,
+      iFrameSelector
+    );
     expect(mockCheckboxMechanic.toggle).toHaveBeenCalledTimes(1);
 
     expect(mockCheckboxMechanic.verifyCheckedState).toHaveBeenCalledWith(
       selector,
-      false
+      false,
+      iFrameSelector
     );
     expect(mockCheckboxMechanic.verifyCheckedState).toHaveBeenCalledWith(
       selector,
-      true
+      true,
+      iFrameSelector
     );
     expect(mockCheckboxMechanic.verifyCheckedState).toHaveBeenCalledTimes(2);
 
     // Uncheck section (requires the check section for setup)
     instrumentSet.use<CheckboxInstrument>(CHECKBOX_INSTRUMENT_ID).uncheck();
 
-    expect(mockCheckboxMechanic.toggle).toHaveBeenCalledWith(selector);
+    expect(mockCheckboxMechanic.toggle).toHaveBeenCalledWith(
+      selector,
+      iFrameSelector
+    );
     expect(mockCheckboxMechanic.toggle).toHaveBeenCalledTimes(2);
 
     expect(mockCheckboxMechanic.verifyCheckedState).toHaveBeenCalledWith(
       selector,
-      true
+      true,
+      iFrameSelector
     );
     expect(mockCheckboxMechanic.verifyCheckedState).toHaveBeenCalledWith(
       selector,
-      false
+      false,
+      iFrameSelector
     );
     expect(mockCheckboxMechanic.verifyCheckedState).toHaveBeenCalledTimes(4);
   });
@@ -157,7 +191,10 @@ describe('CheckboxInstrument', () => {
   test('can be toggled', () => {
     instrumentSet.use<CheckboxInstrument>(CHECKBOX_INSTRUMENT_ID).toggle();
 
-    expect(mockCheckboxMechanic.toggle).toHaveBeenCalledWith(selector);
+    expect(mockCheckboxMechanic.toggle).toHaveBeenCalledWith(
+      selector,
+      iFrameSelector
+    );
     expect(mockCheckboxMechanic.toggle).toHaveBeenCalledTimes(1);
 
     expect(mockCheckboxMechanic.verifyCheckedState).toHaveBeenCalledTimes(0);
@@ -172,7 +209,8 @@ describe('CheckboxInstrument', () => {
 
     expect(mockCheckboxMechanic.verifyCheckedState).toHaveBeenCalledWith(
       selector,
-      true
+      true,
+      iFrameSelector
     );
     expect(mockCheckboxMechanic.verifyCheckedState).toHaveBeenCalledTimes(1);
   });
@@ -186,7 +224,8 @@ describe('CheckboxInstrument', () => {
 
     expect(mockCheckboxMechanic.verifyCheckedState).toHaveBeenCalledWith(
       selector,
-      false
+      false,
+      iFrameSelector
     );
     expect(mockCheckboxMechanic.verifyCheckedState).toHaveBeenCalledTimes(1);
   });

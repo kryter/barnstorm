@@ -39,18 +39,29 @@ export class CheckboxInstrument extends UIElementInstrument<CheckboxState> {
   }
 
   public toggle(): void {
-    this.mechanicGroup.checkbox.toggle(this.config.selector);
+    this.mechanicGroup.checkbox.toggle(
+      this.config.selector,
+      this.config.iFrameSelector
+    );
     this.updateState({
       isChecked: !this.currentState.isChecked,
     });
   }
 
   public verifyIsChecked(): void {
-    this.mechanicGroup.checkbox.verifyCheckedState(this.config.selector, true);
+    this.mechanicGroup.checkbox.verifyCheckedState(
+      this.config.selector,
+      true,
+      this.config.iFrameSelector
+    );
   }
 
   public verifyIsNotChecked(): void {
-    this.mechanicGroup.checkbox.verifyCheckedState(this.config.selector, false);
+    this.mechanicGroup.checkbox.verifyCheckedState(
+      this.config.selector,
+      false,
+      this.config.iFrameSelector
+    );
   }
 
   public uncheck(): void {

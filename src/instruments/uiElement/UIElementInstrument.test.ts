@@ -11,6 +11,7 @@ const UI_ELEMENT_INSTRUMENT = 'UI_ELEMENT_INSTRUMENT';
 
 describe('UIElementInstrument', () => {
   const selector = '.the-element-selector';
+  const iFrameSelector = 'iframe#the-iframe';
   const classToCheck = 'selected';
 
   let instrumentSet: InstrumentSet;
@@ -32,6 +33,7 @@ describe('UIElementInstrument', () => {
       id: UI_ELEMENT_INSTRUMENT,
       instrumentType: INSTRUMENT_TYPES.UI_ELEMENT,
       selector,
+      iFrameSelector,
       initialState: {},
     });
   });
@@ -42,7 +44,8 @@ describe('UIElementInstrument', () => {
       .verifyIsNotVisible();
 
     expect(mockElementMechanic.verifyIsNotVisible).toHaveBeenCalledWith(
-      selector
+      selector,
+      iFrameSelector
     );
     expect(mockElementMechanic.verifyIsNotVisible).toHaveBeenCalledTimes(1);
   });
@@ -53,7 +56,8 @@ describe('UIElementInstrument', () => {
       .verifyIsNotPresent();
 
     expect(mockElementMechanic.verifyIsNotPresent).toHaveBeenCalledWith(
-      selector
+      selector,
+      iFrameSelector
     );
     expect(mockElementMechanic.verifyIsNotPresent).toHaveBeenCalledTimes(1);
   });
@@ -66,7 +70,8 @@ describe('UIElementInstrument', () => {
 
     expect(mockElementMechanic.verifyTextContent).toHaveBeenCalledWith(
       selector,
-      textContent
+      textContent,
+      iFrameSelector
     );
     expect(mockElementMechanic.verifyTextContent).toHaveBeenCalledTimes(1);
   });
@@ -78,7 +83,8 @@ describe('UIElementInstrument', () => {
 
     expect(mockElementMechanic.verifyHasClass).toHaveBeenCalledWith(
       selector,
-      classToCheck
+      classToCheck,
+      iFrameSelector
     );
     expect(mockElementMechanic.verifyHasClass).toHaveBeenCalledTimes(1);
   });
@@ -90,7 +96,8 @@ describe('UIElementInstrument', () => {
 
     expect(mockElementMechanic.verifyDoesNotHaveClass).toHaveBeenCalledWith(
       selector,
-      classToCheck
+      classToCheck,
+      iFrameSelector
     );
     expect(mockElementMechanic.verifyDoesNotHaveClass).toHaveBeenCalledTimes(1);
   });
@@ -100,7 +107,10 @@ describe('UIElementInstrument', () => {
       .use<UIElementInstrument>(UI_ELEMENT_INSTRUMENT)
       .verifyIsInFocus();
 
-    expect(mockElementMechanic.verifyIsInFocus).toHaveBeenCalledWith(selector);
+    expect(mockElementMechanic.verifyIsInFocus).toHaveBeenCalledWith(
+      selector,
+      iFrameSelector
+    );
     expect(mockElementMechanic.verifyIsInFocus).toHaveBeenCalledTimes(1);
   });
 
@@ -115,7 +125,8 @@ describe('UIElementInstrument', () => {
     expect(mockElementMechanic.verifyCssProperty).toHaveBeenCalledWith(
       selector,
       propertyKey,
-      propertyValue
+      propertyValue,
+      iFrameSelector
     );
     expect(mockElementMechanic.verifyCssProperty).toHaveBeenCalledTimes(1);
   });
