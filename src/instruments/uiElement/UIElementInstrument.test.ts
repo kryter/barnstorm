@@ -50,6 +50,18 @@ describe('UIElementInstrument', () => {
     expect(mockElementMechanic.verifyIsNotVisible).toHaveBeenCalledTimes(1);
   });
 
+  test('can verify is present', () => {
+    instrumentSet
+      .use<UIElementInstrument>(UI_ELEMENT_INSTRUMENT)
+      .verifyIsPresent();
+
+    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(
+      selector,
+      iFrameSelector
+    );
+    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledTimes(1);
+  });
+
   test('can verify is not present', () => {
     instrumentSet
       .use<UIElementInstrument>(UI_ELEMENT_INSTRUMENT)

@@ -199,37 +199,6 @@ describe('ListInstrument', () => {
       instrumentSet.use<ListInstrument>(LIST_INSTRUMENT_ID).getStateString()
     ).toBe(JSON.stringify(updatedState, null, 2));
 
-    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(
-      selector,
-      iFrameSelector
-    );
-    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(
-      textItemSelectors[0],
-      iFrameSelector
-    );
-    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(
-      textItemSelectors[1],
-      iFrameSelector
-    );
-    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(
-      textItemSelectors[2],
-      iFrameSelector
-    );
-    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(
-      checkboxItemSelectors[0],
-      iFrameSelector
-    );
-    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(
-      checkboxItemSelectors[1],
-      iFrameSelector
-    );
-    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(
-      checkboxItemSelectors[2],
-      iFrameSelector
-    );
-
-    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledTimes(7);
-
     expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(
       selector,
       iFrameSelector
@@ -353,17 +322,6 @@ describe('ListInstrument', () => {
 
     instrumentSet.verifyState();
 
-    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(
-      selector,
-      iFrameSelector
-    );
-    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(
-      textItemSelectors[0],
-      iFrameSelector
-    );
-
-    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledTimes(2);
-
     expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(
       selector,
       iFrameSelector
@@ -414,21 +372,6 @@ describe('ListInstrument', () => {
     ).toBe(JSON.stringify(secondRowState, null, 2));
 
     instrumentSet.verifyState();
-
-    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(
-      selector,
-      iFrameSelector
-    );
-    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(
-      textItemSelectors[0],
-      iFrameSelector
-    );
-    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(
-      checkboxItemSelectors[1],
-      iFrameSelector
-    );
-
-    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledTimes(5);
 
     expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(
       selector,
@@ -532,21 +475,6 @@ describe('ListInstrument', () => {
 
     instrumentSet.verifyState();
 
-    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(
-      selector,
-      iFrameSelector
-    );
-    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(
-      selector,
-      iFrameSelector
-    );
-    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(
-      textItemSelectors[0],
-      iFrameSelector
-    );
-
-    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledTimes(3);
-
     expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(
       selector,
       iFrameSelector
@@ -611,21 +539,6 @@ describe('ListInstrument', () => {
     ).toBe(JSON.stringify(secondRowState, null, 2));
 
     instrumentSet.verifyState();
-
-    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(
-      selector,
-      iFrameSelector
-    );
-    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(
-      textItemSelectors[0],
-      iFrameSelector
-    );
-    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(
-      checkboxItemSelectors[1],
-      iFrameSelector
-    );
-
-    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledTimes(7);
 
     expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(
       selector,

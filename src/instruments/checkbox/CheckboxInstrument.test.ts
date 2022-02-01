@@ -66,13 +66,6 @@ describe('CheckboxInstrument', () => {
       .use<CheckboxInstrument>(CHECKED_CHECKBOX_INSTRUMENT_ID)
       .verifyState();
 
-    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(
-      selector,
-      iFrameSelector
-    );
-
-    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledTimes(1);
-
     expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(
       selector,
       iFrameSelector
@@ -95,13 +88,6 @@ describe('CheckboxInstrument', () => {
     // First make sure the checkbox state starts as false.
     checkboxInstrument.verifyState();
 
-    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(
-      selector,
-      iFrameSelector
-    );
-
-    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledTimes(1);
-
     expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(
       selector,
       iFrameSelector
@@ -121,13 +107,6 @@ describe('CheckboxInstrument', () => {
       isChecked: true,
     });
     checkboxInstrument.verifyState();
-
-    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(
-      selector,
-      iFrameSelector
-    );
-
-    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledTimes(2);
 
     expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(
       selector,

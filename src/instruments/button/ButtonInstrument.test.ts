@@ -59,13 +59,6 @@ describe('ButtonInstrument', () => {
   test('can have text content', () => {
     instrumentSet.use<ButtonInstrument>(BUTTON_INSTRUMENT_ID).verifyState();
 
-    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(
-      selector,
-      iFrameSelector
-    );
-
-    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledTimes(1);
-
     expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(
       selector,
       iFrameSelector
@@ -98,13 +91,6 @@ describe('ButtonInstrument', () => {
     });
 
     instrumentSet.use<ButtonInstrument>(BUTTON_INSTRUMENT_ID).verifyState();
-
-    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledWith(
-      selector,
-      iFrameSelector
-    );
-
-    expect(mockElementMechanic.verifyIsPresent).toHaveBeenCalledTimes(1);
 
     expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(
       selector,
