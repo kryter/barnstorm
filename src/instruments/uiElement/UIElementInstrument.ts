@@ -86,7 +86,6 @@ export class UIElementInstrument<
       // any of its other state.
       return;
     }
-    this.verifyIsPresent();
 
     if (!this.currentState.isVisible) {
       this.verifyIsNotVisible();

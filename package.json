@@ -11,7 +11,7 @@
     "precommit": "tsc && eslint --fix 'src/**' && prettier --write 'src/**' && jest",
     "test": "jest"
   },
-  "files":  [
+  "files": [
     "docs",
     "lib",
     "src"
