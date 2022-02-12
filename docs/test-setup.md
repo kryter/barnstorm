@@ -19,7 +19,9 @@ For example, to create a button instrument for a button UI element, we can speci
 const counterButton = {
   id: 'counterButton',
   instrumentType: INSTRUMENT_TYPES.BUTTON,
-  selector: '.counter-button',
+  selector: {
+    css: '.counter-button'
+  },
   initialState: {
     textContent: 'count is: 0'
   }
@@ -37,7 +39,9 @@ export const BUTTON_TEXT_COLOR = 'rgb(255, 255, 255)';
 const theButton = {
   id: 'theButton',
   instrumentType: INSTRUMENT_TYPES.BUTTON,
-  selector: '[data-id="the-button"]',
+  selector: {
+    css: '[data-id="the-button"]'
+  },
   initialState: {
     textContent: 'Click me',
     css: {
@@ -50,7 +54,9 @@ const theButton = {
 const anotherButton = {
   id: 'anotherButton',
   instrumentType: INSTRUMENT_TYPES.BUTTON,
-  selector: '[data-id="another-button"]',
+  selector: {
+    css: '[data-id="another-button"]'
+  },
   initialState: {
     textContent: 'Click me too',
     css: {

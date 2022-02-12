@@ -3,14 +3,19 @@ import TextBoxMechanicMock from '../../mechanics/textBox/TextBoxMechanicMock';
 import MechanicGroup from '../../MechanicGroup';
 import { InstrumentSet } from '../../InstrumentSet';
 import { INSTRUMENT_TYPES } from '../../INSTRUMENT_TYPES';
+import { Selector } from '../uiElement/Selector';
 
 jest.mock('../../mechanics/textBox/TextBoxMechanicMock');
 
 const TEXT_BOX_INSTRUMENT_ID = 'TEXT_BOX_INSTRUMENT';
 
 describe('TextBoxInstrument', () => {
-  const selector = '.the-textBox-selector';
+  const cssSelector = '.the-textBox-selector';
   const iFrameSelector = 'iframe#the-iframe';
+  const selector: Selector = {
+    css: cssSelector,
+    iFrame: iFrameSelector,
+  };
   const expectedText = 'hello world';
 
   let instrumentSet: InstrumentSet;
@@ -32,7 +37,6 @@ describe('TextBoxInstrument', () => {
       id: TEXT_BOX_INSTRUMENT_ID,
       instrumentType: INSTRUMENT_TYPES.TEXT_BOX,
       selector,
-      iFrameSelector,
       initialState: {
         textContent: '',
       },
@@ -46,8 +50,7 @@ describe('TextBoxInstrument', () => {
 
     expect(mockTextBoxMechanic.enterText).toHaveBeenCalledWith(
       selector,
-      expectedText,
-      iFrameSelector
+      expectedText
     );
     expect(mockTextBoxMechanic.enterText).toHaveBeenCalledTimes(1);
   });
@@ -59,8 +62,7 @@ describe('TextBoxInstrument', () => {
 
     expect(mockTextBoxMechanic.verifyTextContent).toHaveBeenCalledWith(
       selector,
-      expectedText,
-      iFrameSelector
+      expectedText
     );
     expect(mockTextBoxMechanic.verifyTextContent).toHaveBeenCalledTimes(1);
   });

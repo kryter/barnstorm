@@ -4,6 +4,7 @@ import MechanicGroup from '../../MechanicGroup';
 import { InstrumentSet } from '../../InstrumentSet';
 import { INSTRUMENT_TYPES } from '../../INSTRUMENT_TYPES';
 import ElementMechanicMock from '../../mechanics/element/ElementMechanicMock';
+import { Selector } from '../uiElement/Selector';
 
 jest.mock('../../mechanics/button/ButtonMechanicMock');
 jest.mock('../../mechanics/element/ElementMechanicMock');
@@ -13,8 +14,12 @@ const BUTTON_INSTRUMENT_ID = 'BUTTON_INSTRUMENT';
 describe('ButtonInstrument', () => {
   const textContent = 'Say Hello';
   const laterTextContent = 'Say Bye';
-  const selector = '.the-button-selector';
+  const cssSelector = '.the-button-selector';
   const iFrameSelector = 'iframe#the-iframe';
+  const selector: Selector = {
+    css: cssSelector,
+    iFrame: iFrameSelector,
+  };
 
   let instrumentSet: InstrumentSet;
   let mockButtonMechanic: ButtonMechanicMock;
@@ -38,38 +43,30 @@ describe('ButtonInstrument', () => {
     instrumentSet.createInstrument({
       id: BUTTON_INSTRUMENT_ID,
       instrumentType: INSTRUMENT_TYPES.BUTTON,
+      selector,
       initialState: {
         textContent,
       },
-      selector,
-      iFrameSelector,
     });
   });
 
   test('can be clicked', () => {
     instrumentSet.use<ButtonInstrument>(BUTTON_INSTRUMENT_ID).click();
 
-    expect(mockButtonMechanic.click).toHaveBeenCalledWith(
-      selector,
-      iFrameSelector
-    );
+    expect(mockButtonMechanic.click).toHaveBeenCalledWith(selector);
     expect(mockButtonMechanic.click).toHaveBeenCalledTimes(1);
   });
 
   test('can have text content', () => {
     instrumentSet.use<ButtonInstrument>(BUTTON_INSTRUMENT_ID).verifyState();
 
-    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(
-      selector,
-      iFrameSelector
-    );
+    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(selector);
 
     expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledTimes(1);
 
     expect(mockElementMechanic.verifyTextContent).toHaveBeenCalledWith(
       selector,
-      textContent,
-      iFrameSelector
+      textContent
     );
     expect(mockElementMechanic.verifyTextContent).toHaveBeenCalledTimes(1);
 
@@ -79,8 +76,7 @@ describe('ButtonInstrument', () => {
 
     expect(mockElementMechanic.verifyTextContent).toHaveBeenCalledWith(
       selector,
-      textContent,
-      iFrameSelector
+      textContent
     );
     expect(mockElementMechanic.verifyTextContent).toHaveBeenCalledTimes(2);
   });
@@ -92,17 +88,13 @@ describe('ButtonInstrument', () => {
 
     instrumentSet.use<ButtonInstrument>(BUTTON_INSTRUMENT_ID).verifyState();
 
-    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(
-      selector,
-      iFrameSelector
-    );
+    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(selector);
 
     expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledTimes(1);
 
     expect(mockElementMechanic.verifyTextContent).toHaveBeenCalledWith(
       selector,
-      laterTextContent,
-      iFrameSelector
+      laterTextContent
     );
     expect(mockElementMechanic.verifyTextContent).toHaveBeenCalledTimes(1);
 
@@ -112,8 +104,7 @@ describe('ButtonInstrument', () => {
 
     expect(mockElementMechanic.verifyTextContent).toHaveBeenCalledWith(
       selector,
-      laterTextContent,
-      iFrameSelector
+      laterTextContent
     );
     expect(mockElementMechanic.verifyTextContent).toHaveBeenCalledTimes(2);
   });

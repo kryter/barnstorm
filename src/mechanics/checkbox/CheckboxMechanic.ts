@@ -1,8 +1,6 @@
+import { Selector } from '../../instruments/uiElement/Selector';
+
 export interface CheckboxMechanic {
-  toggle(selector: string, iFrameSelector?: string): void;
-  verifyCheckedState(
-    selector: string,
-    expectedIsChecked: boolean,
-    iFrameSelector?: string
-  ): void;
+  toggle(selector: Selector): void;
+  verifyCheckedState(selector: Selector, expectedIsChecked: boolean): void;
 }

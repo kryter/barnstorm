@@ -43,7 +43,9 @@ If you've hidden your UI element but it is still interactive, such as a hiding a
 const aCheckbox = {
   id: 'aCheckbox',
   instrumentType: INSTRUMENT_TYPES.CHECKBOX,
-  selector: 'input[type="checkbox"].toggle',
+  selector: {
+    css: 'input[type="checkbox"].toggle'
+  },
   verifyStateWhenInvisible: true,
   initialState: {
     isChecked: false
@@ -61,7 +63,9 @@ The base `UI element instrument` is typically used for elements that have a disp
 const someUiElement = {
     id: 'someUiElement',
     instrumentType: INSTRUMENT_TYPES.UI_ELEMENT,
-    selector: '.simplest-possible-css-path-to-element',
+    selector: {
+      css: '.simplest-possible-css-path-to-element'
+    },
     initialState: {
       hasClasses: ['label'];
       doesNotHaveClasses: ['selected'];
@@ -84,7 +88,9 @@ A `button instrument` has a `.click()` method to click on the DOM element.  Note
 const aButton = {
   id: 'aButton',
   instrumentType: INSTRUMENT_TYPES.BUTTON,
-  selector: '.simplest-possible-css-path-to-element',
+  selector: {
+    css: '.simplest-possible-css-path-to-element'
+  },
   initialState: {
     textContent: 'count is: 0'
   }
@@ -105,7 +111,9 @@ A `checkbox instrument` has methods to check and uncheck the checkbox.
 const aCheckbox = {
   id: 'aCheckbox',
   instrumentType: INSTRUMENT_TYPES.CHECKBOX,
-  selector: 'input[type="checkbox"].toggle',
+  selector: {
+    css: 'input[type="checkbox"].toggle'
+  },
   initialState: {
     isChecked: false
   }
@@ -140,18 +148,24 @@ export const TODO_ITEM_CHECKBOX = 'TODO_ITEM_CHECKBOX';
 const todoList = {
   id: 'todoList',
   instrumentType: INSTRUMENT_TYPES.LIST,
-  selector: '.todo-list',
+  selector: {
+    css: '.todo-list'
+  },
   relativeItemSelector: 'li',
   columns: [
     {
       id: TODO_ITEM_TEXT,
       instrumentType: INSTRUMENT_TYPES.UI_ELEMENT,
-      selector: '',
+      selector: {
+        css: ''
+      },
     },
     {
       id: TODO_ITEM_CHECKBOX,
       instrumentType: INSTRUMENT_TYPES.CHECKBOX,
-      selector: '.item-checkbox'
+      selector: {
+        css: '.item-checkbox'
+      }
     }
   ],
   initialState: {
@@ -231,7 +245,9 @@ A `text area instrument` has methods to interact with textarea text.
 const aTextArea = {
   id: 'aTextArea',
   instrumentType: INSTRUMENT_TYPES.TEXT_AREA,
-  selector: '.simplest-possible-css-path-to-element',
+  selector: {
+    css: '.simplest-possible-css-path-to-element'
+  },
   initialState: {
     textContent: '',
   }
@@ -261,7 +277,9 @@ A `text box instrument` has methods to interact with textbox text.
 const aTextBox = {
   id: 'aTextBox',
   instrumentType: INSTRUMENT_TYPES.TEXT_BOX,
-  selector: '.simplest-possible-css-path-to-element',
+  selector: {
+    css: '.simplest-possible-css-path-to-element'
+  },
   initialState: {
     textContent: '',
   }

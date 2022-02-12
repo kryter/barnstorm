@@ -4,6 +4,7 @@ import MechanicGroup from '../../MechanicGroup';
 import { InstrumentSet } from '../../InstrumentSet';
 import { INSTRUMENT_TYPES } from '../../INSTRUMENT_TYPES';
 import ElementMechanicMock from '../../mechanics/element/ElementMechanicMock';
+import { Selector } from '../uiElement/Selector';
 
 jest.mock('../../mechanics/checkbox/CheckboxMechanicMock');
 jest.mock('../../mechanics/element/ElementMechanicMock');
@@ -12,8 +13,12 @@ const CHECKBOX_INSTRUMENT_ID = 'CHECKBOX_INSTRUMENT';
 const CHECKED_CHECKBOX_INSTRUMENT_ID = 'CHECKED_CHECKBOX_INSTRUMENT';
 
 describe('CheckboxInstrument', () => {
-  const selector = '.the-checkbox-selector';
+  const cssSelector = '.the-checkbox-selector';
   const iFrameSelector = 'iframe#the-iframe';
+  const selector: Selector = {
+    css: cssSelector,
+    iFrame: iFrameSelector,
+  };
 
   let instrumentSet: InstrumentSet;
   let mockCheckboxMechanic;
@@ -39,7 +44,6 @@ describe('CheckboxInstrument', () => {
       id: CHECKBOX_INSTRUMENT_ID,
       instrumentType: INSTRUMENT_TYPES.CHECKBOX,
       selector,
-      iFrameSelector,
       initialState: {
         isChecked: false,
       },
@@ -48,8 +52,10 @@ describe('CheckboxInstrument', () => {
     instrumentSet.createInstrument({
       id: CHECKED_CHECKBOX_INSTRUMENT_ID,
       instrumentType: INSTRUMENT_TYPES.CHECKBOX,
-      selector,
-      iFrameSelector,
+      selector: {
+        css: cssSelector,
+        iFrame: iFrameSelector,
+      },
       initialState: {
         isChecked: true,
       },
@@ -66,17 +72,13 @@ describe('CheckboxInstrument', () => {
       .use<CheckboxInstrument>(CHECKED_CHECKBOX_INSTRUMENT_ID)
       .verifyState();
 
-    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(
-      selector,
-      iFrameSelector
-    );
+    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(selector);
 
     expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledTimes(1);
 
     expect(mockCheckboxMechanic.verifyCheckedState).toHaveBeenCalledWith(
       selector,
-      true,
-      iFrameSelector
+      true
     );
   });
 
@@ -88,17 +90,13 @@ describe('CheckboxInstrument', () => {
     // First make sure the checkbox state starts as false.
     checkboxInstrument.verifyState();
 
-    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(
-      selector,
-      iFrameSelector
-    );
+    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(selector);
 
     expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledTimes(1);
 
     expect(mockCheckboxMechanic.verifyCheckedState).toHaveBeenCalledWith(
       selector,
-      false,
-      iFrameSelector
+      false
     );
     expect(mockCheckboxMechanic.verifyCheckedState).toHaveBeenCalledTimes(1);
 
@@ -108,17 +106,13 @@ describe('CheckboxInstrument', () => {
     });
     checkboxInstrument.verifyState();
 
-    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(
-      selector,
-      iFrameSelector
-    );
+    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(selector);
 
     expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledTimes(2);
 
     expect(mockCheckboxMechanic.verifyCheckedState).toHaveBeenCalledWith(
       selector,
-      true,
-      iFrameSelector
+      true
     );
     expect(mockCheckboxMechanic.verifyCheckedState).toHaveBeenCalledTimes(2);
   });
@@ -127,42 +121,32 @@ describe('CheckboxInstrument', () => {
     // Check section
     instrumentSet.use<CheckboxInstrument>(CHECKBOX_INSTRUMENT_ID).check();
 
-    expect(mockCheckboxMechanic.toggle).toHaveBeenCalledWith(
-      selector,
-      iFrameSelector
-    );
+    expect(mockCheckboxMechanic.toggle).toHaveBeenCalledWith(selector);
     expect(mockCheckboxMechanic.toggle).toHaveBeenCalledTimes(1);
 
     expect(mockCheckboxMechanic.verifyCheckedState).toHaveBeenCalledWith(
       selector,
-      false,
-      iFrameSelector
+      false
     );
     expect(mockCheckboxMechanic.verifyCheckedState).toHaveBeenCalledWith(
       selector,
-      true,
-      iFrameSelector
+      true
     );
     expect(mockCheckboxMechanic.verifyCheckedState).toHaveBeenCalledTimes(2);
 
     // Uncheck section (requires the check section for setup)
     instrumentSet.use<CheckboxInstrument>(CHECKBOX_INSTRUMENT_ID).uncheck();
 
-    expect(mockCheckboxMechanic.toggle).toHaveBeenCalledWith(
-      selector,
-      iFrameSelector
-    );
+    expect(mockCheckboxMechanic.toggle).toHaveBeenCalledWith(selector);
     expect(mockCheckboxMechanic.toggle).toHaveBeenCalledTimes(2);
 
     expect(mockCheckboxMechanic.verifyCheckedState).toHaveBeenCalledWith(
       selector,
-      true,
-      iFrameSelector
+      true
     );
     expect(mockCheckboxMechanic.verifyCheckedState).toHaveBeenCalledWith(
       selector,
-      false,
-      iFrameSelector
+      false
     );
     expect(mockCheckboxMechanic.verifyCheckedState).toHaveBeenCalledTimes(4);
   });
@@ -170,10 +154,7 @@ describe('CheckboxInstrument', () => {
   test('can be toggled', () => {
     instrumentSet.use<CheckboxInstrument>(CHECKBOX_INSTRUMENT_ID).toggle();
 
-    expect(mockCheckboxMechanic.toggle).toHaveBeenCalledWith(
-      selector,
-      iFrameSelector
-    );
+    expect(mockCheckboxMechanic.toggle).toHaveBeenCalledWith(selector);
     expect(mockCheckboxMechanic.toggle).toHaveBeenCalledTimes(1);
 
     expect(mockCheckboxMechanic.verifyCheckedState).toHaveBeenCalledTimes(0);
@@ -188,8 +169,7 @@ describe('CheckboxInstrument', () => {
 
     expect(mockCheckboxMechanic.verifyCheckedState).toHaveBeenCalledWith(
       selector,
-      true,
-      iFrameSelector
+      true
     );
     expect(mockCheckboxMechanic.verifyCheckedState).toHaveBeenCalledTimes(1);
   });
@@ -203,8 +183,7 @@ describe('CheckboxInstrument', () => {
 
     expect(mockCheckboxMechanic.verifyCheckedState).toHaveBeenCalledWith(
       selector,
-      false,
-      iFrameSelector
+      false
     );
     expect(mockCheckboxMechanic.verifyCheckedState).toHaveBeenCalledTimes(1);
   });

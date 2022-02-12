@@ -1,7 +1,5 @@
+import { Selector } from '../../instruments/uiElement/Selector';
+
 export interface ListMechanic {
-  verifyListLength(
-    selector: string,
-    expectedLength: number,
-    iFrameSelector?: string
-  ): void;
+  verifyListLength(selector: Selector, expectedLength: number): void;
 }

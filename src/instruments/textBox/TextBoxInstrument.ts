@@ -10,18 +10,13 @@ export class TextBoxInstrument extends UIElementInstrument {
   }
 
   public enterText(textToType: string): void {
-    this.mechanicGroup.textBox.enterText(
-      this.config.selector,
-      textToType,
-      this.config.iFrameSelector
-    );
+    this.mechanicGroup.textBox.enterText(this.config.selector, textToType);
   }
 
   public verifyTextContent(expectedText: string): void {
     this.mechanicGroup.textBox.verifyTextContent(
       this.config.selector,
-      expectedText,
-      this.config.iFrameSelector
+      expectedText
     );
   }
 }

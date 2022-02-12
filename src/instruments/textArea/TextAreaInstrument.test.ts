@@ -3,14 +3,19 @@ import TextAreaMechanicMock from '../../mechanics/textArea/TextAreaMechanicMock'
 import MechanicGroup from '../../MechanicGroup';
 import { InstrumentSet } from '../../InstrumentSet';
 import { INSTRUMENT_TYPES } from '../../INSTRUMENT_TYPES';
+import { Selector } from '../uiElement/Selector';
 
 jest.mock('../../mechanics/textArea/TextAreaMechanicMock');
 
 const TEXT_AREA_INSTRUMENT_ID = 'TEXT_AREA_INSTRUMENT';
 
 describe('TextAreaInstrument', () => {
-  const selector = '.the-textArea-selector';
+  const cssSelector = '.the-textArea-selector';
   const iFrameSelector = 'iframe#the-iframe';
+  const selector: Selector = {
+    css: cssSelector,
+    iFrame: iFrameSelector,
+  };
   const expectedText = 'hello world';
 
   let instrumentSet: InstrumentSet;
@@ -33,7 +38,6 @@ describe('TextAreaInstrument', () => {
       id: TEXT_AREA_INSTRUMENT_ID,
       instrumentType: INSTRUMENT_TYPES.TEXT_AREA,
       selector,
-      iFrameSelector,
       initialState: {
         textContent: '',
       },
@@ -47,8 +51,7 @@ describe('TextAreaInstrument', () => {
 
     expect(mockTextAreaMechanic.enterText).toHaveBeenCalledWith(
       selector,
-      expectedText,
-      iFrameSelector
+      expectedText
     );
     expect(mockTextAreaMechanic.enterText).toHaveBeenCalledTimes(1);
   });
@@ -60,8 +63,7 @@ describe('TextAreaInstrument', () => {
 
     expect(mockTextAreaMechanic.verifyTextContent).toHaveBeenCalledWith(
       selector,
-      expectedText,
-      iFrameSelector
+      expectedText
     );
     expect(mockTextAreaMechanic.verifyTextContent).toHaveBeenCalledTimes(1);
   });

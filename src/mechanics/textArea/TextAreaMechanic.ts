@@ -1,12 +1,6 @@
+import { Selector } from '../../instruments/uiElement/Selector';
+
 export interface TextAreaMechanic {
-  enterText(
-    selector: string,
-    textToType: string,
-    iFrameSelector?: string
-  ): void;
-  verifyTextContent(
-    selector: string,
-    expectedText: string,
-    iFrameSelector?: string
-  ): void;
+  enterText(selector: Selector, textToType: string): void;
+  verifyTextContent(selector: Selector, expectedText: string): void;
 }

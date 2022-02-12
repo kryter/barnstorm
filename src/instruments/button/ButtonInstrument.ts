@@ -14,9 +14,6 @@ export class ButtonInstrument extends UIElementInstrument {
   }
 
   public click(): void {
-    this.mechanicGroup.button.click(
-      this.config.selector,
-      this.config.iFrameSelector
-    );
+    this.mechanicGroup.button.click(this.config.selector);
   }
 }

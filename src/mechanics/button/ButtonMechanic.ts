@@ -1,3 +1,5 @@
+import { Selector } from '../../instruments/uiElement/Selector';
+
 export interface ButtonMechanic {
-  click(selector: string, iFrameSelector?: string): void;
+  click(selector: Selector): void;
 }

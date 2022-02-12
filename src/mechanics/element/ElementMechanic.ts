@@ -1,28 +1,17 @@
+import { Selector } from '../../instruments/uiElement/Selector';
+
 export interface ElementMechanic {
-  verifyIsNotVisible(selector: string, iFrameSelector?: string): void;
-  verifyIsVisible(selector: string, iFrameSelector?: string): void;
-  verifyIsNotPresent(selector: string, iFrameSelector?: string): void;
-  verifyIsPresent(selector: string, iFrameSelector?: string): void;
-  verifyTextContent(
-    selector: string,
-    content: string,
-    iFrameSelector?: string
-  ): void;
-  verifyHasClass(
-    selector: string,
-    className: string,
-    iFrameSelector?: string
-  ): void;
-  verifyDoesNotHaveClass(
-    selector: string,
-    className: string,
-    iFrameSelector?: string
-  ): void;
-  verifyIsInFocus(selector: string, iFrameSelector?: string): void;
+  verifyIsNotVisible(selector: Selector): void;
+  verifyIsVisible(selector: Selector): void;
+  verifyIsNotPresent(selector: Selector): void;
+  verifyIsPresent(selector: Selector): void;
+  verifyTextContent(selector: Selector, content: string): void;
+  verifyHasClass(selector: Selector, className: string): void;
+  verifyDoesNotHaveClass(selector: Selector, className: string): void;
+  verifyIsInFocus(selector: Selector): void;
   verifyCssProperty(
-    selector: string,
+    selector: Selector,
     propertyKey: string,
-    propertyValue: string,
-    iFrameSelector?: string
+    propertyValue: string
   ): void;
 }

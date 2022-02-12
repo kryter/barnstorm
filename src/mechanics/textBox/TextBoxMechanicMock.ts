@@ -1,7 +1,8 @@
+import { Selector } from '../../instruments/uiElement/Selector';
 import { TextBoxMechanic } from './TextBoxMechanic';
 
 export default class TextBoxMechanicMock implements TextBoxMechanic {
-  enterText(selector: string, textToType: string): void {}
+  enterText(selector: Selector, textToType: string): void {}
 
-  verifyTextContent(selector: string, expectedText: string): void {}
+  verifyTextContent(selector: Selector, expectedText: string): void {}
 }

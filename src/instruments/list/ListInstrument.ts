@@ -5,6 +5,7 @@ import {
   UIElementState,
 } from '../uiElement/UIElementInstrument';
 import { InstrumentManager } from '../../InstrumentManager';
+import { Selector } from '../uiElement/Selector';
 
 export interface ListState extends UIElementState {
   rows?: Record<string, Record<string, unknown>>[];
@@ -144,10 +145,10 @@ export class ListInstrument extends UIElementInstrument<
       ...columnOptions,
       id: cellId,
       initialState,
-      selector: `${this.listItemSelectorByIndex(rowIndex)} ${
-        columnOptions.selector || ''
-      }`,
-      iFrameSelector: this.config.iFrameSelector,
+      selector: this.listItemSelectorByIndex(
+        rowIndex,
+        columnOptions.selector.css
+      ),
     });
 
     return cellId;
@@ -170,29 +171,48 @@ export class ListInstrument extends UIElementInstrument<
   /**
    * Takes a zero-based item index and returns a selector for that item.
    */
-  public listItemSelectorByIndex(itemIndex: number): string {
+  public listItemSelectorByIndex(
+    itemIndex: number,
+    columnCss?: string
+  ): Selector {
     // Increment the zero-based item index (which is handy for writing loops in tests)
     // to convert it to the one-based item number that the CSS nth-child selector is expecting.
     const itemNumber = itemIndex + 1;
-    return this.listItemSelectorByNumber(itemNumber);
+    return this.listItemSelectorByNumber(itemNumber, columnCss);
   }
 
   /**
    * Takes a one-based item index and returns a selector for that item.
    */
-  public listItemSelectorByNumber(itemNumber: number): string {
-    return `${this.genericListItemSelector()}:nth-child(${itemNumber})`;
+  public listItemSelectorByNumber(
+    itemNumber: number,
+    columnCss?: string
+  ): Selector {
+    return {
+      css: `${this.genericListItemCss()}:nth-child(${itemNumber})${
+        columnCss ? ` ${columnCss}` : ''
+      }`,
+      content: this.config.selector.content,
+      iFrame: this.config.selector.iFrame,
+    };
   }
 
-  protected genericListItemSelector(): string {
-    return `${this.config.selector} ${this.config.relativeItemSelector}`;
+  protected genericListItemCss(): string {
+    return `${this.config.selector.css} ${this.config.relativeItemSelector}`;
+  }
+
+  protected genericListItemSelector(): Selector {
+    return {
+      css: this.genericListItemCss(),
+      content: this.config.selector.content,
+      iFrame: this.config.selector.iFrame,
+    };
   }
 
   public verifyContentLength(expectedLength: number): void {
     this.mechanicGroup.list.verifyListLength(
       this.genericListItemSelector(),
-      expectedLength,
-      this.config.iFrameSelector
+      expectedLength
     );
   }
 }
