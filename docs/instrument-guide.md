@@ -37,6 +37,8 @@ In general, when specifying any instrument, specify as much initial state as pos
 
 `UI element instruments` require some additional configuration and must be explicitly added to the instrument set (it is recommended to do this configuration during `tower` setup).
 
+### Hidden (But Still Interactive) Elements
+
 If you've hidden your UI element but it is still interactive, such as a hiding a checkbox and painting some other shape to the screen so the user is aware there is a checkbox, you'll need to let the test know that although the UI element is invisible, it is still interactive and its state should still be verified.  In this case, you'll need to add the `verifyStateWhenInvisible` option when configuring the `UI element instrument`.  This flag works for any UI element, but is most commonly used with a checkbox.
 
 ```typescript
@@ -44,7 +46,9 @@ const aCheckbox = {
   id: 'aCheckbox',
   instrumentType: INSTRUMENT_TYPES.CHECKBOX,
   selector: {
-    css: 'input[type="checkbox"].toggle'
+    css: 'input[type="checkbox"].toggle',
+    content: 'List item 3',
+    iFrame: '
   },
   verifyStateWhenInvisible: true,
   initialState: {
@@ -54,6 +58,42 @@ const aCheckbox = {
 ```
 
 To see an example of a hidden interactive checkbox, see the [Barnstorm Samples](https://github.com/kryter/barnstorm-samples) that contains Barnstorm tests that target the [Cypress Todo App](https://example.cypress.io/todo).
+
+For most purposes, specifying the CSS selector is enough for the test to find the element:
+
+```typescript
+  selector: {
+    css: '.simplest-possible-css-path-to-element'
+  }
+```
+
+In other cases, we need additional options:
+
+### Select By Content
+
+If you have a list of items (typically something like documents, projects, or other high level "containers" in the app) where you can't guarantee the content of the list except that the list should contain the one item that the test just created.  In the test you probably want to select this item to do something more with it (like open the project, document, or container).  This scenario often comes up in cases where multiple concurrent tests will need to be run against the same test user and the tests need to run independently and therefore cannot verify the full content of the list.  To make this case simple, we can look for the single item in the list that has the name we assign it in the test:
+
+```typescript
+  selector: {
+    css: '.document-list-item',
+    content: 'My new document - 0910a283-f8d0-45c3-884b-cdcd211d6dda'
+  }
+```
+
+For these cases, it is recommended to name the item with a unique name, even if another instance of this test is running concurrently on the same machine.  This also can be helpful when developing locally so that multiple test runs of the same test don't interfere with each other.
+
+### Select Within IFrame
+
+You may find that you want to run tests on components that exist within an IFrame.  For example, if you write end to end tests for components that live in a [Storybook](https://storybook.js.org/), those components will exist within an IFrame, and the test will need to drill into the IFrame to interact with the component.  To solve this, add a selector for the iFrame as part of the selector object:
+
+```typescript
+  selector: {
+    css: '.my-component',
+    iFrame: 'iframe#storybook-preview-iframe'
+  }
+```
+
+This will trigger the test to enter the iFrame before looking for the CSS specified in the selector.
 
 ### UI Element Instrument
 

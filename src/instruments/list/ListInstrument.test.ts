@@ -132,7 +132,6 @@ describe('ListInstrument', () => {
       css: '.the-list-selector .a-list-item-selector:nth-child(3)',
       iFrame: iFrameSelector,
       content: 'Hello world',
-      content: 'Hello world',
     });
   });
 
@@ -144,7 +143,6 @@ describe('ListInstrument', () => {
     expect(listItemSelector).toStrictEqual({
       css: '.the-list-selector .a-list-item-selector:nth-child(3)',
       iFrame: iFrameSelector,
-      content: 'Hello world',
       content: 'Hello world',
     });
   });

@@ -98,7 +98,7 @@ export class UIElementInstrument<
       this.currentState.hasClasses.forEach((aClass) => {
         this.verifyHasClass(aClass);
         hasVerifiedSomething = true;
-     });
+      });
     }
     if (this.currentState.doesNotHaveClasses) {
       this.currentState.doesNotHaveClasses.forEach((aClass) => {
@@ -124,7 +124,11 @@ export class UIElementInstrument<
       });
     }
 
-    if (!hasVerifiedSomething && this.currentState.isVisible && this.toVerifyIsVisible()) {
+    if (
+      !hasVerifiedSomething &&
+      this.currentState.isVisible &&
+      this.toVerifyIsVisible()
+    ) {
       this.verifyIsVisible();
     }
   }
