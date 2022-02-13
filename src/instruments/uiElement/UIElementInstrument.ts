@@ -90,25 +90,29 @@ export class UIElementInstrument<
       if (!this.config.verifyStateWhenInvisible) {
         return;
       }
-    } else {
-      this.verifyIsVisible();
     }
 
+    let hasVerifiedSomething: boolean = false;
+
     if (this.currentState.hasClasses) {
-      this.currentState.hasClasses.forEach((aClass) =>
-        this.verifyHasClass(aClass)
-      );
+      this.currentState.hasClasses.forEach((aClass) => {
+        this.verifyHasClass(aClass);
+        hasVerifiedSomething = true;
+     });
     }
     if (this.currentState.doesNotHaveClasses) {
-      this.currentState.doesNotHaveClasses.forEach((aClass) =>
-        this.verifyDoesNotHaveClass(aClass)
-      );
+      this.currentState.doesNotHaveClasses.forEach((aClass) => {
+        this.verifyDoesNotHaveClass(aClass);
+        hasVerifiedSomething = true;
+      });
     }
     if (this.currentState.textContent) {
       this.verifyTextContent(this.currentState.textContent);
+      hasVerifiedSomething = true;
     }
     if (this.currentState.inFocus) {
       this.verifyIsInFocus();
+      hasVerifiedSomething = true;
     }
     if (this.currentState.css) {
       Object.keys(this.currentState.css).forEach((cssPropertyKey: string) => {
@@ -116,8 +120,25 @@ export class UIElementInstrument<
           cssPropertyKey,
           this.currentState.css[cssPropertyKey]
         );
+        hasVerifiedSomething = true;
       });
     }
+
+    if (!hasVerifiedSomething && this.currentState.isVisible && this.toVerifyIsVisible()) {
+      this.verifyIsVisible();
+    }
+  }
+
+  /**
+   * Return true if we should verify the visibility of the element if no other basic verifications
+   * were made.
+   * Instruments that have a verification by default,
+   * for example,
+   * the checked state of a button or the length of a list,
+   * should override this method and return false because validating visibility is redundant.
+   */
+  protected toVerifyIsVisible(): boolean {
+    return true;
   }
 
   protected createUpdatedState(stateUpdates: TState): TState {

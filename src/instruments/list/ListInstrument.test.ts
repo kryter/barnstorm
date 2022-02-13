@@ -29,7 +29,7 @@ describe('ListInstrument', () => {
   const selector: Selector = {
     css: cssSelector,
     iFrame: iFrameSelector,
-    content: undefined,
+    content: 'Hello world',
   };
 
   const checkboxItemSelectors = [
@@ -131,8 +131,8 @@ describe('ListInstrument', () => {
     expect(listItemSelector).toStrictEqual({
       css: '.the-list-selector .a-list-item-selector:nth-child(3)',
       iFrame: iFrameSelector,
-      content: undefined,
-      content: undefined,
+      content: 'Hello world',
+      content: 'Hello world',
     });
   });
 
@@ -144,8 +144,8 @@ describe('ListInstrument', () => {
     expect(listItemSelector).toStrictEqual({
       css: '.the-list-selector .a-list-item-selector:nth-child(3)',
       iFrame: iFrameSelector,
-      content: undefined,
-      content: undefined,
+      content: 'Hello world',
+      content: 'Hello world',
     });
   });
 
@@ -163,7 +163,7 @@ describe('ListInstrument', () => {
     expect(mockCheckboxMechanic.toggle).toHaveBeenCalledWith({
       css: checkboxItemSelectors[2],
       iFrame: iFrameSelector,
-      content: undefined,
+      content: 'Hello world',
     });
     expect(mockCheckboxMechanic.toggle).toHaveBeenCalledTimes(1);
   });
@@ -218,46 +218,14 @@ describe('ListInstrument', () => {
       instrumentSet.use<ListInstrument>(LIST_INSTRUMENT_ID).getStateString()
     ).toBe(JSON.stringify(updatedState, null, 2));
 
-    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(selector);
-    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith({
-      css: textItemSelectors[0],
-      iFrame: iFrameSelector,
-      content: undefined,
-    });
-    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith({
-      css: textItemSelectors[1],
-      iFrame: iFrameSelector,
-      content: undefined,
-    });
-    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith({
-      css: textItemSelectors[2],
-      iFrame: iFrameSelector,
-      content: undefined,
-    });
-    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith({
-      css: checkboxItemSelectors[0],
-      iFrame: iFrameSelector,
-      content: undefined,
-    });
-    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith({
-      css: checkboxItemSelectors[1],
-      iFrame: iFrameSelector,
-      content: undefined,
-    });
-    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith({
-      css: checkboxItemSelectors[2],
-      iFrame: iFrameSelector,
-      content: undefined,
-    });
-
-    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledTimes(7);
+    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledTimes(0);
 
     // The verification should check the text column state for each row.
     expect(mockElementMechanic.verifyTextContent).toHaveBeenCalledWith(
       {
         css: textItemSelectors[0],
         iFrame: iFrameSelector,
-        content: undefined,
+        content: 'Hello world',
       },
       listContent[0][TEXT_INSTRUMENT_ID].textContent
     );
@@ -265,7 +233,7 @@ describe('ListInstrument', () => {
       {
         css: textItemSelectors[1],
         iFrame: iFrameSelector,
-        content: undefined,
+        content: 'Hello world',
       },
       listContent[1][TEXT_INSTRUMENT_ID].textContent
     );
@@ -273,7 +241,7 @@ describe('ListInstrument', () => {
       {
         css: textItemSelectors[2],
         iFrame: iFrameSelector,
-        content: undefined,
+        content: 'Hello world',
       },
       listContent[2][TEXT_INSTRUMENT_ID].textContent
     );
@@ -284,7 +252,7 @@ describe('ListInstrument', () => {
       {
         css: checkboxItemSelectors[0],
         iFrame: iFrameSelector,
-        content: undefined,
+        content: 'Hello world',
       },
       listContent[0][CHECKBOX_INSTRUMENT_ID].isChecked
     );
@@ -292,7 +260,7 @@ describe('ListInstrument', () => {
       {
         css: checkboxItemSelectors[1],
         iFrame: iFrameSelector,
-        content: undefined,
+        content: 'Hello world',
       },
       listContent[1][CHECKBOX_INSTRUMENT_ID].isChecked
     );
@@ -300,7 +268,7 @@ describe('ListInstrument', () => {
       {
         css: checkboxItemSelectors[2],
         iFrame: iFrameSelector,
-        content: undefined,
+        content: 'Hello world',
       },
       listContent[2][CHECKBOX_INSTRUMENT_ID].isChecked
     );
@@ -311,7 +279,7 @@ describe('ListInstrument', () => {
       {
         css: '.the-list-selector .a-list-item-selector',
         iFrame: iFrameSelector,
-        content: undefined,
+        content: 'Hello world',
       },
       listContent.length
     );
@@ -328,7 +296,7 @@ describe('ListInstrument', () => {
       {
         css: '.the-list-selector .a-list-item-selector',
         iFrame: iFrameSelector,
-        content: undefined,
+        content: 'Hello world',
       },
       expectedLength
     );
@@ -368,21 +336,14 @@ describe('ListInstrument', () => {
 
     instrumentSet.verifyState();
 
-    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(selector);
-    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith({
-      css: textItemSelectors[0],
-      iFrame: iFrameSelector,
-      content: undefined,
-    });
-
-    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledTimes(2);
+    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledTimes(0);
 
     // The verification should check the text column state for each row.
     expect(mockElementMechanic.verifyTextContent).toHaveBeenCalledWith(
       {
         css: textItemSelectors[0],
         iFrame: iFrameSelector,
-        content: undefined,
+        content: 'Hello world',
       },
       newRowText
     );
@@ -396,7 +357,7 @@ describe('ListInstrument', () => {
       {
         css: '.the-list-selector .a-list-item-selector',
         iFrame: iFrameSelector,
-        content: undefined,
+        content: 'Hello world',
       },
       1
     );
@@ -423,26 +384,14 @@ describe('ListInstrument', () => {
 
     instrumentSet.verifyState();
 
-    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(selector);
-    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith({
-      css: textItemSelectors[0],
-      iFrame: iFrameSelector,
-      content: undefined,
-    });
-    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith({
-      css: checkboxItemSelectors[1],
-      iFrame: iFrameSelector,
-      content: undefined,
-    });
-
-    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledTimes(5);
+    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledTimes(0);
 
     // The verification should check the text column state for each row.
     expect(mockElementMechanic.verifyTextContent).toHaveBeenCalledWith(
       {
         css: textItemSelectors[0],
         iFrame: iFrameSelector,
-        content: undefined,
+        content: 'Hello world',
       },
       newRowText
     );
@@ -453,7 +402,7 @@ describe('ListInstrument', () => {
       {
         css: checkboxItemSelectors[1],
         iFrame: iFrameSelector,
-        content: undefined,
+        content: 'Hello world',
       },
       true
     );
@@ -465,7 +414,7 @@ describe('ListInstrument', () => {
       {
         css: '.the-list-selector .a-list-item-selector',
         iFrame: iFrameSelector,
-        content: undefined,
+        content: 'Hello world',
       },
       2
     );
@@ -536,22 +485,12 @@ describe('ListInstrument', () => {
 
     instrumentSet.verifyState();
 
-    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(selector);
-    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(selector);
-    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith({
-      css: textItemSelectors[0],
-      iFrame: iFrameSelector,
-      content: undefined,
-    });
-
-    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledTimes(3);
-
     // The verification should check the text column state for each row.
     expect(mockElementMechanic.verifyTextContent).toHaveBeenCalledWith(
       {
         css: textItemSelectors[0],
         iFrame: iFrameSelector,
-        content: undefined,
+        content: 'Hello world',
       },
       newRowText
     );
@@ -565,7 +504,7 @@ describe('ListInstrument', () => {
       {
         css: '.the-list-selector .a-list-item-selector',
         iFrame: iFrameSelector,
-        content: undefined,
+        content: 'Hello world',
       },
       1
     );
@@ -573,7 +512,7 @@ describe('ListInstrument', () => {
       {
         css: '.the-list-selector .a-list-item-selector',
         iFrame: iFrameSelector,
-        content: undefined,
+        content: 'Hello world',
       },
       0
     );
@@ -605,27 +544,19 @@ describe('ListInstrument', () => {
 
     instrumentSet.verifyState();
 
-    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(selector);
-    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(selector);
-    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith({
-      css: textItemSelectors[0],
+    expect(mockElementMechanic.verifyIsNotVisible).toHaveBeenCalledWith({
+      css: checkboxItemSelectors[1],
       iFrame: iFrameSelector,
-      content: undefined,
+      content: 'Hello world',
     });
 
     expect(mockElementMechanic.verifyIsNotVisible).toHaveBeenCalledWith({
       css: checkboxItemSelectors[1],
       iFrame: iFrameSelector,
-      content: undefined,
+      content: 'Hello world',
     });
 
-    expect(mockElementMechanic.verifyIsNotVisible).toHaveBeenCalledWith({
-      css: checkboxItemSelectors[1],
-      iFrame: iFrameSelector,
-      content: undefined,
-    });
-
-    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledTimes(6);
+    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledTimes(0);
     expect(mockElementMechanic.verifyIsNotVisible).toHaveBeenCalledTimes(1);
 
     // The verification should check the text column state for each row.
@@ -633,7 +564,7 @@ describe('ListInstrument', () => {
       {
         css: textItemSelectors[0],
         iFrame: iFrameSelector,
-        content: undefined,
+        content: 'Hello world',
       },
       newRowText
     );
@@ -644,7 +575,7 @@ describe('ListInstrument', () => {
       {
         css: checkboxItemSelectors[1],
         iFrame: iFrameSelector,
-        content: undefined,
+        content: 'Hello world',
       },
       true
     );
@@ -656,7 +587,7 @@ describe('ListInstrument', () => {
       {
         css: '.the-list-selector .a-list-item-selector',
         iFrame: iFrameSelector,
-        content: undefined,
+        content: 'Hello world',
       },
       2
     );
@@ -664,7 +595,7 @@ describe('ListInstrument', () => {
       {
         css: '.the-list-selector .a-list-item-selector',
         iFrame: iFrameSelector,
-        content: undefined,
+        content: 'Hello world',
       },
       1
     );

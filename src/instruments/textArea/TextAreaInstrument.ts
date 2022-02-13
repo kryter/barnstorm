@@ -19,4 +19,8 @@ export class TextAreaInstrument extends UIElementInstrument {
       expectedText
     );
   }
+
+  protected toVerifyIsVisible(): boolean {
+    return false;
+  }
 }

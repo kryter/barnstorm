@@ -42,6 +42,17 @@ describe('UIElementInstrument', () => {
     });
   });
 
+  test('can verify is visible', () => {
+    instrumentSet
+      .use<UIElementInstrument>(UI_ELEMENT_INSTRUMENT)
+      .verifyIsVisible();
+
+    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(
+      selector
+    );
+    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledTimes(1);
+  });
+
   test('can verify is not visible', () => {
     instrumentSet
       .use<UIElementInstrument>(UI_ELEMENT_INSTRUMENT)

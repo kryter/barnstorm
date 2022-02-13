@@ -60,9 +60,9 @@ describe('ButtonInstrument', () => {
   test('can have text content', () => {
     instrumentSet.use<ButtonInstrument>(BUTTON_INSTRUMENT_ID).verifyState();
 
-    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(selector);
-
-    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledTimes(1);
+    // If the test is already testing the content, then it doesn't need to test whether
+    // the button element is visible.
+    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledTimes(0);
 
     expect(mockElementMechanic.verifyTextContent).toHaveBeenCalledWith(
       selector,
@@ -88,9 +88,7 @@ describe('ButtonInstrument', () => {
 
     instrumentSet.use<ButtonInstrument>(BUTTON_INSTRUMENT_ID).verifyState();
 
-    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(selector);
-
-    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledTimes(1);
+    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledTimes(0);
 
     expect(mockElementMechanic.verifyTextContent).toHaveBeenCalledWith(
       selector,

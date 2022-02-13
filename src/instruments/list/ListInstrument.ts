@@ -215,4 +215,8 @@ export class ListInstrument extends UIElementInstrument<
       expectedLength
     );
   }
+
+  protected toVerifyIsVisible(): boolean {
+    return false;
+  }
 }

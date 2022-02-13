@@ -72,9 +72,9 @@ describe('CheckboxInstrument', () => {
       .use<CheckboxInstrument>(CHECKED_CHECKBOX_INSTRUMENT_ID)
       .verifyState();
 
-    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(selector);
-
-    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledTimes(1);
+    // If the test is already testing the checkbox state, then it doesn't need to test whether
+    // the checkbox element is visible.
+    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledTimes(0);
 
     expect(mockCheckboxMechanic.verifyCheckedState).toHaveBeenCalledWith(
       selector,
@@ -90,9 +90,9 @@ describe('CheckboxInstrument', () => {
     // First make sure the checkbox state starts as false.
     checkboxInstrument.verifyState();
 
-    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(selector);
-
-    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledTimes(1);
+    // If the test is already testing the checkbox state, then it doesn't need to test whether
+    // the checkbox element is visible.
+    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledTimes(0);
 
     expect(mockCheckboxMechanic.verifyCheckedState).toHaveBeenCalledWith(
       selector,
@@ -106,9 +106,7 @@ describe('CheckboxInstrument', () => {
     });
     checkboxInstrument.verifyState();
 
-    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledWith(selector);
-
-    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledTimes(2);
+    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledTimes(0);
 
     expect(mockCheckboxMechanic.verifyCheckedState).toHaveBeenCalledWith(
       selector,

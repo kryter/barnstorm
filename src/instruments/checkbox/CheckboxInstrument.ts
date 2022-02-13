@@ -64,4 +64,8 @@ export class CheckboxInstrument extends UIElementInstrument<CheckboxState> {
     this.toggle();
     this.verifyIsChecked();
   }
+
+  protected toVerifyIsVisible(): boolean {
+    return false;
+  }
 }
