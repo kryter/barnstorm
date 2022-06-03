@@ -5,7 +5,7 @@ import { INSTRUMENT_TYPES } from '../../INSTRUMENT_TYPES';
 export const URL_INSTRUMENT_ID = 'URL_INSTRUMENT';
 
 export interface URLState extends Record<string, unknown> {
-  currentUrl: string;
+  currentUrl: string | RegExp;
 }
 
 export class UrlInstrument extends InstrumentBase<URLState> {
@@ -34,7 +34,11 @@ export class UrlInstrument extends InstrumentBase<URLState> {
     });
   }
 
-  public verifyUrl(url: string): void {
+  public verifyUrl(url: string | RegExp): void {
     this.mechanicGroup.url.verifyUrl(url);
+  }
+
+  public getUrl(): Promise<string> {
+    return this.mechanicGroup.url.getUrl();
   }
 }

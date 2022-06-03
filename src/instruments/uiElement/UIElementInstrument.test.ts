@@ -128,6 +128,30 @@ describe('UIElementInstrument', () => {
     expect(mockElementMechanic.verifyIsInFocus).toHaveBeenCalledTimes(1);
   });
 
+  test('can verify is enabled', () => {
+    instrumentSet
+      .use<UIElementInstrument>(UI_ELEMENT_INSTRUMENT)
+      .verifyIsEnabled(true);
+
+    expect(mockElementMechanic.verifyIsEnabled).toHaveBeenCalledWith(
+      selector,
+      true
+    );
+    expect(mockElementMechanic.verifyIsEnabled).toHaveBeenCalledTimes(1);
+  });
+
+  test('can verify is not enabled', () => {
+    instrumentSet
+      .use<UIElementInstrument>(UI_ELEMENT_INSTRUMENT)
+      .verifyIsEnabled(false);
+
+    expect(mockElementMechanic.verifyIsEnabled).toHaveBeenCalledWith(
+      selector,
+      false
+    );
+    expect(mockElementMechanic.verifyIsEnabled).toHaveBeenCalledTimes(1);
+  });
+
   test('can verify any CSS property key and value', () => {
     const propertyKey = 'background-color';
     const propertyValue = 'rgb(0, 0, 0)';
@@ -142,5 +166,30 @@ describe('UIElementInstrument', () => {
       propertyValue
     );
     expect(mockElementMechanic.verifyCssProperty).toHaveBeenCalledTimes(1);
+  });
+
+  test('can verify any attribute key and value', () => {
+    const attributeKey = 'href';
+    const attributeValue = 'someLink';
+
+    instrumentSet
+      .use<UIElementInstrument>(UI_ELEMENT_INSTRUMENT)
+      .verifyAttribute(attributeKey, attributeValue);
+
+    expect(mockElementMechanic.verifyAttribute).toHaveBeenCalledWith(
+      selector,
+      attributeKey,
+      attributeValue
+    );
+    expect(mockElementMechanic.verifyAttribute).toHaveBeenCalledTimes(1);
+  });
+
+  test('can get a promise for whether the element is present', () => {
+    instrumentSet
+      .use<UIElementInstrument>(UI_ELEMENT_INSTRUMENT)
+      .getIsPresent();
+
+    expect(mockElementMechanic.getIsPresent).toHaveBeenCalledWith(selector);
+    expect(mockElementMechanic.getIsPresent).toHaveBeenCalledTimes(1);
   });
 });

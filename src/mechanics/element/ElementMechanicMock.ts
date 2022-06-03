@@ -18,9 +18,21 @@ export default class ElementMechanicMock implements ElementMechanic {
 
   verifyIsInFocus(selector: Selector): void {}
 
+  verifyIsEnabled(selector: Selector, expectedIsEnabled: boolean): void {}
+
   verifyCssProperty(
     selector: Selector,
     propertyKey: string,
     propertyValue: string
   ): void {}
+
+  verifyAttribute(
+    selector: Selector,
+    attributeKey: string,
+    attributeValue: string
+  ): void {}
+
+  getIsPresent(selector: Selector): Promise<boolean> {
+    return Promise.resolve(true);
+  }
 }

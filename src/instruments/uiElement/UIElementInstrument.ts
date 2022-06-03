@@ -8,9 +8,11 @@ const SUPPORTED_STATE_KEYS = [
   'doesNotHaveClasses',
   'textContent',
   'inFocus',
+  'isEnabled',
   'isVisible',
   'isPresent',
   'css',
+  'attributes',
 ];
 
 export interface UIElementState extends Record<string, unknown> {
@@ -18,9 +20,11 @@ export interface UIElementState extends Record<string, unknown> {
   doesNotHaveClasses?: string[];
   textContent?: string;
   inFocus?: boolean;
+  isEnabled?: boolean;
   isVisible?: boolean;
   isPresent?: boolean;
-  css?: Record<string, string>;
+  css?: Record<string, string | boolean>;
+  attributes?: Record<string, string>;
 }
 
 export interface UIElementInstrumentConfig<
@@ -92,27 +96,29 @@ export class UIElementInstrument<
       }
     }
 
-    let hasVerifiedSomething: boolean = false;
+    let hasVerifiedSomethingVisible: boolean = false;
 
     if (this.currentState.hasClasses) {
       this.currentState.hasClasses.forEach((aClass) => {
         this.verifyHasClass(aClass);
-        hasVerifiedSomething = true;
       });
     }
     if (this.currentState.doesNotHaveClasses) {
       this.currentState.doesNotHaveClasses.forEach((aClass) => {
         this.verifyDoesNotHaveClass(aClass);
-        hasVerifiedSomething = true;
       });
     }
     if (this.currentState.textContent) {
       this.verifyTextContent(this.currentState.textContent);
-      hasVerifiedSomething = true;
+      hasVerifiedSomethingVisible = true;
     }
     if (this.currentState.inFocus) {
       this.verifyIsInFocus();
-      hasVerifiedSomething = true;
+      hasVerifiedSomethingVisible = true;
+    }
+    if (this.currentState.isEnabled !== undefined) {
+      this.verifyIsEnabled(this.currentState.isEnabled);
+      hasVerifiedSomethingVisible = true;
     }
     if (this.currentState.css) {
       Object.keys(this.currentState.css).forEach((cssPropertyKey: string) => {
@@ -120,12 +126,21 @@ export class UIElementInstrument<
           cssPropertyKey,
           this.currentState.css[cssPropertyKey]
         );
-        hasVerifiedSomething = true;
       });
+    }
+    if (this.currentState.attributes) {
+      Object.keys(this.currentState.attributes).forEach(
+        (attributeKey: string) => {
+          this.verifyAttribute(
+            attributeKey,
+            this.currentState.attributes[attributeKey]
+          );
+        }
+      );
     }
 
     if (
-      !hasVerifiedSomething &&
+      !hasVerifiedSomethingVisible &&
       this.currentState.isVisible &&
       this.toVerifyIsVisible()
     ) {
@@ -152,6 +167,10 @@ export class UIElementInstrument<
       css: {
         ...this.currentState.css,
         ...stateUpdates.css,
+      },
+      attributes: {
+        ...this.currentState.attributes,
+        ...stateUpdates.attributes,
       },
     };
   }
@@ -191,11 +210,33 @@ export class UIElementInstrument<
     this.mechanicGroup.element.verifyIsInFocus(this.config.selector);
   }
 
-  public verifyCssProperty(propertyKey: string, propertyValue: string): void {
+  public verifyIsEnabled(expectedIsEnabled: boolean): void {
+    this.mechanicGroup.element.verifyIsEnabled(
+      this.config.selector,
+      expectedIsEnabled
+    );
+  }
+
+  public verifyCssProperty(
+    propertyKey: string,
+    propertyValue: string | boolean
+  ): void {
     this.mechanicGroup.element.verifyCssProperty(
       this.config.selector,
       propertyKey,
-      propertyValue
+      String(propertyValue)
     );
+  }
+
+  public verifyAttribute(attributeKey: string, attributeValue: string): void {
+    this.mechanicGroup.element.verifyAttribute(
+      this.config.selector,
+      attributeKey,
+      attributeValue
+    );
+  }
+
+  public getIsPresent(): Promise<boolean> {
+    return this.mechanicGroup.element.getIsPresent(this.config.selector);
   }
 }

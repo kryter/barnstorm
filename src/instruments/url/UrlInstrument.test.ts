@@ -56,4 +56,11 @@ describe('UrlInstrument', () => {
     expect(mockUrlMechanic.verifyUrl).toHaveBeenCalledWith(url);
     expect(mockUrlMechanic.verifyUrl).toHaveBeenCalledTimes(2);
   });
+
+  test('can get a promise for the current url', () => {
+    instrumentSet.use<UrlInstrument>(URL_INSTRUMENT_ID).getUrl();
+
+    expect(mockUrlMechanic.getUrl).toHaveBeenCalled();
+    expect(mockUrlMechanic.getUrl).toHaveBeenCalledTimes(1);
+  });
 });

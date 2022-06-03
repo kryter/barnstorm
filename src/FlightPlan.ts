@@ -1,4 +1,5 @@
 import { FlightLeg } from './FlightLeg';
+import { InstrumentSet } from './InstrumentSet';
 
 export interface FlightPlan {
   /**
@@ -9,5 +10,9 @@ export interface FlightPlan {
    */
   notes?: string[];
 
+  preFlight?: (instrumentSet: InstrumentSet) => void;
+
   legs: FlightLeg[];
+
+  postFlight?: (instrumentSet: InstrumentSet) => void;
 }

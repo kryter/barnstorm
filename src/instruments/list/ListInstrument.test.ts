@@ -207,6 +207,7 @@ describe('ListInstrument', () => {
       isPresent: true,
       isVisible: true,
       css: {},
+      attributes: {},
     };
     instrumentSet
       .use<ListInstrument>(LIST_INSTRUMENT_ID)
@@ -320,6 +321,7 @@ describe('ListInstrument', () => {
       isPresent: true,
       isVisible: true,
       css: {},
+      attributes: {},
     };
 
     expect(
@@ -372,6 +374,7 @@ describe('ListInstrument', () => {
       isPresent: true,
       isVisible: true,
       css: {},
+      attributes: {},
     };
 
     instrumentSet.use<ListInstrument>(LIST_INSTRUMENT_ID).addRow(newRow2);
@@ -463,6 +466,7 @@ describe('ListInstrument', () => {
       isPresent: true,
       isVisible: true,
       css: {},
+      attributes: {},
     };
 
     expect(
@@ -528,6 +532,7 @@ describe('ListInstrument', () => {
       isPresent: true,
       isVisible: true,
       css: {},
+      attributes: {},
     };
 
     instrumentSet
