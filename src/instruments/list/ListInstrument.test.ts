@@ -207,6 +207,7 @@ describe('ListInstrument', () => {
       isPresent: true,
       isVisible: true,
       css: {},
+      boundingBox: {},
       attributes: {},
     };
     instrumentSet
@@ -321,6 +322,7 @@ describe('ListInstrument', () => {
       isPresent: true,
       isVisible: true,
       css: {},
+      boundingBox: {},
       attributes: {},
     };
 
@@ -374,6 +376,7 @@ describe('ListInstrument', () => {
       isPresent: true,
       isVisible: true,
       css: {},
+      boundingBox: {},
       attributes: {},
     };
 
@@ -466,6 +469,7 @@ describe('ListInstrument', () => {
       isPresent: true,
       isVisible: true,
       css: {},
+      boundingBox: {},
       attributes: {},
     };
 
@@ -532,6 +536,7 @@ describe('ListInstrument', () => {
       isPresent: true,
       isVisible: true,
       css: {},
+      boundingBox: {},
       attributes: {},
     };
 

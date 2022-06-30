@@ -106,4 +106,15 @@ describe('ButtonInstrument', () => {
     );
     expect(mockElementMechanic.verifyTextContent).toHaveBeenCalledTimes(2);
   });
+
+  test('can ignore all state verifications if the ignore flag is set', () => {
+    instrumentSet.use<ButtonInstrument>(BUTTON_INSTRUMENT_ID).updateState({
+      ignoreState: true,
+    });
+
+    instrumentSet.use<ButtonInstrument>(BUTTON_INSTRUMENT_ID).verifyState();
+
+    expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledTimes(0);
+    expect(mockElementMechanic.verifyTextContent).toHaveBeenCalledTimes(0);
+  });
 });

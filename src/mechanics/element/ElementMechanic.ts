@@ -1,3 +1,4 @@
+import { ExpectedBoundingBox } from '../../instruments/uiElement/ExpectedBoundingBox';
 import { Selector } from '../../instruments/uiElement/Selector';
 
 export interface ElementMechanic {
@@ -15,10 +16,13 @@ export interface ElementMechanic {
     propertyKey: string,
     propertyValue: string
   ): void;
+  verifyBoundingBox(
+    selector: Selector,
+    expectedBoundingBox: ExpectedBoundingBox
+  ): void;
   verifyAttribute(
     selector: Selector,
     attributeKey: string,
     attributeValue: string
   ): void;
-  getIsPresent(selector: Selector): Promise<boolean>;
 }

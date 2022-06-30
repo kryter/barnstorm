@@ -14,4 +14,9 @@ export interface Selector {
    * the iFrame before searching for the element.
    */
   iFrame?: string;
+
+  /**
+   * Optional timeout for finding the HTML element if the default is not enough.
+   */
+  timeoutInMs?: number;
 }

@@ -1,6 +1,7 @@
 import MechanicGroup from '../../MechanicGroup';
 import { InstrumentBase } from '../instrument/InstrumentBase';
 import { InstrumentConfig } from '../instrument/InstrumentConfig';
+import { ExpectedBoundingBox } from './ExpectedBoundingBox';
 import { Selector } from './Selector';
 
 const SUPPORTED_STATE_KEYS = [
@@ -12,7 +13,9 @@ const SUPPORTED_STATE_KEYS = [
   'isVisible',
   'isPresent',
   'css',
+  'boundingBox',
   'attributes',
+  'ignoreState',
 ];
 
 export interface UIElementState extends Record<string, unknown> {
@@ -24,7 +27,9 @@ export interface UIElementState extends Record<string, unknown> {
   isVisible?: boolean;
   isPresent?: boolean;
   css?: Record<string, string | boolean>;
+  boundingBox?: ExpectedBoundingBox;
   attributes?: Record<string, string>;
+  ignoreState?: boolean;
 }
 
 export interface UIElementInstrumentConfig<
@@ -66,6 +71,10 @@ export class UIElementInstrument<
   }
 
   protected canVerifyState(): boolean {
+    if (this.currentState.ignoreState) {
+      return false;
+    }
+
     if (!this.currentState.isPresent) {
       return false;
     }
@@ -78,6 +87,12 @@ export class UIElementInstrument<
   }
 
   public verifyState(): void {
+    // In general, this should not be used,
+    // but it is available as an escape hatch if needed.
+    if (this.currentState.ignoreState) {
+      return;
+    }
+
     if (!this.currentState.isPresent) {
       this.verifyIsNotPresent();
 
@@ -128,6 +143,9 @@ export class UIElementInstrument<
         );
       });
     }
+    if (this.currentState.boundingBox) {
+      this.verifyBoundingBox(this.currentState.boundingBox);
+    }
     if (this.currentState.attributes) {
       Object.keys(this.currentState.attributes).forEach(
         (attributeKey: string) => {
@@ -167,6 +185,10 @@ export class UIElementInstrument<
       css: {
         ...this.currentState.css,
         ...stateUpdates.css,
+      },
+      boundingBox: {
+        ...this.currentState.boundingBox,
+        ...stateUpdates.boundingBox,
       },
       attributes: {
         ...this.currentState.attributes,
@@ -228,15 +250,18 @@ export class UIElementInstrument<
     );
   }
 
+  public verifyBoundingBox(expectedBoundingBox: ExpectedBoundingBox): void {
+    this.mechanicGroup.element.verifyBoundingBox(
+      this.config.selector,
+      expectedBoundingBox
+    );
+  }
+
   public verifyAttribute(attributeKey: string, attributeValue: string): void {
     this.mechanicGroup.element.verifyAttribute(
       this.config.selector,
       attributeKey,
       attributeValue
     );
-  }
-
-  public getIsPresent(): Promise<boolean> {
-    return this.mechanicGroup.element.getIsPresent(this.config.selector);
   }
 }

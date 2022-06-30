@@ -1,3 +1,4 @@
+import { ExpectedBoundingBox } from '../../instruments/uiElement/ExpectedBoundingBox';
 import { Selector } from '../../instruments/uiElement/Selector';
 import { ElementMechanic } from './ElementMechanic';
 
@@ -26,13 +27,14 @@ export default class ElementMechanicMock implements ElementMechanic {
     propertyValue: string
   ): void {}
 
+  verifyBoundingBox(
+    selector: Selector,
+    expectedBoundingBox: ExpectedBoundingBox
+  ): void {}
+
   verifyAttribute(
     selector: Selector,
     attributeKey: string,
     attributeValue: string
   ): void {}
-
-  getIsPresent(selector: Selector): Promise<boolean> {
-    return Promise.resolve(true);
-  }
 }

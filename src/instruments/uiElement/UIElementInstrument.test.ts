@@ -168,6 +168,24 @@ describe('UIElementInstrument', () => {
     expect(mockElementMechanic.verifyCssProperty).toHaveBeenCalledTimes(1);
   });
 
+  test('can verify the bounding box', () => {
+    const expectedBoundingBox = {
+      x: 4,
+      y: 5,
+      height: 10,
+    };
+
+    instrumentSet
+      .use<UIElementInstrument>(UI_ELEMENT_INSTRUMENT)
+      .verifyBoundingBox(expectedBoundingBox);
+
+    expect(mockElementMechanic.verifyBoundingBox).toHaveBeenCalledWith(
+      selector,
+      expectedBoundingBox
+    );
+    expect(mockElementMechanic.verifyBoundingBox).toHaveBeenCalledTimes(1);
+  });
+
   test('can verify any attribute key and value', () => {
     const attributeKey = 'href';
     const attributeValue = 'someLink';
@@ -182,14 +200,5 @@ describe('UIElementInstrument', () => {
       attributeValue
     );
     expect(mockElementMechanic.verifyAttribute).toHaveBeenCalledTimes(1);
-  });
-
-  test('can get a promise for whether the element is present', () => {
-    instrumentSet
-      .use<UIElementInstrument>(UI_ELEMENT_INSTRUMENT)
-      .getIsPresent();
-
-    expect(mockElementMechanic.getIsPresent).toHaveBeenCalledWith(selector);
-    expect(mockElementMechanic.getIsPresent).toHaveBeenCalledTimes(1);
   });
 });
