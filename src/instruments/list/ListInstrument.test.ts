@@ -567,6 +567,9 @@ describe('ListInstrument', () => {
     expect(mockElementMechanic.verifyIsVisible).toHaveBeenCalledTimes(0);
     expect(mockElementMechanic.verifyIsNotVisible).toHaveBeenCalledTimes(1);
 
+    // Make sure we are not verifying an empty bounding box.
+    expect(mockElementMechanic.verifyBoundingBox).toHaveBeenCalledTimes(0);
+
     // The verification should check the text column state for each row.
     expect(mockElementMechanic.verifyTextContent).toHaveBeenCalledWith(
       {

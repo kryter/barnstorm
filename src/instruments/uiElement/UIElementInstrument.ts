@@ -143,7 +143,10 @@ export class UIElementInstrument<
         );
       });
     }
-    if (this.currentState.boundingBox) {
+    if (
+      this.currentState.boundingBox &&
+      Object.keys(this.currentState.boundingBox).length > 0
+    ) {
       this.verifyBoundingBox(this.currentState.boundingBox);
     }
     if (this.currentState.attributes) {
