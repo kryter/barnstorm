@@ -193,6 +193,13 @@ export class InstrumentSet {
       this.idToDisconnectedInstrument[instrumentId] = instrument;
       delete this.idToInstrument[instrumentId];
     } else {
+      const disconnectedInstrument =
+        this.idToDisconnectedInstrument[instrumentId];
+      if (disconnectedInstrument) {
+        // The instrument has already been disconnected, so there is nothing to do.
+        return;
+      }
+
       throw new Error(
         `Unable to find a connected instrument for id "${instrumentId}" to disconnect.`
       );
