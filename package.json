@@ -1,6 +1,6 @@
 {
   "name": "@kryter/barnstorm",
-  "version": "3.1.0",
+  "version": "3.1.1",
   "description": "Organize end to end test code",
   "sideEffects": false,
   "scripts": {
