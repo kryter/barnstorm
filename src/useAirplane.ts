@@ -3,6 +3,12 @@ import { InstrumentSet } from './InstrumentSet';
 import { FlightLeg } from './FlightLeg';
 
 function flyLeg(leg: FlightLeg, instruments: InstrumentSet) {
+  if (leg.notes) {
+    instruments.log(`Test step: ${leg.notes.join(' | ')}`);
+  } else {
+    instruments.log('Test step');
+  }
+
   // Do the test action.
   leg.doTestAction(instruments);
 

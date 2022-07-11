@@ -305,6 +305,10 @@ export class InstrumentSet {
         );
     }
   }
+
+  public log(message: string) {
+    this.mechanicGroup.log?.log(message);
+  }
 }
 
 export function useInstrumentSet(mechanics: MechanicGroup): InstrumentSet {
