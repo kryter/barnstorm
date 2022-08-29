@@ -341,4 +341,8 @@ theTower.aTextBox().updateState({
 });
 ```
 
+### Possible instrument states
+
+To learn more about the possible states for each instrument, head over to [Instrument State Guide](/docs/instrument-state-guide.md).
+
 Happy flying!
