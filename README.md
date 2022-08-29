@@ -6,6 +6,7 @@ Barnstorm provides organization and generic methods for end to end tests that ma
  2. [Project Setup](/docs/project-setup.md)
  3. [Test Setup](/docs/test-setup.md)
  4. [Instrument Guide](/docs/instrument-guide.md)
+ 5. [Instrument State Guide](/docs/instrument-state-guide.md)
 
 ## Overview
 
