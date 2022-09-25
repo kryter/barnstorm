@@ -602,14 +602,6 @@ describe('ListInstrument', () => {
       },
       2
     );
-    expect(mockListMechanic.verifyListLength).toHaveBeenCalledWith(
-      {
-        css: '.the-list-selector .a-list-item-selector',
-        iFrame: iFrameSelector,
-        content: 'Hello world',
-      },
-      1
-    );
-    expect(mockListMechanic.verifyListLength).toHaveBeenCalledTimes(4);
+    expect(mockListMechanic.verifyListLength).toHaveBeenCalledTimes(3);
   });
 });

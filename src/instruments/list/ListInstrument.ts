@@ -60,8 +60,6 @@ export class ListInstrument extends UIElementInstrument<
   }
 
   public verifyState(): void {
-    super.verifyState();
-
     if (!this.canVerifyState()) {
       return;
     }
@@ -69,6 +67,8 @@ export class ListInstrument extends UIElementInstrument<
     // Just check the length here.
     // The cell instruments will check their own cell states.
     this.verifyContentLength(this.rowsOfColumnKeyToCellId.length);
+
+    super.verifyState();
   }
 
   public getCellId(rowIndex: number, columnKey: string): string {

@@ -7,6 +7,8 @@ export abstract class InstrumentBase<
   TConfig extends InstrumentConfig<TState> = InstrumentConfig<TState>
 > implements Instrument<TState>
 {
+  protected isCurrentStateVerified: boolean = false;
+
   protected currentState: TState;
 
   constructor(
@@ -35,6 +37,9 @@ export abstract class InstrumentBase<
 
     // Update the values.
     this.currentState = this.createUpdatedState(stateUpdates);
+
+    // Make a note to verify the updated state.
+    this.isCurrentStateVerified = false;
   }
 
   /**

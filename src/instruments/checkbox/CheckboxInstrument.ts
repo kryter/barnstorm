@@ -25,8 +25,6 @@ export class CheckboxInstrument extends UIElementInstrument<CheckboxState> {
   }
 
   public verifyState(): void {
-    super.verifyState();
-
     if (!this.canVerifyState()) {
       return;
     }
@@ -36,6 +34,8 @@ export class CheckboxInstrument extends UIElementInstrument<CheckboxState> {
     } else if (this.currentState.isChecked === false) {
       this.verifyIsNotChecked();
     }
+
+    super.verifyState();
   }
 
   public toggle(): void {

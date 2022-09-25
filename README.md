@@ -10,7 +10,7 @@ Barnstorm provides organization and generic methods for end to end tests that ma
 
 ## Overview
 
-Barnstorm provides `instruments` to make it easier to interact with UI components and track their expected state.  Instruments know how to interact with specific UI components (textboxes, buttons, tables, etc.) and how to verify their state.  Barnstorm automatically verifies instrument state at the end of each test step so tests no longer need to perform explicit verifications, rather they only update the expected state when it changes.
+Barnstorm provides `instruments` to make it easier to interact with UI components and track their expected state.  Instruments know how to interact with specific UI components (textboxes, buttons, tables, etc.) and how to verify their state.  Barnstorm automatically verifies instrument state at the end of each test step so tests no longer need to perform explicit verifications, rather they only update the expected state when it changes.  Barnstorm will verify the state of every instrument after any test step when a part of that instrument state changes.
 
 Barnstorm provides a `flight plan` mechanism to make it easier to organize and reuse test actions.  With Barnstorm, test code becomes less imperative and more declarative so that the developer can focus more on the intent of the test and less on the implementation details of the test framework.  With Barnstorm, the test developer will rarely (if ever) need to write imperative DOM walking code to manipulate a UI element or verify its state because the location of the UI element and its state is described declaratively.
 

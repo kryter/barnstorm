@@ -83,6 +83,10 @@ export class UIElementInstrument<
       return true;
     }
 
+    if (this.isCurrentStateVerified) {
+      return false;
+    }
+
     return this.currentState.isVisible;
   }
 
@@ -167,6 +171,8 @@ export class UIElementInstrument<
     ) {
       this.verifyIsVisible();
     }
+
+    this.isCurrentStateVerified = true;
   }
 
   /**
